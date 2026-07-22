@@ -8,6 +8,8 @@ disable-model-invocation: true
 
 Perform a broad, evidence-based assessment only when the user invokes this skill. This skill produces recommendations; it does not refactor the codebase.
 
+For an explicitly requested broad reuse or replacement audit, use `dont-reinvent-the-wheel` for individual candidate decisions while this skill retains ownership of broader architectural findings.
+
 ## Workflow
 
 1. Establish the requested scope and read repository guidance plus relevant architecture documentation. Documentation is useful when present but is never a prerequisite.

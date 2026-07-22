@@ -7,6 +7,8 @@ description: Build a small disposable experiment when executing code is the fast
 
 Use a prototype only when a small executable experiment will produce better evidence than more discussion or ordinary implementation work.
 
+A prototype may validate the practical fit of a candidate selected during a `dont-reinvent-the-wheel` decision; that skill retains ownership of the comparison and recommendation.
+
 ## Workflow
 
 1. State the single question being tested.

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Don't Reinvent the Wheel"
+  short_description: "Decide whether to reuse, integrate, buy, or build"
+  default_prompt: "Use $dont-reinvent-the-wheel to decide whether this specific capability should reuse an existing solution or be built custom."

@@ -7,6 +7,8 @@ description: Research a technical or product question using high-trust primary s
 
 Use this skill when external evidence or current documentation materially affects a decision. For questions answerable from the local codebase alone, inspect the code directly.
 
+For a build-versus-reuse decision, gather and verify external evidence here while `dont-reinvent-the-wheel` owns the recommendation.
+
 ## Workflow
 
 1. Define the question, decision it informs, and any version, platform, or date constraints.
