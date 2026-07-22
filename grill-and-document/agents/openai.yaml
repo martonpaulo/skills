@@ -1,0 +1,6 @@
+interface:
+  display_name: "Grill and Document"
+  short_description: "Resolve decisions and preserve durable context"
+  default_prompt: "Use $grill-and-document to pressure-test this plan and preserve only durable domain context."
+policy:
+  allow_implicit_invocation: false

@@ -1,26 +1,33 @@
 ---
 name: prototype
-description: Build a throwaway prototype to answer a design question. Use when the user wants to sanity-check whether a state model or logic feels right, or explore what a UI should look like.
+description: Build a small disposable experiment when executing code is the fastest reliable way to answer a concrete technical, behavioral, integration, state-management, or UI question. Do not use for normal production implementation.
 ---
 
 # Prototype
 
-A prototype is **throwaway code that answers a question**. The question decides the shape.
+Use a prototype only when a small executable experiment will produce better evidence than more discussion or ordinary implementation work.
 
-## Pick a branch
+## Workflow
 
-Identify which question is being answered — from the user's prompt, the surrounding code, or by asking if the user is around:
+1. State the single question being tested.
+2. Define the observable result that would answer it, including what would falsify the current assumption.
+3. Inspect the relevant code, constraints, and existing tooling without changing production files.
+4. Create the smallest experiment that exercises the uncertainty:
+   - Inside a repository, use `.scratch/prototypes/<descriptive-slug>/` unless repository guidance configures another prototype path.
+   - Outside a repository, create a uniquely named safe temporary workspace.
+   - Reuse the project's runtime when practical, but keep the experiment isolated.
+5. Run the experiment and record the actual observations. Adjust only when an observation reveals that the experiment cannot answer the stated question.
+6. Report the answer, evidence, limitations, and every disposable file created.
 
-- **"Does this logic / state model feel right?"** → [LOGIC.md](LOGIC.md). Build a tiny interactive terminal app that pushes the state machine through cases that are hard to reason about on paper.
-- **"What should this look like?"** → [UI.md](UI.md). Generate several radically different UI variations on a single route, switchable via a URL search param and a floating bottom bar.
+Read [LOGIC.md](LOGIC.md) for logic, state, behavior, or integration experiments. Read [UI.md](UI.md) for visual or interaction experiments.
 
-The two branches produce very different artifacts — getting this wrong wastes the whole prototype. If the question is genuinely ambiguous and the user isn't reachable, default to whichever branch better matches the surrounding code (a backend module → logic; a page or component → UI) and state the assumption at the top of the prototype.
+## Safety boundaries
 
-## Rules that apply to both
+- Never modify production files merely to make the prototype easier.
+- Keep real data, credentials, and destructive integrations out of the experiment unless the question specifically requires a safe isolated substitute.
+- Never silently integrate prototype code into production. Production adoption is separate implementation work with normal review and testing.
+- Do not commit, publish, or push prototype artifacts unless the user explicitly requests it.
 
-1. **Throwaway from day one, and clearly marked as such.** Locate the prototype code close to where it will actually be used (next to the module or page it's prototyping for) so context is obvious — but name it so a casual reader can see it's a prototype, not production. For throwaway UI routes, obey whatever routing convention the project already uses; don't invent a new top-level structure.
-2. **One command to run.** Whatever the project's existing task runner supports — `pnpm <name>`, `python <path>`, `bun <path>`, etc. The user must be able to start it without thinking.
-3. **No persistence by default.** State lives in memory. Persistence is the thing the prototype is _checking_, not something it should depend on. If the question explicitly involves a database, hit a scratch DB or a local file with a clear "PROTOTYPE — wipe me" name.
-4. **Skip the polish.** No tests, no error handling beyond what makes the prototype _runnable_, no abstractions. The point is to learn something fast.
-5. **Surface the state.** After every action (logic) or on every variant switch (UI), print or render the full relevant state so the user can see what changed.
-6. **Capture it when done.** Fold any validated decision into the real code, then capture the prototype itself as a **primary source**: commit it to a throwaway branch, out of main, and leave a context pointer to that branch on the implementation issue. Capture the answer too — the verdict and the question it settled — in the issue or a commit. The main branch keeps only the validated decision.
+## Completion
+
+The prototype is complete when the stated observation has answered the question or when the remaining evidence gap is explicit. Identify the disposable workspace so it can be removed safely.

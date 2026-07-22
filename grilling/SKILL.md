@@ -1,12 +1,25 @@
 ---
 name: grilling
-description: Grill the user relentlessly about a plan, decision, or idea. Use when the user wants to stress-test their thinking, or uses any 'grill' trigger phrases.
+description: Interview the user one decision at a time to resolve material uncertainty in a plan or design before implementation. Use only when unresolved choices could significantly affect behavior, scope, architecture, data, security, compatibility, or user experience.
 ---
 
-Interview me relentlessly about every aspect of this until we reach a shared understanding. Walk down each branch of the decision tree, resolving dependencies between decisions one-by-one. For each question, provide your recommended answer.
+# Grilling
 
-Ask the questions one at a time, waiting for feedback on each question before continuing. Asking multiple questions at once is bewildering.
+Use this discipline to pressure-test a plan or design when important choices remain. Skip it when the task is concrete, low-risk, local, and reversible.
 
-If a *fact* can be found by exploring the environment (filesystem, tools, etc.), look it up rather than asking me. The *decisions*, though, are mine — put each one to me and wait for my answer.
+## Interview loop
 
-Do not act on it until I confirm we have reached a shared understanding.
+1. Inspect the codebase, documentation, and environment first. Answer factual questions from evidence instead of asking the user.
+2. Map the unresolved decisions and their dependencies. Start with prerequisites that constrain later choices.
+3. Ask exactly one question at a time and wait for the answer.
+4. Explain why the question matters when that is not obvious.
+5. Offer a recommended answer with concise reasoning and the key tradeoff.
+6. Update the shared understanding after each answer, then ask the next material question.
+
+Focus on decisions that materially affect behavior, scope, architecture, data, security, compatibility, user experience, or irreversible cost. Use established project conventions for reversible preferences instead of questioning the user.
+
+Stop when the remaining uncertainty can be handled by reasonable, reversible implementation choices. Do not continue for exhaustiveness.
+
+## Completion
+
+Conclude with a concise shared-understanding summary, assumptions, constraints, decisions, and any unresolved choices. Do not start implementation.

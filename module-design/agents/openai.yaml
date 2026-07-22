@@ -1,0 +1,4 @@
+interface:
+  display_name: "Module Design"
+  short_description: "Improve boundaries, interfaces, and test seams"
+  default_prompt: "Use $module-design to improve this module boundary, interface, dependency direction, and test seam."

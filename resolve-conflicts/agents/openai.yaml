@@ -1,0 +1,4 @@
+interface:
+  display_name: "Resolve Conflicts"
+  short_description: "Resolve Git conflicts from both intentions"
+  default_prompt: "Use $resolve-conflicts to resolve the active Git conflict while preserving both valid intentions."

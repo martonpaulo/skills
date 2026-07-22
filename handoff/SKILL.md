@@ -1,16 +1,39 @@
 ---
 name: handoff
-description: Compact the current conversation into a handoff document for another agent to pick up.
-argument-hint: "What will the next session be used for?"
+description: Write a compact durable handoff containing the exact context, decisions, modified files, verification, risks, and next action another agent or later session needs to continue safely.
+argument-hint: "Focus or topic for the next session"
 disable-model-invocation: true
 ---
 
-Write a handoff document summarising the current conversation so a fresh agent can continue the work. Save to the temporary directory of the user's OS - not the current workspace.
+# Handoff
 
-Include a "suggested skills" section in the document, which suggests skills that the agent should invoke.
+Create a durable continuation note only when the user invokes this skill.
 
-Do not duplicate content already captured in other artifacts (specs, plans, ADRs, issues, commits, diffs). Reference them by path or URL instead.
+## Destination
 
-Redact any sensitive information, such as API keys, passwords, or personally identifiable information.
+Use the repository's configured handoff path when available. Otherwise:
 
-If the user passed arguments, treat them as a description of what the next session will focus on and tailor the doc accordingly.
+- inside a repository: `.scratch/handoffs/<timestamp>-<topic>.md`;
+- outside a repository: `~/tools/handoffs/<timestamp>-<topic>.md`.
+
+Use a sortable local timestamp and a short descriptive slug. Create the destination directory only when writing the handoff.
+
+## Required content
+
+- goal;
+- current state;
+- decisions already made;
+- assumptions and constraints;
+- relevant files and symbols;
+- files modified;
+- commands and tests run;
+- test results;
+- known failures, risks, or uncertainty;
+- Git status and branch when relevant;
+- exact next action.
+
+Keep the document compact and operational. Reference existing artifacts instead of copying them or the full conversation. Redact credentials, secrets, and unnecessary personal information. If suggested skills would materially help, name only skills from this personalized collection.
+
+## Completion
+
+Report the absolute handoff path and confirm that the next action is specific enough to execute safely.

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Domain Model"
+  short_description: "Clarify domain language and rules"
+  default_prompt: "Use $domain-model to resolve the ambiguous domain language and rules in this request."

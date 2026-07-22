@@ -1,3 +1,4 @@
 interface:
   display_name: "Prototype"
-  short_description: "Prototype to answer a design question"
+  short_description: "Run a disposable evidence-gathering experiment"
+  default_prompt: "Use $prototype to build a disposable experiment that answers this concrete question."
