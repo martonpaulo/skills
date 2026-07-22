@@ -1,13 +1,15 @@
 # Personal Engineering Skills
 
-These 14 personalized forks are designed for practical use across coding agents. They preserve engineering discipline while avoiding organization-specific process dependencies.
+These 16 personalized forks are designed for practical use across coding agents. They preserve engineering discipline while avoiding organization-specific process dependencies.
 
 ## Available skills
 
 | Skill | Invocation | Purpose |
 | --- | --- | --- |
 | `architecture-review` | User | Assess an existing codebase and rank evidence-backed architecture improvements. |
+| `apple-docs` | Model or user | Perform authoritative, version-aware Apple development documentation research using Apple docs, Swift sources and proposals, Xcode context, local Xcode documentation, HIG, WWDC, release notes, and distribution guidance. |
 | `debug` | Model or user | Diagnose a non-trivial bug through reproduction, hypotheses, a minimal fix, and verification. |
+| `deep-docs` | Model or user | Perform authoritative, version-aware documentation research for non-Apple frameworks, SDKs, libraries, APIs, CLIs, platforms, and developer tools. |
 | `domain-model` | Model or user | Clarify contradictory domain terminology, states, rules, and relationships. |
 | `dont-reinvent-the-wheel` | Model or user | Evaluate whether a specific capability should reuse an existing project feature, native platform capability, maintained dependency, open-source project, external service, hybrid approach, or custom implementation. |
 | `grill` | User | Pressure-test a plan through a focused interview without writing files. |
@@ -30,14 +32,20 @@ These 14 personalized forks are designed for practical use across coding agents.
 - `dont-reinvent-the-wheel` uses `grilling` when unresolved requirements materially affect the decision.
 - `dont-reinvent-the-wheel` uses `prototype` when practical fit must be validated.
 - `dont-reinvent-the-wheel` uses `architecture-review` only for an explicitly requested broad reuse audit.
+- `deep-docs` defers Apple development documentation to `apple-docs`.
+- `research` uses `apple-docs` for authoritative Apple documentation and `deep-docs` for precise version-aware software documentation.
+- `debug` uses `apple-docs` or `deep-docs` when a bug depends on documented behavior.
+- `dont-reinvent-the-wheel` uses `apple-docs` or `deep-docs` when native capability or version support must be verified.
 
-## Renamed from upstream
+## Upstream mapping
 
 | Upstream | Personal name |
 | --- | --- |
 | `prototype` | `prototype` |
 | `research` | `research` |
 | `dont-reinvent-the-wheel` | `dont-reinvent-the-wheel` |
+| `apple-developer-docs` | `apple-docs` |
+| `appledeepdoc-mcp` | Architectural reference for `deep-docs`, not a runtime dependency |
 | `improve-codebase-architecture` | `architecture-review` |
 | `diagnosing-bugs` | `debug` |
 | `domain-modeling` | `domain-model` |

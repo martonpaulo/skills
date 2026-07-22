@@ -51,6 +51,8 @@ When formal skill invocation is unavailable, apply the same evidence standard di
 
 Never fabricate a package, API, price, license, compatibility claim, security status, or maintenance signal.
 
+Use `apple-docs` to verify whether an Apple platform already provides the capability. Use `deep-docs` to verify native, framework, SDK, API, or version-specific capabilities elsewhere. This skill retains ownership of the build-versus-reuse decision.
+
 Read [marketplace.md](references/marketplace.md) only when commercial source-code products are genuinely plausible for the detected stack, capability, ownership requirements, integration model, security posture, and license needs.
 
 ### 5. Compare with custom implementation

@@ -1,0 +1,6 @@
+interface:
+  display_name: "Apple Docs"
+  short_description: "Authoritative version-aware Apple documentation"
+  default_prompt: "Use $apple-docs to verify this Apple API behavior against the detected project and SDK versions."
+policy:
+  allow_implicit_invocation: true

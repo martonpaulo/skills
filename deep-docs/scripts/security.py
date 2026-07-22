@@ -13,24 +13,9 @@ class ValidationResult:
 
 
 class CodeValidator:
-    """Reject code that could escape the small documentation API surface."""
-
-    BLOCKED_FUNCTIONS = {
-        "__import__",
-        "breakpoint",
-        "compile",
-        "delattr",
-        "dir",
-        "eval",
-        "exec",
-        "getattr",
-        "globals",
-        "hasattr",
-        "input",
-        "locals",
-        "open",
-        "setattr",
-        "vars",
+    BLOCKED = {
+        "__import__", "breakpoint", "compile", "delattr", "dir", "eval", "exec",
+        "getattr", "globals", "hasattr", "input", "locals", "open", "setattr", "vars",
     }
 
     def __init__(self, max_code_length: int = 10_000):
@@ -46,29 +31,27 @@ class CodeValidator:
         except SyntaxError as exc:
             return ValidationResult(False, [f"Syntax error at line {exc.lineno}: {exc.msg}"])
 
-        errors: list[str] = []
+        errors = []
         has_result = False
         for node in ast.walk(tree):
             if isinstance(node, (ast.Import, ast.ImportFrom)):
                 errors.append("Imports are not allowed")
             elif isinstance(node, ast.Name):
-                if node.id in self.BLOCKED_FUNCTIONS:
+                if node.id in self.BLOCKED:
                     errors.append(f"Name '{node.id}' is not allowed")
                 if node.id.startswith("__") and node.id.endswith("__"):
                     errors.append(f"Dunder name '{node.id}' is not allowed")
-            elif isinstance(node, ast.Attribute):
-                if node.attr.startswith("__") and node.attr.endswith("__"):
-                    errors.append(f"Dunder attribute '{node.attr}' is not allowed")
+            elif isinstance(node, ast.Attribute) and node.attr.startswith("__") and node.attr.endswith("__"):
+                errors.append(f"Dunder attribute '{node.attr}' is not allowed")
             elif isinstance(node, ast.Call):
-                if isinstance(node.func, ast.Name) and node.func.id in self.BLOCKED_FUNCTIONS:
+                if isinstance(node.func, ast.Name) and node.func.id in self.BLOCKED:
                     errors.append(f"Call to '{node.func.id}' is not allowed")
-                if isinstance(node.func, ast.Attribute) and node.func.attr in self.BLOCKED_FUNCTIONS:
+                if isinstance(node.func, ast.Attribute) and node.func.attr in self.BLOCKED:
                     errors.append(f"Call to '{node.func.attr}' is not allowed")
             elif isinstance(node, ast.Assign):
                 has_result |= any(isinstance(target, ast.Name) and target.id == "result" for target in node.targets)
             elif isinstance(node, ast.AnnAssign):
                 has_result |= isinstance(node.target, ast.Name) and node.target.id == "result"
-
         if not has_result:
             errors.append("Code must assign the final JSON-serializable value to 'result'")
         return ValidationResult(not errors, sorted(set(errors)))

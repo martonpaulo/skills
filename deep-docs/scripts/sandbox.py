@@ -1,4 +1,4 @@
-"""Subprocess sandbox with a documentation-only IPC bridge."""
+"""Subprocess sandbox exposing only normalized documentation APIs."""
 
 from __future__ import annotations
 
@@ -28,17 +28,11 @@ class ExecutionResult:
     api_calls_made: int = 0
 
     def to_dict(self) -> dict:
-        values = vars(self)
-        return {key: value for key, value in values.items() if value not in (None, "")}
+        return {key: value for key, value in vars(self).items() if value not in (None, "")}
 
 
 class SandboxExecutor:
-    """Execute validated Python in a restricted child process.
-
-    AST validation is defense in depth. The separate process, restricted
-    builtins, resource limits, isolated working directory, minimal environment,
-    timeout, and narrow IPC API form the runtime boundary.
-    """
+    """Use AST checks plus process, namespace, time, memory, and output boundaries."""
 
     TEMPLATE = r'''
 import base64
@@ -57,23 +51,19 @@ except (AttributeError, ValueError, resource.error):
 ALLOWED_BUILTINS = {{
     "abs": abs, "all": all, "any": any, "bool": bool, "dict": dict,
     "enumerate": enumerate, "Exception": Exception, "filter": filter,
-    "float": float, "IndexError": IndexError, "int": int,
-    "isinstance": isinstance, "KeyError": KeyError, "len": len,
-    "list": list, "map": map, "max": max, "min": min, "next": next,
-    "None": None, "pow": pow, "range": range, "repr": repr,
-    "reversed": reversed, "round": round, "RuntimeError": RuntimeError,
-    "set": set, "sorted": sorted, "str": str, "sum": sum,
-    "True": True, "False": False, "tuple": tuple, "TypeError": TypeError,
-    "ValueError": ValueError, "ZeroDivisionError": ZeroDivisionError, "zip": zip,
+    "float": float, "IndexError": IndexError, "int": int, "isinstance": isinstance,
+    "KeyError": KeyError, "len": len, "list": list, "map": map, "max": max,
+    "min": min, "next": next, "None": None, "pow": pow, "range": range,
+    "repr": repr, "reversed": reversed, "round": round, "RuntimeError": RuntimeError,
+    "set": set, "sorted": sorted, "str": str, "sum": sum, "True": True,
+    "False": False, "tuple": tuple, "TypeError": TypeError, "ValueError": ValueError,
+    "ZeroDivisionError": ZeroDivisionError, "zip": zip,
 }}
 
 def _call(name, *args, **kwargs):
     sys.stdout.write(json.dumps({{"__api_call__": {{"name": name, "args": list(args), "kwargs": kwargs}}}}) + "\n")
     sys.stdout.flush()
-    line = sys.stdin.readline()
-    if not line:
-        raise RuntimeError("Documentation API bridge closed")
-    response = json.loads(line)
+    response = json.loads(sys.stdin.readline())
     if "error" in response:
         raise RuntimeError(response["error"])
     return response.get("result")
@@ -81,22 +71,18 @@ def _call(name, *args, **kwargs):
 namespace = {{"__builtins__": ALLOWED_BUILTINS}}
 for api_name in {api_names}:
     namespace[api_name] = (lambda name: lambda *args, **kwargs: _call(name, *args, **kwargs))(api_name)
-
 printed = []
 def _print(*args, **kwargs):
-    if kwargs:
-        unsupported = set(kwargs) - {{"sep", "end"}}
-        if unsupported:
-            raise TypeError("Only sep and end are supported by print")
+    unsupported = set(kwargs) - {{"sep", "end"}}
+    if unsupported:
+        raise TypeError("Only sep and end are supported by print")
     printed.append(kwargs.get("sep", " ").join(str(value) for value in args) + kwargs.get("end", "\n"))
 namespace["print"] = _print
 
 try:
     code = base64.b64decode({encoded_code!r}).decode("utf-8")
     exec(compile(code, "<documentation-query>", "exec"), namespace, namespace)
-    value = namespace["result"]
-    payload = {{"success": True, "result": value, "stdout": "".join(printed)}}
-    encoded = json.dumps(payload, ensure_ascii=False)
+    encoded = json.dumps({{"success": True, "result": namespace["result"], "stdout": "".join(printed)}}, ensure_ascii=False)
     if len(encoded.encode("utf-8")) > {output_bytes}:
         raise ValueError("Sandbox output exceeds {output_bytes} bytes")
 except Exception as exc:
@@ -105,18 +91,10 @@ sys.stdout.write("__SANDBOX_COMPLETE__\n" + encoded + "\n")
 sys.stdout.flush()
 '''
 
-    def __init__(
-        self,
-        timeout: int = 10,
-        max_memory_mb: int = 64,
-        max_output_bytes: int = 100_000,
-        python_path: str | None = None,
-        api_handlers: dict[str, Callable] | None = None,
-    ):
+    def __init__(self, *, timeout: int = 10, max_memory_mb: int = 64, max_output_bytes: int = 100_000, api_handlers: dict[str, Callable] | None = None):
         self.timeout = max(1, min(int(timeout), 60))
         self.max_memory_mb = max(32, min(int(max_memory_mb), 512))
         self.max_output_bytes = max(1_024, min(int(max_output_bytes), 1_000_000))
-        self.python_path = python_path or sys.executable
         self.api_handlers = api_handlers or {}
         self.validator = CodeValidator()
 
@@ -124,13 +102,8 @@ sys.stdout.flush()
         started = time.monotonic()
         validation = self.validator.validate(code)
         if not validation.is_safe:
-            return ExecutionResult(
-                False,
-                error="; ".join(validation.errors),
-                error_type="ValidationError",
-                execution_time_ms=int((time.monotonic() - started) * 1_000),
-            )
-        encoded = base64.b64encode(code.encode("utf-8")).decode("ascii")
+            return ExecutionResult(False, error="; ".join(validation.errors), error_type="ValidationError")
+        encoded = base64.b64encode(code.encode()).decode()
         script = self.TEMPLATE.format(
             timeout=self.timeout,
             memory_mb=self.max_memory_mb,
@@ -142,16 +115,14 @@ sys.stdout.flush()
         result.execution_time_ms = int((time.monotonic() - started) * 1_000)
         return result
 
-    def _api_response(self, request: dict) -> dict:
+    def _call(self, request: dict) -> dict:
         call = request.get("__api_call__", {})
         name = call.get("name")
-        args = call.get("args", [])
+        args = call.get("args")
         kwargs = call.get("kwargs", {})
         handler = self.api_handlers.get(name)
-        if handler is None:
-            return {"error": f"Unknown documentation API: {name}"}
-        if not isinstance(args, list) or not isinstance(kwargs, dict):
-            return {"error": "API arguments must be a list and keyword arguments must be an object"}
+        if handler is None or not isinstance(args, list) or not isinstance(kwargs, dict):
+            return {"error": "Unknown documentation API or invalid arguments"}
         try:
             value = handler(*args, **kwargs)
             json.dumps(value)
@@ -161,26 +132,22 @@ sys.stdout.flush()
 
     def _run(self, script: str) -> ExecutionResult:
         api_calls = 0
-        with tempfile.TemporaryDirectory(prefix="apple-docs-sandbox-") as sandbox_dir:
-            script_path = os.path.join(sandbox_dir, "runner.py")
-            with open(script_path, "w", encoding="utf-8") as handle:
+        process = None
+        with tempfile.TemporaryDirectory(prefix="deep-docs-sandbox-") as directory:
+            path = os.path.join(directory, "runner.py")
+            with open(path, "w", encoding="utf-8") as handle:
                 handle.write(script)
             with tempfile.TemporaryFile(mode="w+", encoding="utf-8") as stderr_file:
                 process = subprocess.Popen(
-                    [self.python_path, "-I", script_path],
-                    cwd=sandbox_dir,
-                    stdin=subprocess.PIPE,
-                    stdout=subprocess.PIPE,
-                    stderr=stderr_file,
-                    text=True,
+                    [sys.executable, "-I", path], cwd=directory,
+                    stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=stderr_file,
+                    text=True, shell=False, start_new_session=True,
                     env={"PATH": os.environ.get("PATH", "/usr/bin:/bin"), "LANG": "C", "LC_ALL": "C"},
-                    shell=False,
-                    start_new_session=True,
                 )
                 selector = selectors.DefaultSelector()
                 selector.register(process.stdout, selectors.EVENT_READ)
-                deadline = time.monotonic() + self.timeout
                 payload = None
+                deadline = time.monotonic() + self.timeout
                 try:
                     while time.monotonic() < deadline:
                         ready = selector.select(timeout=min(0.1, max(0.0, deadline - time.monotonic())))
@@ -201,8 +168,7 @@ sys.stdout.flush()
                             continue
                         if "__api_call__" in request:
                             api_calls += 1
-                            response = self._api_response(request)
-                            process.stdin.write(json.dumps(response) + "\n")
+                            process.stdin.write(json.dumps(self._call(request)) + "\n")
                             process.stdin.flush()
                     if payload is None and process.poll() is None:
                         process.kill()
@@ -219,18 +185,15 @@ sys.stdout.flush()
                 stderr = stderr_file.read()[:20_000]
                 if payload is None:
                     return ExecutionResult(False, stderr=stderr, error="Sandbox exited without a result", error_type="ProcessError", api_calls_made=api_calls)
-                if len(payload.encode("utf-8")) > self.max_output_bytes:
+                if len(payload.encode()) > self.max_output_bytes:
                     return ExecutionResult(False, stderr=stderr, error="Sandbox output exceeded the host limit", error_type="OutputLimitError", api_calls_made=api_calls)
                 try:
                     decoded = json.loads(payload)
                 except json.JSONDecodeError:
                     return ExecutionResult(False, stderr=stderr, error="Sandbox returned invalid JSON", error_type="ParseError", api_calls_made=api_calls)
                 return ExecutionResult(
-                    bool(decoded.get("success")),
-                    result=decoded.get("result"),
-                    stdout=decoded.get("stdout", "")[:20_000],
-                    stderr=stderr,
-                    error=decoded.get("error"),
-                    error_type=decoded.get("error_type"),
+                    bool(decoded.get("success")), result=decoded.get("result"),
+                    stdout=decoded.get("stdout", "")[:20_000], stderr=stderr,
+                    error=decoded.get("error"), error_type=decoded.get("error_type"),
                     api_calls_made=api_calls,
                 )

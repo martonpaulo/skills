@@ -1,80 +1,10 @@
-# Sandbox Security Model
+# Sandbox security
 
-## Architecture
+Submitted query code is untrusted. The runner applies defense in depth:
 
-```
-┌─────────────────┐     IPC (stdin/stdout)     ┌──────────────────┐
-│  MCP Server     │◄──────────────────────────►│  Sandbox Process │
-│  (Parent)       │                            │  (Subprocess)    │
-│                 │  {"__api_call__": ...}     │                  │
-│  - Database     │◄─────────────────────────  │  - User code     │
-│  - API Bridge   │  {"result": ...}           │  - Restricted    │
-│                 │ ─────────────────────────► │    builtins      │
-└─────────────────┘                            └──────────────────┘
-```
+1. AST validation rejects imports, dangerous built-ins, dunder access, and code without a `result` assignment.
+2. A separate Python process runs with restricted built-ins, an isolated temporary working directory, a minimal environment, timeout, output cap, and resource limits where the platform supports them.
+3. The child can call only named documentation APIs through JSON IPC. It has no generic filesystem, network, or subprocess API.
+4. Host APIs validate inputs, constrain paths and domains, cap results, and serialize responses before returning them.
 
-**Primary boundary:** Subprocess isolation (OS-level)
-**Secondary:** Static code validation (defense-in-depth)
-
-## Forbidden Operations
-
-### AST Validation
-Code is parsed and validated structurally (not via regex, so strings and comments are ignored):
-- Import statements (`import`, `from ... import`)
-- Blocked function calls (`exec`, `eval`, `compile`, `open`, `getattr`, `setattr`, `delattr`, `hasattr`, `globals`, `locals`, `vars`, `dir`, `breakpoint`, `input`, `__import__`)
-- Blocked module access (`os.`, `sys.`, `subprocess.`)
-- Dunder attribute access (`__class__`, `__name__`, `__subclasses__`, etc.)
-- Dunder name references (`__builtins__`, etc.)
-
-## Resource Limits
-
-```python
-timeout = 5          # seconds
-max_memory = 50      # MB
-max_code_length = 10000  # characters
-max_output = 10 * 1024   # bytes
-```
-
-## IPC Protocol
-
-Sandbox calls APIs via stdout/stdin JSON:
-
-```json
-// Request (sandbox → parent)
-{"__api_call__": {"func": "search_proposals", "args": ["async"]}}
-
-// Response (parent → sandbox)
-{"result": {"proposals": [...]}}
-```
-
-## Allowed Builtins (Complete List)
-
-```python
-# Type constructors
-list, dict, set, tuple, str, int, float, bool, bytes
-
-# Iteration
-len, range, enumerate, zip, map, filter, reversed
-
-# Aggregation
-min, max, sum, any, all, sorted
-
-# Math
-abs, round, pow, divmod
-
-# Type checking
-isinstance, type
-
-# Output
-print, repr
-
-# Constants
-True, False, None
-```
-
-## What Happens on Violation
-
-1. **AST violation:** Rejection with specific error
-2. **Timeout:** Process killed, TimeoutError returned
-3. **Memory exceeded:** Process killed by OS
-4. **No `result` variable:** Warning returned (code runs but result is None)
+AST validation is not the sole security boundary. Resource limits differ across operating systems, so the subprocess, API allowlist, timeouts, and output limits remain required. Never add `open`, imports, arbitrary attribute introspection, generic subprocess execution, generic URL fetching, or arbitrary path access to the sandbox namespace.

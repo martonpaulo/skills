@@ -20,6 +20,13 @@ from .swift_compiler import (
     list_compiler_phases, get_compiler_phase,
 )
 from .xcode_releases import list_xcode_release_notes, get_xcode_release_notes_url
+from .authority import get_source_authority
+from .project_context import configure_project_root, detect_apple_project_context
+from .local_xcode_docs import (
+    fetch_local_xcode_doc,
+    list_xcode_documentation_sources,
+    search_local_xcode_docs,
+)
 
 __all__ = [
     'fetch_documentation',
@@ -45,4 +52,14 @@ __all__ = [
     'get_compiler_phase',
     'list_xcode_release_notes',
     'get_xcode_release_notes_url',
+    'get_source_authority',
+    'detect_apple_project_context',
+    'list_xcode_documentation_sources',
+    'search_local_xcode_docs',
+    'fetch_local_xcode_doc',
 ]
+
+
+def configure(project_root='.'):
+    """Configure host-owned context. This function is not exposed in the sandbox."""
+    configure_project_root(project_root)

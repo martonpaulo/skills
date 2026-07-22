@@ -7,6 +7,8 @@ description: Diagnose a non-trivial bug through reproduction, evidence gathering
 
 Use this discipline for difficult bugs, intermittent failures, and performance regressions. For a local failure with an already-proven cause, use the normal implementation workflow.
 
+When a hypothesis depends on documented API behavior, version compatibility, deprecation, configuration semantics, or migration changes, use `apple-docs` for Apple development or `deep-docs` elsewhere. This skill retains ownership of reproduction, diagnosis, and the fix.
+
 ## Workflow
 
 1. Inspect the relevant code, call sites, tests, logs, and recent changes before editing.

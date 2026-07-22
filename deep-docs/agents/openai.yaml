@@ -1,0 +1,6 @@
+interface:
+  display_name: "Deep Docs"
+  short_description: "Version-aware authoritative software documentation"
+  default_prompt: "Use $deep-docs to verify this behavior against the exact installed or requested software version."
+policy:
+  allow_implicit_invocation: true
