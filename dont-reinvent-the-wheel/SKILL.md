@@ -70,7 +70,7 @@ Always retain custom implementation as the baseline. Compare only criteria mater
 
 Read [scorecard.md](references/scorecard.md) for material comparisons, confidence, effort sizing, optional scoring, and replacement safety. A failed must-have requirement disqualifies a candidate regardless of its aggregate score.
 
-If practical fit remains the strongest uncertainty—such as undocumented behavior, performance, SDK ergonomics, UI embedding, migration complexity, glue code, framework compatibility, or native-platform support—recommend `prototype`. Do not build the experiment as part of this decision unless the user separately requests implementation and that workflow takes over.
+If practical fit remains the strongest uncertainty (undocumented behavior, performance, SDK ergonomics, UI embedding, migration complexity, glue code, framework compatibility, or native-platform support), recommend `prototype`. Do not build the experiment as part of this decision unless the user separately requests implementation and that workflow takes over.
 
 ### 6. Lead with the decision
 

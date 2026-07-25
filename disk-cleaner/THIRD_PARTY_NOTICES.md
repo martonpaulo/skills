@@ -6,7 +6,7 @@
 - **Imported revision:** `b8e02ce23c3c05c9aea3f70810e83418794a49f6`
 - **Imported on:** 2026-07-25
 - **Original authors:** Disk Cleaner Contributors
-- **License:** MIT — full text in `LICENSE`, preserved unchanged.
+- **License:** MIT, full text in `LICENSE`, preserved unchanged.
 
 The `diskcleaner/` package and the `scripts/` runners originate from that project's
 `skills/disk-cleaner/` directory.
@@ -17,7 +17,7 @@ The `diskcleaner/` package and the `scripts/` runners originate from that projec
 feature catalogue with an emoji policy, marketing copy, and sample "multi-agent" code calling a
 `Anthropic().agent.create` API that does not exist. The replacement is an audit-first workflow
 with explicit safety boundaries. The scan-sizing decision tree (sample first, choose mode from
-the estimate) and the mandatory dry-run before deletion are kept from upstream — they are the
+the estimate) and the mandatory dry-run before deletion are kept from upstream; they are the
 genuinely good ideas in it.
 
 **Audit workflow added.** `references/audit-report.md` and `references/macos-developer.md` are
@@ -45,7 +45,7 @@ collection is English-only.
 
 | Removed | Reason |
 | --- | --- |
-| `scripts/analyze_progressive.py` | Broken upstream — imports `init_console` from `skill_bootstrap`, which does not define it. `analyze_disk.py --progressive` covers the same need. |
+| `scripts/analyze_progressive.py` | Broken upstream: imports `init_console` from `skill_bootstrap`, which does not define it. `analyze_disk.py --progressive` covers the same need. |
 | `scripts/interactive_wizard.py`, `diskcleaner/core/interactive.py` | Interactive TTY prompts an agent cannot drive; overlaps the workflow in `SKILL.md`. |
 | `scripts/scheduler.py` | Installs cron/launchd jobs. Out of scope, and this skill does not set up background execution. |
 | `scripts/organize_files.py`, `diskcleaner/core/organizer.py`, `diskcleaner/core/rules/` | Moves the user's files into new folder structures. A different responsibility from reclaiming space. |

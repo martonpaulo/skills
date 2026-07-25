@@ -46,7 +46,7 @@ These are absolute. They hold even if the user asks for speed.
 
 Establish the target path (default: the user's home directory), whether this is an audit or an
 approved cleanup, and how much time the user will accept. If the machine is a developer
-machine, read `references/macos-developer.md` before scanning — it lists the toolchain
+machine, read `references/macos-developer.md` before scanning; it lists the toolchain
 locations that generic scanners miss.
 
 ### 2. Size the job before scanning it
@@ -62,12 +62,11 @@ Use `estimated_time_seconds` from the result to pick the mode:
 | Estimate | Mode | Command |
 | --- | --- | --- |
 | < 30 s | Full scan | `analyze_disk.py --path <path>` |
-| 30–120 s | Time-limited | `analyze_disk.py --path <path> --time-limit 60` |
+| 30 to 120 s | Time-limited | `analyze_disk.py --path <path> --time-limit 60` |
 | > 120 s | Progressive | `analyze_disk.py --path <path> --progressive --time-limit 60` |
 
 Tell the user the expected duration before starting, and never leave them without feedback for
-more than two minutes. Partial results from an interrupted scan are still useful — say they are
-partial.
+more than two minutes. Partial results from an interrupted scan are still useful; say so.
 
 ### 3. Audit read-only
 
@@ -80,7 +79,7 @@ Combine the scripts with direct read-only inspection. Cover, at minimum:
   simulator and emulator data, container images.
 - Duplicates and large stale files, old installers, forgotten downloads.
 - Residue from applications that no longer exist.
-- Local backups and snapshots — for reporting only.
+- Local backups and snapshots, for reporting only.
 
 `references/macos-developer.md` has the macOS paths and the safe read-only commands.
 `references/temp_locations.md` has the cross-platform cache and temp locations.
@@ -90,9 +89,9 @@ Combine the scripts with direct read-only inspection. Cover, at minimum:
 Do not present a raw size list. Every item gets three labels, defined in
 `references/audit-report.md`:
 
-- **Risk** — Low, Medium, High.
-- **Recreatability** — Easy, Moderate, Hard.
-- **Recommendation** — one of the fixed set (Safe to clean, Good candidate but review first,
+- **Risk**: Low, Medium, High.
+- **Recreatability**: Easy, Moderate, Hard.
+- **Recommendation**: one of the fixed set (Safe to clean, Good candidate but review first,
   Keep, Do not touch, Investigate manually, Back up first, Depends on whether still in use).
 
 Avoid double counting: when a parent directory and a child both appear, say which total
@@ -101,7 +100,7 @@ contains the other, and count the space once in the summary.
 ### 5. Report
 
 Follow the structure in `references/audit-report.md`. Write the report in the language the user
-is writing in, in plain terms — this is a report for a person deciding what to delete, not a
+is writing in, in plain terms. This is a report for a person deciding what to delete, not a
 tool dump. Sizes in MB or GB. Order by impact within each risk level. End with a phased plan
 that has not been executed.
 
@@ -116,7 +115,7 @@ python3 scripts/clean_disk.py --cache --logs --force     # only after explicit c
 
 Prefer a targeted path (`--path`) over a broad category when the audit identified a specific
 offender. For toolchain caches, prefer the tool's own command (`brew cleanup`, `npm cache
-clean --force`, `docker system prune`) and tell the user what it will do — but only run it when
+clean --force`, `docker system prune`) and tell the user what it will do, but only run it when
 the user asked for that cleanup.
 
 Afterwards, re-measure free space and report actual versus estimated savings.
@@ -124,11 +123,11 @@ Afterwards, re-measure free space and report actual versus estimated savings.
 ## Scripts
 
 Run them from the skill root; they locate the bundled `diskcleaner` package themselves.
-Requires Python 3.7+ and nothing else — no pip install.
+Requires Python 3.7+ and nothing else: no pip install.
 
 | Script | Purpose | Notable flags |
 | --- | --- | --- |
-| `check_skill.py` | Verify the package works in this environment | — |
+| `check_skill.py` | Verify the package works in this environment | n/a |
 | `analyze_disk.py` | Size analysis | `--sample`, `--progressive`, `--file-limit`, `--time-limit`, `--deep-scan`, `--find-duplicates`, `--json` |
 | `find_duplicates.py` | Duplicate detection by hash | `--strategy {adaptive,fast,accurate}`, `--all`, `--json` |
 | `analyze_growth.py` | Growth trend over captured snapshots | `--capture`, `--history`, `--cleanup DAYS` |

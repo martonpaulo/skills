@@ -6,7 +6,7 @@ The [MIT license](LICENSE) in this repository covers the **original work in this
 the personalized skill content, the documentation, the reference files, and the configuration
 written for it.
 
-It does not — and cannot — relicense third-party work that this repository vendors or adapts.
+It does not, and cannot, relicense third-party work that this repository vendors or adapts.
 
 ## Third-party work
 
@@ -26,5 +26,5 @@ was changed.
 
 `dont-reinvent-the-wheel` and `grey-market` derive from a repository that publishes no license.
 The MIT grant in `LICENSE` **does not extend to the upstream material in those two
-directories** — that permission is not mine to give. They are kept here for personal use, with
+directories**. That permission is not mine to give. They are kept here for personal use, with
 attribution to the original author. Contact felinto-dev before reusing them.

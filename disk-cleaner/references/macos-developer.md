@@ -76,7 +76,7 @@ Per-project: `node_modules`, `.next`, `dist`, `build`, `out`, `.turbo`, `.parcel
 
 Global stores: `~/.npm`, `~/.yarn`, `~/.pnpm-store`, `~/.bun`, `~/.deno`, `~/.nvm`.
 
-A `node_modules` beside a lockfile is low risk — `npm ci` restores it exactly. Without a
+A `node_modules` beside a lockfile is low risk, `npm ci` restores it exactly. Without a
 lockfile it is medium risk, because the restored tree may differ.
 
 ### JVM
@@ -101,7 +101,7 @@ dry-run commands above to see what `brew cleanup` and `brew autoremove` would re
 
 ### Containers and VMs
 
-`~/Library/Containers/com.docker.docker/Data` (Docker Desktop disk image — often tens of GB and
+`~/Library/Containers/com.docker.docker/Data` (Docker Desktop disk image, often tens of GB and
 does not shrink on its own), Parallels, UTM, VMware, VirtualBox images, Android emulator images
 under `~/.android/avd`.
 
@@ -123,7 +123,7 @@ casks) with what still has state in:
 `/Library/LaunchDaemons`.
 
 For launch agents and daemons, read only `Label`, `Program`, `ProgramArguments`, and
-`RunAtLoad`, and check whether the referenced binary exists. Do not dump whole plists — they can
+`RunAtLoad`, and check whether the referenced binary exists. Do not dump whole plists, they can
 contain secrets.
 
 | Plist | Label | Target binary | Exists? | Likely app | Risk | Recommendation |

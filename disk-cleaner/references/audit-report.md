@@ -1,7 +1,7 @@
 # Audit report structure
 
 Use this when producing a disk audit. Write in the user's language. Sizes in MB or GB. Every
-table is for a person deciding what to delete — explain jargon inline.
+table is for a person deciding what to delete, so explain jargon inline.
 
 ## Classification vocabulary
 
@@ -78,7 +78,7 @@ binary that does not exist.
 | Project | Path | Dependencies | Builds/caches | Total candidate | Last modified | Recreatable | Risk | Recommendation |
 | --- | --- | ---: | ---: | ---: | --- | --- | --- | --- |
 
-Heuristics: untouched for more than 180 days is a strong candidate; 90–180 days deserves
+Heuristics: untouched for more than 180 days is a strong candidate; 90 to 180 days deserves
 review; modified in the last 30 days should usually be kept. A dependency directory with a
 lockfile is low risk; without one it is medium risk. Build output is generally low risk.
 

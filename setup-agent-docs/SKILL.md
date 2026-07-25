@@ -8,7 +8,7 @@ disable-model-invocation: true
 
 Run this user-invoked setup once per repository when the user wants explicit paths for artifacts written by the project skills in this collection. It must remain safe to run again.
 
-Scope: only project skills produce repository artifacts. Personal-use skills such as `disk-cleaner` and `grey-market` operate on the user's machine, not on a repository — never configure paths, conventions, or guidance for them.
+Scope: only project skills produce repository artifacts. Personal-use skills such as `disk-cleaner` and `grey-market` operate on the user's machine, not on a repository, never configure paths, conventions, or guidance for them.
 
 ## Workflow
 
