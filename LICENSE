@@ -19,28 +19,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
----
-
-Scope of this license
-
-This license covers the original work in this repository: the personalized
-skill content, documentation, references, and configuration written for this
-collection.
-
-It does not and cannot relicense third-party work that this repository
-vendors or adapts. Each such skill keeps its upstream license and records its
-provenance:
-
-- Skills derived from mattpocock/skills, Ahrentlov/apple-docs-skill,
-  Ahrentlov/appledeepdoc-mcp, and gccszs/disk-cleaner are MIT-licensed
-  upstream. Where code is vendored, the upstream LICENSE file is preserved in
-  that skill's directory.
-
-- `dont-reinvent-the-wheel` and `grey-market` derive from
-  felinto-dev/felinto-skills, which publishes no license. The MIT grant above
-  does not extend to the upstream material in those two directories. They are
-  kept here for personal use with attribution; check with the original author
-  before reusing them.
-
-See README.md and each skill's THIRD_PARTY_NOTICES.md for details.

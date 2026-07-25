@@ -120,9 +120,9 @@ imported revision and exactly what was changed.
 
 The original work in this repository — the personalization, the documentation, and the
 references written for this collection — is [MIT licensed](LICENSE). That grant covers my work
-only. Vendored upstream code stays under its own license, and it does not extend to
-`dont-reinvent-the-wheel` or `grey-market`: their upstream publishes no license, so that
-permission is not mine to give. Ask felinto-dev before reusing those two.
+only: vendored upstream code stays under its own license, and it does not extend to
+`dont-reinvent-the-wheel` or `grey-market`, whose upstream publishes no license at all. See
+[NOTICE.md](NOTICE.md) for exactly what applies to what.
 
 Do not update these skills with `npx skills update` — it would overwrite the personalization.
 Review upstream changes and port over only what is worth having.
