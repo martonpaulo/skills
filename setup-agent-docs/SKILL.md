@@ -2,6 +2,10 @@
 name: setup-agent-docs
 description: Configure lightweight per-repository conventions for optional domain glossaries, ADRs, research notes, handoffs, and disposable prototypes without setting up trackers, tickets, labels, or backlog workflows.
 disable-model-invocation: true
+metadata:
+  scope: meta
+  role: setup
+  mutation: docs
 ---
 
 # Setup Agent Docs

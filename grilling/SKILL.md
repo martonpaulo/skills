@@ -1,6 +1,10 @@
 ---
 name: grilling
 description: Interview the user one decision at a time to resolve material uncertainty in a plan or design before implementation. Use only when unresolved choices could significantly affect behavior, scope, architecture, data, security, compatibility, or user experience.
+metadata:
+  scope: project
+  role: foundation
+  mutation: none
 ---
 
 # Grilling

@@ -1,6 +1,10 @@
 ---
 name: debug
 description: Diagnose a non-trivial bug through reproduction, evidence gathering, hypothesis testing, root-cause analysis, a minimal fix, and regression verification. Use when the cause is not already obvious.
+metadata:
+  scope: project
+  role: workflow
+  mutation: write
 ---
 
 # Debug

@@ -1,6 +1,10 @@
 ---
 name: dont-reinvent-the-wheel
 description: Evaluate whether a specific requested software capability should use an existing project feature, native platform capability, maintained dependency, open-source project, external service, hybrid approach, or custom implementation. Use for explicit build-versus-reuse decisions or when evaluating replacements for one identified custom capability. Do not use for general research, architecture reviews, codebase-wide audits, implementation work, debugging, or requirements interviews.
+metadata:
+  scope: project
+  role: workflow
+  mutation: none
 ---
 
 # Don't Reinvent the Wheel

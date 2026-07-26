@@ -1,6 +1,10 @@
 ---
 name: resolve-conflicts
 description: Resolve an in-progress Git merge, rebase, or cherry-pick conflict by reconstructing the intent of both sides, preserving compatible behavior, and validating the resulting code and history.
+metadata:
+  scope: project
+  role: workflow
+  mutation: write
 ---
 
 # Resolve Conflicts

@@ -2,6 +2,9 @@
 name: grey-market
 description: Find digital products (accounts, licenses, subscriptions, gift cards, templates, courses) sold far below the official price in regional markets such as China, India, Brazil, Russia, Southeast Asia and Eastern Europe, by searching discussion communities, forums, messaging groups, and regional marketplaces instead of ordinary search engines. Use when the user asks for cheap keys or licenses, shared accounts, regional offers, loot deals, Brazilian PIX-friendly sellers, Turkish or Argentine gift cards, subscription splitting, or names a grey-market source such as Plati, 52pojie, DesiDime, GGMAX, or Desapego Games. Do not use for ordinary shopping research, for pirated software, or for anything that requires making a purchase.
 metadata:
+  scope: personal
+  role: utility
+  mutation: none
   upstream: https://github.com/felinto-dev/felinto-skills/tree/main/.agents/skills/grey-market
   upstream-author: felinto-dev
 ---

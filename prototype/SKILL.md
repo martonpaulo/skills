@@ -1,6 +1,10 @@
 ---
 name: prototype
 description: Build a small disposable experiment when executing code is the fastest reliable way to answer a concrete technical, behavioral, integration, state-management, or UI question. Do not use for normal production implementation.
+metadata:
+  scope: project
+  role: foundation
+  mutation: temporary
 ---
 
 # Prototype

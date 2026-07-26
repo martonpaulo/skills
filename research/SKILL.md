@@ -1,6 +1,10 @@
 ---
 name: research
 description: Research a technical or product question using high-trust primary sources when a decision depends on current documentation, external evidence, compatibility details, standards, or verified behavior.
+metadata:
+  scope: project
+  role: foundation
+  mutation: docs
 ---
 
 # Research

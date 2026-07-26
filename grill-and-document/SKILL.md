@@ -2,6 +2,10 @@
 name: grill-and-document
 description: Start a focused one-question-at-a-time interview that also preserves resolved domain vocabulary and genuinely consequential architectural decisions without creating tickets or implementing the plan.
 disable-model-invocation: true
+metadata:
+  scope: project
+  role: authoring
+  mutation: docs
 ---
 
 # Grill and Document

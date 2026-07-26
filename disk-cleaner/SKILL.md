@@ -4,6 +4,9 @@ description: Audit a personal computer for reclaimable disk space and, only afte
 license: MIT
 allowed-tools: "Bash(python3:*)"
 metadata:
+  scope: personal
+  role: utility
+  mutation: approval-gated
   upstream: https://github.com/gccszs/disk-cleaner
   upstream-author: Disk Cleaner Contributors
   version: 2.2.0-personal.1

@@ -8,12 +8,40 @@ A personal collection of Agent Skills. Every skill is either a personalized fork
 source skill or written for this collection. Personalization is the point: upstream is a
 starting position, not a spec.
 
-Two categories, kept distinct in [README.md](README.md):
+## Taxonomy
 
-- **Project skills** act on a codebase.
-- **Personal skills** act on the owner's machine or life. They are never configured by
-  `setup-agent-docs`, never referenced from repository conventions, and never treated as part of
-  a project workflow.
+Every skill is classified on two independent axes, declared in frontmatter and mirrored by the
+[README.md](README.md) catalog.
+
+**`scope`** is where the skill acts.
+
+- `project` acts on a codebase.
+- `personal` acts on the owner's machine or life. Never configured by `setup-agent-docs`, never
+  referenced from repository conventions, never treated as part of a project workflow.
+- `meta` acts on the skills and the agent setup themselves.
+
+**`role`** is what the skill does in the flow.
+
+- `setup` prepares an environment or agrees a convention.
+- `foundation` is a reusable capability other skills delegate part of their work to.
+- `workflow` performs one concrete task with a start, a process and a finish.
+- `audit` inspects what exists and ranks findings, without implementing them.
+- `authoring` produces a durable artifact as its main output.
+- `utility` performs an operational task outside any project.
+
+Frequency of use is not a category and must not become one. A skill invoked twice a year is
+still whatever role it performs.
+
+Roles overlap by design. When two fit, pick the one that describes the skill's **main output**:
+`handoff` interviews nothing and produces a note, so it is `authoring`, not `workflow`.
+
+**`mutation`** is a separate property, not a role. It states how far the skill may go:
+`none`, `temporary` (disposable files, all reported), `docs` (documentation only, never
+production code), `write` (project code or configuration), `approval-gated` (nothing without a
+confirmed per-item decision). Declare the maximum the skill is permitted, not the common case.
+
+Invocation is already expressed by `disable-model-invocation`, and effort levels by the skill's
+own arguments. Neither is duplicated into `metadata`; a second copy is a drift bug.
 
 ## Hard rules
 
@@ -47,6 +75,10 @@ exactly. Everything else is optional and belongs inside the skill's own director
 documents loaded on demand, executable scripts, agent-specific metadata, and the licensing and
 attribution files required when upstream work is vendored.
 
+Skill directories stay **flat**, one level under the repository root. Do not group them into
+`audits/`, `workflows/` or any other folder: the taxonomy is metadata, and nesting would only
+break paths, cross-references, and copying a single skill elsewhere.
+
 Read a few existing skills before adding one. They are the current example of the shape, and
 they are authoritative in a way this file cannot be.
 
@@ -60,11 +92,18 @@ disable-model-invocation: true   # user-invoked skills only
 license: MIT                     # when upstream code is vendored
 allowed-tools: "Bash(python3:*)" # when the skill ships executable scripts
 metadata:
-  upstream: <url>
+  scope: project | personal | meta
+  role: setup | foundation | workflow | audit | authoring | utility
+  mutation: none | temporary | docs | write | approval-gated
+  upstream: <url>                  # when derived from someone else's skill
   upstream-author: <name>
   version: <upstream>-personal.N
 ---
 ```
+
+`scope`, `role` and `mutation` are required on every skill and defined under
+[Taxonomy](#taxonomy). A skill that ships its own effort or depth levels declares them where
+they are actually implemented, through `argument-hint` and the workflow, not as inert metadata.
 
 `description` is the whole triggering mechanism. Write narrow triggers and state the
 non-triggers explicitly. A description that fires during ordinary implementation work is a
@@ -89,10 +128,12 @@ agent already follows.
    `chore: import <name> upstream baseline`. It makes the personalization diff reviewable.
 3. Personalize: rewrite the description, strip ceremony and vendor lock-in, translate to
    English, tighten safety, drop broken or out-of-scope files.
-4. Run whatever the skill ships: scripts, tests, diagnostics. Report what you actually ran.
-5. Write `THIRD_PARTY_NOTICES.md` and keep the upstream `LICENSE`.
-6. Update `README.md` (the right table and the relationships) and `NOTICE.md`.
-7. Commit with a focused message and push.
+4. Classify it: `scope`, `role` and `mutation`, decided from what the finished skill actually
+   does rather than from what upstream called it.
+5. Run whatever the skill ships: scripts, tests, diagnostics. Report what you actually ran.
+6. Write `THIRD_PARTY_NOTICES.md` and keep the upstream `LICENSE`.
+7. Update `README.md` (the table for its role, and the relationships) and `NOTICE.md`.
+8. Commit with a focused message and push.
 
 Installing a skill into a particular agent is the owner's local concern and is not tracked here.
 
@@ -100,6 +141,8 @@ Installing a skill into a particular agent is the owner's local concern and is n
 
 - Every skill directory has a `SKILL.md` whose frontmatter `name` matches the directory.
 - Every description states both triggers and non-triggers.
+- Every skill declares `scope`, `role` and `mutation`, using only the documented values.
+- The declared `mutation` is not narrower than what the skill's workflow actually permits.
 - The invocation policy matches what the README claims.
 - Every relative Markdown link resolves.
 - No reference to a renamed, uninstalled, or upstream-only skill name.

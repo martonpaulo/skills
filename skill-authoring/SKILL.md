@@ -2,6 +2,10 @@
 name: skill-authoring
 description: Create, review, or simplify Agent Skills with precise triggers, focused workflows, explicit safety boundaries, useful completion criteria, valid frontmatter, and minimal unnecessary context.
 disable-model-invocation: true
+metadata:
+  scope: meta
+  role: authoring
+  mutation: write
 ---
 
 # Skill Authoring

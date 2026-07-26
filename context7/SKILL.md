@@ -4,6 +4,9 @@ description: Fetch current documentation snippets and code examples for an index
 license: MIT
 allowed-tools: "Bash(ctx7:*), Bash(npx:*)"
 metadata:
+  scope: project
+  role: foundation
+  mutation: none
   upstream: https://github.com/upstash/context7/tree/master/skills/context7-cli
   upstream-author: Upstash, Inc.
   version: 0.5.6-personal.1

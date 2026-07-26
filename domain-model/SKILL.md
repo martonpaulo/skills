@@ -1,6 +1,10 @@
 ---
 name: domain-model
 description: Clarify ambiguous domain terminology, states, rules, entities, and relationships when code, documentation, or requested behavior use inconsistent or overloaded language.
+metadata:
+  scope: project
+  role: foundation
+  mutation: docs
 ---
 
 # Domain Model

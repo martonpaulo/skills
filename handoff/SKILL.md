@@ -3,6 +3,10 @@ name: handoff
 description: Write a compact durable handoff containing the exact context, decisions, modified files, verification, risks, and next action another agent or later session needs to continue safely.
 argument-hint: "Focus or topic for the next session"
 disable-model-invocation: true
+metadata:
+  scope: project
+  role: authoring
+  mutation: docs
 ---
 
 # Handoff

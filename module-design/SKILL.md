@@ -1,6 +1,10 @@
 ---
 name: module-design
 description: Design or improve module boundaries, interfaces, dependency direction, cohesion, coupling, test seams, and responsibility ownership when a code change exposes unclear or unstable structure.
+metadata:
+  scope: project
+  role: workflow
+  mutation: write
 ---
 
 # Module Design

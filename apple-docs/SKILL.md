@@ -4,6 +4,9 @@ description: Research authoritative, version-aware Apple platform documentation 
 license: MIT
 allowed-tools: "Bash(python3:*)"
 metadata:
+  scope: project
+  role: foundation
+  mutation: none
   author: Patrick Ahrentløv
   version: 1.5.0-personal.1
 ---

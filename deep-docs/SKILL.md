@@ -4,6 +4,9 @@ description: Perform authoritative, version-aware documentation research for sof
 license: MIT
 allowed-tools: "Bash(python3:*)"
 metadata:
+  scope: project
+  role: foundation
+  mutation: none
   version: 0.1.0
 ---
 

@@ -2,6 +2,10 @@
 name: architecture-review
 description: Review an existing codebase for high-value architectural improvements, using concrete code evidence to identify weak boundaries, shallow modules, duplication, coupling, scattered responsibilities, and unstable seams.
 disable-model-invocation: true
+metadata:
+  scope: project
+  role: audit
+  mutation: docs
 ---
 
 # Architecture Review

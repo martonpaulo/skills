@@ -2,6 +2,10 @@
 name: grill
 description: Start a focused one-question-at-a-time interview to pressure-test a plan or design without creating documentation or implementing it.
 disable-model-invocation: true
+metadata:
+  scope: project
+  role: workflow
+  mutation: none
 ---
 
 # Grill
