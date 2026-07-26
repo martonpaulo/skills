@@ -64,6 +64,7 @@ copyable on its own.
 | Skill | Invocation | Writes | What it does | Upstream |
 | --- | --- | --- | --- | --- |
 | [`setup-agent-docs`](setup-agent-docs/) | User | `docs` | Configure optional **per-repository paths** for glossaries, ADRs, research, handoffs and prototypes. | [mattpocock/skills → setup-matt-pocock-skills](https://github.com/mattpocock/skills/tree/main/skills/engineering/setup-matt-pocock-skills) |
+| [`setup-project`](setup-project/) | User | `write` | Bootstrap or align a repository's **identity, operating rules, Git policy, public metadata and applicable project foundations**. | Written for this collection. |
 
 ### Foundations
 
@@ -138,6 +139,11 @@ Cross-references exist only where the dependency is real.
 
 ```mermaid
 flowchart LR
+  setup-project --> setup-agent-docs
+  setup-project --> grilling
+  setup-project -.current external evidence.-> research
+  setup-project -.version-specific Apple setup.-> apple-docs
+  setup-project -.version-specific non-Apple setup.-> deep-docs
   grill --> grilling
   grill-and-document --> grilling
   grill-and-document --> domain-model
@@ -160,6 +166,10 @@ flowchart LR
 <details>
 <summary>Conditional edges, spelled out</summary>
 
+- `setup-project` delegates optional glossary, ADR, research, handoff and prototype path
+  selection to `setup-agent-docs` after establishing the repository's root guidance. It uses
+  `grilling` for the one-time setup decisions, `research` only for current external evidence,
+  and `apple-docs` or `deep-docs` only for version-specific configuration.
 - `architecture-review` reaches for `domain-model` or `grilling` only when the review actually
   needs them.
 - `bug-hunter` routes versioned Apple behavior to `apple-docs` and other framework or library
