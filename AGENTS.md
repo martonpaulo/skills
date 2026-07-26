@@ -108,7 +108,9 @@ they are actually implemented, through `argument-hint` and the workflow, not as 
 `description` is the whole triggering mechanism. Write narrow triggers and state the
 non-triggers explicitly. A description that fires during ordinary implementation work is a
 defect. User-invoked skills (broad reviews, interviews, file-writing workflows) set
-`disable-model-invocation: true`.
+`disable-model-invocation: true`. A narrow child workflow that must be called by an already
+user-invoked parent leaves the field absent, names both the direct and delegated triggers in its
+description, and may not exceed the mutation already authorized by the parent.
 
 Note that the official skill validator predates `disable-model-invocation` and `argument-hint`
 and rejects both. That is a validator limitation, not a reason to remove the fields.

@@ -3,4 +3,4 @@ interface:
   short_description: "Configure lightweight repository artifact paths"
   default_prompt: "Use $setup-agent-docs to configure only the optional artifact paths this repository needs."
 policy:
-  allow_implicit_invocation: false
+  allow_implicit_invocation: true

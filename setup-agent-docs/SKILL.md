@@ -1,7 +1,6 @@
 ---
 name: setup-agent-docs
-description: Configure lightweight per-repository conventions for optional domain glossaries, ADRs, research notes, handoffs, and disposable prototypes without setting up trackers, tickets, labels, or backlog workflows.
-disable-model-invocation: true
+description: Configure lightweight per-repository conventions for optional domain glossaries, ADRs, research notes, handoffs, and disposable prototypes. Use when the user directly requests these artifact paths or when setup-project delegates this step after establishing root guidance. Do not use for complete project setup, ordinary documentation edits, personal-skill configuration, trackers, tickets, labels, or backlog workflows.
 metadata:
   scope: meta
   role: setup
@@ -10,7 +9,9 @@ metadata:
 
 # Setup Agent Docs
 
-Run this user-invoked setup once per repository when the user wants explicit paths for artifacts written by the project skills in this collection. It must remain safe to run again.
+Run this setup once per repository when the user wants explicit paths for artifacts written by the project skills in this collection. It may be invoked directly or as the delegated final documentation step of `setup-project`, and it must remain safe to run again.
+
+Keep this skill model-invocable because `setup-project` calls it through the agent's skill tool. The already explicit parent setup request authorizes this narrow documentation step; it does not authorize any broader project mutation.
 
 Scope: only project skills produce repository artifacts. Personal-use skills such as `disk-cleaner` and `grey-market` operate on the user's machine, not on a repository, never configure paths, conventions, or guidance for them.
 

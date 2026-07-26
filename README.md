@@ -63,7 +63,7 @@ copyable on its own.
 
 | Skill | Invocation | Writes | What it does | Upstream |
 | --- | --- | --- | --- | --- |
-| [`setup-agent-docs`](setup-agent-docs/) | User | `docs` | Configure optional **per-repository paths** for glossaries, ADRs, research, handoffs and prototypes. | [mattpocock/skills → setup-matt-pocock-skills](https://github.com/mattpocock/skills/tree/main/skills/engineering/setup-matt-pocock-skills) |
+| [`setup-agent-docs`](setup-agent-docs/) | Model or user | `docs` | Configure optional **per-repository paths** for glossaries, ADRs, research, handoffs and prototypes. | [mattpocock/skills → setup-matt-pocock-skills](https://github.com/mattpocock/skills/tree/main/skills/engineering/setup-matt-pocock-skills) |
 | [`setup-project`](setup-project/) | User | `write` | Bootstrap or align a repository's **identity, operating rules, Git policy, public metadata and applicable project foundations**. | Written for this collection. |
 
 ### Foundations
@@ -126,6 +126,7 @@ All `utility`. They act on my machine and my life, never on a repository.
 **Model or user**
 : The agent may load it on its own when the description matches, and I can invoke it by name.
 Descriptions are narrow, with explicit non-triggers, so they stay quiet during ordinary work.
+This also includes narrow child workflows that an already user-invoked parent explicitly delegates.
 
 **User**
 : By name only (`disable-model-invocation: true`). Broad reviews, interviews and file-writing

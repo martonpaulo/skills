@@ -149,6 +149,8 @@ After `AGENTS.md` exists, invoke [`setup-agent-docs`](../setup-agent-docs/SKILL.
 
 If `setup-agent-docs` is unavailable, report the missing dependency and leave this step incomplete rather than inventing a parallel convention.
 
+`setup-agent-docs` must remain model-invocable because this parent workflow calls it indirectly. Treat an invocation-policy rejection as a dependency configuration defect, not as evidence that the installed skill is missing.
+
 ## 8. Validate and finish
 
 1. Verify that `AGENTS.md` contains one project-policy section, the approved values, and no unresolved placeholders.
