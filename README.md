@@ -96,6 +96,8 @@ Read what exists, rank what is worth fixing, change nothing on their own.
 | Skill | Invocation | Writes | What it does | Upstream |
 | --- | --- | --- | --- | --- |
 | [`architecture-review`](architecture-review/) | User | `docs` | Assess a codebase and **rank architecture improvements** against concrete code evidence. | [mattpocock/skills → improve-codebase-architecture](https://github.com/mattpocock/skills/tree/main/skills/engineering/improve-codebase-architecture) |
+| [`bug-hunter`](bug-hunter/) | User | `temporary` | Find **verified functional, logic, runtime and security bugs** through an adversarial audit; never fixes them. | [codexstar69/bug-hunter](https://github.com/codexstar69/bug-hunter) |
+| [`product-audit`](product-audit/) | User | `none` | Audit **UI, UX, accessibility and copy** at routed `low`, `medium` or `high` depth; never implements findings. | [jakubkrehel/skills](https://github.com/jakubkrehel/skills), [content-designer/ux-writing-skill](https://github.com/content-designer/ux-writing-skill), [Thecsiz/ux-critique](https://github.com/Thecsiz/ux-critique) |
 
 ### Authoring
 
@@ -140,6 +142,9 @@ flowchart LR
   grill-and-document --> grilling
   grill-and-document --> domain-model
   architecture-review --> module-design
+  bug-hunter --> apple-docs
+  bug-hunter --> deep-docs
+  bug-hunter -.selected finding to fix.-> debug
   dont-reinvent-the-wheel --> research
   dont-reinvent-the-wheel --> prototype
   research --> apple-docs
@@ -157,6 +162,9 @@ flowchart LR
 
 - `architecture-review` reaches for `domain-model` or `grilling` only when the review actually
   needs them.
+- `bug-hunter` routes versioned Apple behavior to `apple-docs` and other framework or library
+  behavior to `deep-docs`; it hands a user-selected confirmed finding to `debug` only in a
+  separate implementation task.
 - `dont-reinvent-the-wheel` reaches for `grilling` when unresolved requirements would change the
   decision, and for `architecture-review` only on an explicitly requested broad reuse audit.
 - `research`, `debug` and `dont-reinvent-the-wheel` route to `apple-docs` or `deep-docs` only

@@ -1,0 +1,6 @@
+interface:
+  display_name: "Product Audit"
+  short_description: "Audit product UI, UX, accessibility, and copy"
+  default_prompt: "Use $product-audit medium to audit this product UI, UX, accessibility, and copy without changing it."
+policy:
+  allow_implicit_invocation: false

@@ -18,6 +18,10 @@ It does not, and cannot, relicense third-party work that this repository vendors
 | [gccszs/disk-cleaner](https://github.com/gccszs/disk-cleaner) | Disk Cleaner Contributors | MIT | `disk-cleaner` (vendored) |
 | [upstash/context7](https://github.com/upstash/context7) | Upstash, Inc. | MIT | `context7` (skill prose rewritten; the CLI itself is not vendored) |
 | [felinto-dev/felinto-skills](https://github.com/felinto-dev/felinto-skills) | felinto-dev | **none published** | `dont-reinvent-the-wheel`, `grey-market` |
+| [jakubkrehel/skills](https://github.com/jakubkrehel/skills) | Jakub Krehel | MIT | `product-audit` (adapted interface-review orchestration and criteria) |
+| [content-designer/ux-writing-skill](https://github.com/content-designer/ux-writing-skill) | Christopher Greer | MIT | `product-audit` (adapted UX-writing review criteria) |
+| [Thecsiz/ux-critique](https://github.com/Thecsiz/ux-critique) | thecsiz | MIT and CC BY 4.0 by upstream path | `product-audit` (adapted deep-critique method; no KB or scripts vendored) |
+| [codexstar69/bug-hunter](https://github.com/codexstar69/bug-hunter) | codexstar69 | MIT | `bug-hunter` (audit workflow adapted; no scripts vendored) |
 
 Where upstream code is vendored, that skill's directory keeps the upstream `LICENSE` file
 unchanged, alongside a `THIRD_PARTY_NOTICES.md` recording the imported revision and exactly what
