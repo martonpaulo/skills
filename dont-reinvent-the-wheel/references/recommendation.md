@@ -26,6 +26,8 @@ Use for material choices:
 8. confidence;
 9. recommended verification or `prototype`.
 
+When the decision adds a dependency, external service, or self-hosted project, state the result of the dependency admission test, and name any check that is unresolved or accepted as a cost.
+
 Use the smallest candidate set that supports a defensible decision. Include a table only when it makes the tradeoffs easier to compare. Mention marketplace evidence only when marketplace candidates were actually relevant. Do not require an implementation plan or experiment for a decision that is already well supported.
 
 When practical fit remains uncertain, recommend `prototype` and state the exact observation needed. Leave the experiment procedure to that skill.

@@ -68,7 +68,9 @@ Always retain custom implementation as the baseline. Compare only criteria mater
 - long-term maintenance;
 - strategic differentiation.
 
-Read [scorecard.md](references/scorecard.md) for material comparisons, confidence, effort sizing, optional scoring, and replacement safety. A failed must-have requirement disqualifies a candidate regardless of its aggregate score.
+Read [scorecard.md](references/scorecard.md) for material comparisons, the dependency admission test, confidence, effort sizing, optional scoring, and replacement safety. A failed must-have requirement disqualifies a candidate regardless of its aggregate score.
+
+Any candidate that adds a dependency, external service, or self-hosted project must pass the dependency admission test in [scorecard.md](references/scorecard.md) before it can be recommended.
 
 If practical fit remains the strongest uncertainty (undocumented behavior, performance, SDK ergonomics, UI embedding, migration complexity, glue code, framework compatibility, or native-platform support), recommend `prototype`. Do not build the experiment as part of this decision unless the user separately requests implementation and that workflow takes over.
 

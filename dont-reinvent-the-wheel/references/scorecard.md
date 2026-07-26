@@ -14,6 +14,20 @@ Use only the criteria material to the specific capability:
 - code and maintenance avoided;
 - strategic differentiation.
 
+## Dependency admission test
+
+Any candidate that adds a dependency, external service, or self-hosted project must pass all five checks before it can be recommended:
+
+1. Does it solve a problem the project has now, rather than a speculative future one?
+2. Is it actively maintained and supported on every platform and environment the project targets?
+3. Is its license compatible with the project's distribution model and obligations?
+4. Can it be isolated behind an interface the project owns, so it can be swapped or removed later?
+5. Does it remove more code and risk than it introduces?
+
+A failed check disqualifies the candidate regardless of its aggregate score. When a check cannot be answered from verified evidence, treat it as unresolved, lower confidence, and state what is missing instead of assuming a pass.
+
+When isolation is impossible by nature, as with frameworks, language runtimes, and platform SDKs, say so explicitly and treat the coupling as an accepted and documented cost rather than a silent pass on check 4.
+
 ## Confidence
 
 - `HIGH`: important claims are verified through primary sources; functional fit and integration are clear; maintenance, security, license, pricing, migration, and exit path are acceptable.
