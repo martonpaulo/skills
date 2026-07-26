@@ -16,6 +16,7 @@ It does not, and cannot, relicense third-party work that this repository vendors
 | [Ahrentlov/apple-docs-skill](https://github.com/Ahrentlov/apple-docs-skill) | Patrick Ahrentløv | MIT | `apple-docs` (vendored), `deep-docs` (adapted architecture) |
 | [Ahrentlov/appledeepdoc-mcp](https://github.com/Ahrentlov/appledeepdoc-mcp) | Patrick Ahrentløv | MIT | `deep-docs` (architecture reference only) |
 | [gccszs/disk-cleaner](https://github.com/gccszs/disk-cleaner) | Disk Cleaner Contributors | MIT | `disk-cleaner` (vendored) |
+| [upstash/context7](https://github.com/upstash/context7) | Upstash, Inc. | MIT | `context7` (skill prose rewritten; the CLI itself is not vendored) |
 | [felinto-dev/felinto-skills](https://github.com/felinto-dev/felinto-skills) | felinto-dev | **none published** | `dont-reinvent-the-wheel`, `grey-market` |
 
 Where upstream code is vendored, that skill's directory keeps the upstream `LICENSE` file

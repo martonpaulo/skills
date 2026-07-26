@@ -11,6 +11,8 @@ metadata:
 
 Answer precise non-Apple software documentation questions with explicit product and version context. Use `apple-docs` for Apple development; do not duplicate Apple providers here.
 
+Use `context7` when an indexed snippet of a library's current API is enough. This skill owns conclusions that must be traced to an official versioned source, and is the escalation when a library is not indexed or when compatibility, availability, deprecation, or migration has to be proven.
+
 ## Workflow
 
 1. Run `detect_project_context()` before external lookup in an existing project. Resolve declared, locked, locally detected, and unresolved versions separately.

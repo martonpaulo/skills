@@ -31,6 +31,7 @@ A repository has no business configuring conventions for a skill that cleans my 
 | --- | --- | --- | --- |
 | [`apple-docs`](apple-docs/) | Model or user | Version-aware **Apple platform documentation**: Apple docs, Swift Evolution, Xcode and project context, local Xcode docs, HIG, WWDC, release notes, signing and distribution. | [Ahrentlov/apple-docs-skill](https://github.com/Ahrentlov/apple-docs-skill) |
 | [`architecture-review`](architecture-review/) | User | Assess a codebase and **rank architecture improvements** against concrete code evidence. | [mattpocock/skills → improve-codebase-architecture](https://github.com/mattpocock/skills/tree/main/skills/engineering/improve-codebase-architecture) |
+| [`context7`](context7/) | Model or user | **Quick library documentation** from the Context7 index through its CLI: resolve a library ID, then query one topic. Version-aware, and honest about being an index rather than a source. | [upstash/context7 → context7-cli](https://github.com/upstash/context7/tree/master/skills/context7-cli) |
 | [`debug`](debug/) | Model or user | **Diagnose a hard bug**: reproduce, hypothesize, find the root cause, minimal fix, verify. | [mattpocock/skills → diagnosing-bugs](https://github.com/mattpocock/skills/tree/main/skills/engineering/diagnosing-bugs) |
 | [`deep-docs`](deep-docs/) | Model or user | Version-aware **documentation research** for non-Apple frameworks, SDKs, APIs, CLIs and platforms, with source-linked evidence. | Written for this collection. Architecture adapted from [apple-docs-skill](https://github.com/Ahrentlov/apple-docs-skill) and [appledeepdoc-mcp](https://github.com/Ahrentlov/appledeepdoc-mcp) |
 | [`domain-model`](domain-model/) | Model or user | Clarify **contradictory domain terminology**, states, rules and relationships. | [mattpocock/skills → domain-modeling](https://github.com/mattpocock/skills/tree/main/skills/engineering/domain-modeling) |
@@ -83,8 +84,12 @@ flowchart LR
   dont-reinvent-the-wheel --> prototype
   research --> apple-docs
   research --> deep-docs
+  research --> context7
   debug --> deep-docs
   deep-docs -.Apple questions.-> apple-docs
+  deep-docs -.an indexed snippet is enough.-> context7
+  context7 -.Apple questions.-> apple-docs
+  context7 -.an authoritative source is needed.-> deep-docs
 ```
 
 <details>
@@ -96,6 +101,10 @@ flowchart LR
   decision, and for `architecture-review` only on an explicitly requested broad reuse audit.
 - `research`, `debug` and `dont-reinvent-the-wheel` route to `apple-docs` or `deep-docs` only
   when the answer depends on documented behavior.
+- `context7` and `deep-docs` trade in both directions. Context7 is an index of other people's
+  documentation, so it is the fast path for a library's current API, and `deep-docs` takes over
+  whenever the conclusion has to be traced to an official versioned source, or the library is
+  not indexed at all.
 
 </details>
 

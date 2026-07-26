@@ -23,3 +23,5 @@ servers:
 ```
 
 Use a profile only when the server is already configured, all invoked operations are read-only, source identity survives normalization, and version context is represented or explicitly marked unresolved. Do not infer arbitrary tool schemas and do not expose a generic MCP executor to sandbox code.
+
+Context7 appears above as a profile only because a host may already expose it as a server. When it is not configured as one, do not register it: the `context7` skill reaches the same index through its command line tool, without a permanently connected server.
