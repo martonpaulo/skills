@@ -199,6 +199,29 @@ project's skills directory. Conventions for changing anything here live in
 > **Do not run `npx skills update` on these.** It would overwrite the personalization. Review
 > upstream changes and port over only what is worth having.
 
+### Sync all skills
+
+The commands link every top-level skill directly into the corresponding agent directory, so
+repository changes are available immediately without copying files. They are safe to run
+repeatedly and can be called from any working directory:
+
+```sh
+/path/to/skills/sync-skills
+/path/to/skills/sync-agents
+/path/to/skills/sync-claude
+```
+
+`sync-skills` updates both `~/.agents/skills` and `~/.claude/skills`; the other two commands update
+only their named destination. Use `--dry-run` to preview any command. Existing real files and
+directories are reported as conflicts and left untouched.
+
+To make the combined command available in zsh, link it from a directory already on `PATH`:
+
+```sh
+mkdir -p ~/.local/bin
+ln -s /path/to/skills/sync-skills ~/.local/bin/sync-skills
+```
+
 ---
 
 ## 📄 License
