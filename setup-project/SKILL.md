@@ -106,11 +106,12 @@ Create or merge the root `AGENTS.md` from the template:
 4. Surface conflicts among existing guidance, the baseline, code, and approved specifications. Do not silently choose one source as universally authoritative.
 5. Keep project-specific commands and stable contracts exact. Omit speculative inventories and details likely to drift.
 
-Always make `CLAUDE.md` a relative symbolic link to `AGENTS.md`:
+Always make `CLAUDE.md` and `.gemini/rules/agents.md` relative symbolic links to `AGENTS.md`:
 
 - create `CLAUDE.md -> AGENTS.md` when absent;
-- leave the correct symlink unchanged;
-- if it is a regular file or points elsewhere, preserve its unique instructions, surface any Claude-only rule that would be broadened to every agent, and replace it only after the user resolves that scope and confirms the replacement;
+- create `.gemini/rules/agents.md -> ../../AGENTS.md` when absent (creating the directory if needed);
+- leave the correct symlinks unchanged;
+- if they are regular files or point elsewhere, preserve unique instructions, surface any agent-specific rule that would be broadened to every agent, and replace them only after the user resolves that scope and confirms the replacement;
 - never maintain two independent copies of the same agent rules.
 
 ## 5. Establish applicable project foundations
@@ -154,7 +155,7 @@ If `setup-agent-docs` is unavailable, report the missing dependency and leave th
 ## 8. Validate and finish
 
 1. Verify that `AGENTS.md` contains one project-policy section, the approved values, and no unresolved placeholders.
-2. Verify `CLAUDE.md` resolves to `AGENTS.md`.
+2. Verify `CLAUDE.md` and `.gemini/rules/agents.md` resolve to `AGENTS.md`.
 3. Validate the selected license and all Markdown links.
 4. Run the smallest relevant project checks, then one broader check proportional to the setup's risk when practical.
 5. Validate CI and release syntax when those files changed. Use a bounded real integration check only when local validation cannot prove the relevant contract.

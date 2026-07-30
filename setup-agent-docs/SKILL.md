@@ -20,6 +20,7 @@ Scope: only project skills produce repository artifacts. Personal-use skills suc
 1. Inspect existing guidance and conventions before proposing anything:
    - `AGENTS.md`
    - `CLAUDE.md`
+   - `.gemini/rules/agents.md`
    - `CONTRIBUTING.md`
    - existing architecture and documentation directories
    - existing glossary, ADR, research, handoff, and prototype paths
@@ -31,7 +32,7 @@ Scope: only project skills produce repository artifacts. Personal-use skills suc
    - handoffs: `.scratch/handoffs/`
    - prototypes: `.scratch/prototypes/`
 4. Show the short configuration block before writing it.
-5. Record only selected conventions in existing repository guidance. Prefer `AGENTS.md`; use `CLAUDE.md` when it is the repository's active agent guidance. If neither exists, create `AGENTS.md` only with the user's selected conventions.
+5. Record only selected conventions in existing repository guidance. Prefer `AGENTS.md`; use `CLAUDE.md` or `.gemini/rules/agents.md` when it is the repository's active agent guidance. If none exists, create `AGENTS.md` only with the user's selected conventions.
 6. If a `## Agent skill paths` section already exists, update it in place. Preserve surrounding content and remove entries the user no longer wants.
 
 Example block:
