@@ -84,9 +84,11 @@ Reusable capabilities. Invocable directly, but their real job is being delegated
 
 | Skill | Invocation | Writes | What it does | Upstream |
 | --- | --- | --- | --- | --- |
+| [`backlog-curator`](backlog-curator/) | User | `write` | **Review the GitHub Issue backlog**: detect duplicates, obsolete issues, and delegate missing SDD phases. | [github/gh-aw](https://github.com/github/gh-aw) (behavioral ref) |
 | [`debug`](debug/) | Model or user | `write` | **Diagnose a hard bug**: reproduce, hypothesize, find the root cause, minimal fix, verify. | [mattpocock/skills → diagnosing-bugs](https://github.com/mattpocock/skills/tree/main/skills/engineering/diagnosing-bugs) |
 | [`dont-reinvent-the-wheel`](dont-reinvent-the-wheel/) | Model or user | `none` | **Build or reuse?** Decide whether one capability should use an existing feature, a native capability, a dependency, a service, or custom code. | [felinto-dev/felinto-skills → dont-reinvent-the-wheel](https://github.com/felinto-dev/felinto-skills/tree/main/.agents/skills/dont-reinvent-the-wheel) |
 | [`grill`](grill/) | User | `none` | **Pressure-test a plan** through a focused interview. Writes nothing. | [mattpocock/skills → grill-me](https://github.com/mattpocock/skills/tree/main/skills/productivity/grill-me) |
+| [`implement-issue`](implement-issue/) | User | `write` | **Implement exactly one prepared GitHub Issue** by writing code, tests, and documentation. | [martonpaulo/tabelo](https://github.com/martonpaulo/tabelo), [openclaw/openclaw](https://github.com/openclaw/openclaw), [github/spec-kit](https://github.com/github/spec-kit) |
 | [`module-design`](module-design/) | Model or user | `write` | Improve **module boundaries**, interfaces, dependency direction, cohesion and test seams. | [mattpocock/skills → codebase-design](https://github.com/mattpocock/skills/tree/main/skills/engineering/codebase-design) |
 | [`resolve-conflicts`](resolve-conflicts/) | Model or user | `write` | Resolve a **merge, rebase or cherry-pick** by reconstructing the intent of both sides. | [mattpocock/skills → resolving-merge-conflicts](https://github.com/mattpocock/skills/tree/main/skills/engineering/resolving-merge-conflicts) |
 
@@ -98,14 +100,17 @@ Read what exists, rank what is worth fixing, change nothing on their own.
 | --- | --- | --- | --- | --- |
 | [`architecture-review`](architecture-review/) | User | `docs` | Assess a codebase and **rank architecture improvements** against concrete code evidence. | [mattpocock/skills → improve-codebase-architecture](https://github.com/mattpocock/skills/tree/main/skills/engineering/improve-codebase-architecture) |
 | [`bug-hunter`](bug-hunter/) | User | `temporary` | Find **verified functional, logic, runtime and security bugs** through an adversarial audit; never fixes them. | [codexstar69/bug-hunter](https://github.com/codexstar69/bug-hunter) |
+| [`code-review`](code-review/) | User | `write` | **Validate exactly one pull request** against the controlling issue and repository rules. | [NousResearch/hermes-agent](https://github.com/NousResearch/hermes-agent), [SpillwaveSolutions/pr-reviewer-skill](https://github.com/SpillwaveSolutions/pr-reviewer-skill) |
 | [`product-audit`](product-audit/) | User | `none` | Audit **UI, UX, accessibility and copy** at routed `low`, `medium` or `high` depth; never implements findings. | [jakubkrehel/skills](https://github.com/jakubkrehel/skills), [content-designer/ux-writing-skill](https://github.com/content-designer/ux-writing-skill), [Thecsiz/ux-critique](https://github.com/Thecsiz/ux-critique) |
 
 ### Authoring
 
 | Skill | Invocation | Writes | What it does | Upstream |
 | --- | --- | --- | --- | --- |
+| [`capture-issue`](capture-issue/) | Model or user | `write` | **Convert a problem or request** into one canonical GitHub Issue (Specify, Clarify). | Written for this collection. |
 | [`grill-and-document`](grill-and-document/) | User | `docs` | The `grill` interview, but **preserves** canonical domain language and consequential decisions. | [mattpocock/skills → grill-with-docs](https://github.com/mattpocock/skills/tree/main/skills/engineering/grill-with-docs) |
 | [`handoff`](handoff/) | User | `docs` | Write a compact **continuation note** for another agent or a later session. | [mattpocock/skills → handoff](https://github.com/mattpocock/skills/tree/main/skills/productivity/handoff) |
+| [`plan-issue`](plan-issue/) | User | `write` | **Plan the implementation and tasks** for exactly one GitHub Issue. | [obra/superpowers](https://github.com/obra/superpowers) |
 | [`skill-authoring`](skill-authoring/) | User | `write` | Create, review or simplify **Agent Skills**. | [mattpocock/skills → writing-great-skills](https://github.com/mattpocock/skills/tree/main/skills/productivity/writing-great-skills) |
 
 ---
@@ -162,6 +167,27 @@ flowchart LR
   deep-docs -.an indexed snippet is enough.-> context7
   context7 -.Apple questions.-> apple-docs
   context7 -.an authoritative source is needed.-> deep-docs
+  capture-issue --> grilling
+  capture-issue -.when applicable.-> domain-model
+  capture-issue -.when applicable.-> research
+  plan-issue -.when Specify or Clarify is incomplete.-> capture-issue
+  plan-issue -.when consequential decisions remain.-> grilling
+  plan-issue -.when applicable.-> domain-model
+  plan-issue -.when applicable.-> module-design
+  plan-issue -.when applicable.-> research
+  plan-issue -.when applicable.-> prototype
+  plan-issue -.when applicable.-> dont-reinvent-the-wheel
+  implement-issue -.when applicable.-> debug
+  implement-issue -.when applicable.-> domain-model
+  implement-issue -.when applicable.-> module-design
+  implement-issue -.when applicable.-> research
+  implement-issue -.when applicable.-> prototype
+  implement-issue -.when applicable.-> dont-reinvent-the-wheel
+  implement-issue -.when applicable.-> resolve-conflicts
+  code-review -.investigation discipline.-> grilling
+  backlog-curator --> capture-issue
+  backlog-curator --> plan-issue
+  backlog-curator -.for unresolved consequential conflicts.-> grilling
 ```
 
 <details>
@@ -184,6 +210,10 @@ flowchart LR
   documentation, so it is the fast path for a library's current API, and `deep-docs` takes over
   whenever the conclusion has to be traced to an official versioned source, or the library is
   not indexed at all.
+- `capture-issue` routes to `domain-model` or `research` only when existing ambiguity or missing evidence prevents capturing the issue.
+- `plan-issue` delegates to `capture-issue` if the Specify/Clarify foundation is incomplete, and conditionally routes to specialized design/prototype skills when needed.
+- `implement-issue` routes to specialized work skills (e.g., `debug`, `resolve-conflicts`) when they directly apply to implementing the single prepared issue.
+- `backlog-curator` delegates missing phases for an issue to `capture-issue` or `plan-issue`.
 
 </details>
 

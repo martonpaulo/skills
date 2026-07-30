@@ -1,0 +1,62 @@
+---
+name: implement-issue
+description: Perform the Implement SDD phase for exactly one prepared issue. Triggers when the user provides an issue number/URL to implement.
+disable-model-invocation: true
+metadata:
+  scope: project
+  role: workflow
+  mutation: write
+---
+
+# Implement Issue
+
+Perform the SDD phase `Implement` for exactly one prepared issue.
+
+## Workflow
+
+1. Resolve the current repository and exact issue.
+2. Read the issue body, all comments, linked issues/PRs, applicable repository instructions, current code, tests, documentation, and relevant Git history.
+3. Confirm the issue contains implementation-safe `Specify`, `Clarify`, `Plan`, and proportional `Tasks`. Do not silently invent a missing product decision.
+4. When preparation is insufficient, identify the exact missing phase/decision, recommend or delegate to `capture-issue` or `plan-issue`, and do not continue into speculative implementation.
+5. Check Git status, current branch, base branch, remotes, repository policy, existing issue branches, and existing PRs.
+6. Route specialized work only when applicable: `debug`, `domain-model`, `module-design`, `research`, `prototype`, `dont-reinvent-the-wheel`, `resolve-conflicts`. Keep issue ownership and scope inside `implement-issue`.
+7. Implement the smallest coherent solution satisfying the issue. Preserve behavior outside scope.
+8. Update focused tests and canonical documentation with the change.
+9. Run the narrowest relevant validation first, expanding validation according to risk and repository guidance.
+10. Update completed Tasks only after evidence exists. Refetch the issue before editing its body or comments.
+11. Inspect the final diff to ensure no unrelated changes, temporary artifacts, secrets, generated logs, or accidental formatting churn are included.
+12. Commit according to repository policy using focused Conventional Commits. Push normally when authorized.
+13. When using a PR workflow, open a PR that targets the correct base branch, links the issue, and explains the problem, implementation, impact, tests, docs, and risk. Open as ready when validation passes, or draft if a real blocker remains.
+14. If publication is unavailable, finish local work and provide branch, commit, validation results, remaining blockers, and a ready-to-use PR handoff.
+
+## Git and Branch Policy
+
+Follow the repository's explicitly configured Git policy.
+
+**Working directly on the default branch:**
+If `AGENTS.md` requires implementation directly on `main` or another named integration branch:
+- work directly on that branch
+- do not create a feature branch merely for ceremony
+- follow the repository's commit and push policy
+- do not open a PR unless explicitly asked by the user
+
+**Working through branches:**
+If the repository requires/permits issue branches, follow its naming policy. Fallback naming:
+`type/agent/issue-NNN/short-description`
+(e.g., `feature/claude/issue-024/add-button`).
+- `type`: `feature`, `hotfix`, `fix`, `chore`, `docs`, `refactor`, `test`.
+- `agent`: the acting agent identifier.
+- `issue-NNN`: zero-padded issue number.
+
+## Must not
+
+- perform the Validate phase
+- review, approve, request changes on, or merge its own PR
+- manually close the issue before merge
+- invent missing Specify or Clarify decisions
+- implement multiple unrelated issues
+- create duplicate branches or PRs
+- force-push or bypass branch protection
+- use external repository-specific rules (e.g. Tabelo) outside their repo
+- create a branch when the repository explicitly requires direct-to-main work
+- work directly on main when the repository explicitly requires issue branches
