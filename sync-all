@@ -1,0 +1,210 @@
+#!/bin/bash
+
+set -u
+
+command_name=${0##*/}
+dry_run=0
+created=0
+updated=0
+correct=0
+removed=0
+conflicts=0
+errors=0
+
+# Define mappings of command name to target directory
+# Format: "command_name:target_directory"
+KNOWN_TARGETS=(
+    "sync-agents:.agents"
+    "sync-claude:.claude"
+    "sync-gemini:.gemini/config"
+)
+
+targets=()
+if [[ "$command_name" == "sync-all" ]]; then
+    for kt in "${KNOWN_TARGETS[@]}"; do
+        targets+=("${kt#*:}")
+    done
+else
+    for kt in "${KNOWN_TARGETS[@]}"; do
+        if [[ "${kt%%:*}" == "$command_name" ]]; then
+            targets=("${kt#*:}")
+            break
+        fi
+    done
+fi
+
+if (( ${#targets[@]} == 0 )); then
+    valid_cmds="sync-all"
+    for kt in "${KNOWN_TARGETS[@]}"; do
+        valid_cmds="${kt%%:*}, $valid_cmds"
+    done
+    printf 'Run this script as %s.\n' "$valid_cmds" >&2
+    exit 2
+fi
+
+usage() {
+    printf 'Usage: %s [--dry-run]\n' "$command_name" >&2
+    exit "${1:-0}"
+}
+
+case "${1:-}" in
+    '') ;;
+    --dry-run) dry_run=1 ;;
+    -h|--help) usage 0 ;;
+    *)
+        printf 'Unknown option: %s\n' "$1" >&2
+        usage 2
+        ;;
+esac
+
+if (( $# > 1 )); then
+    usage 2
+fi
+
+show_link() {
+    printf '%s: %q -> %q\n' "$1" "$2" "$3"
+}
+
+summary() {
+    local prefix="Summary:"
+    (( dry_run )) && prefix="Summary (dry run):"
+    
+    printf '\n%s\n' "$prefix"
+    printf '  Created: %d\n' "$created"
+    printf '  Updated: %d\n' "$updated"
+    printf '  Already correct: %d\n' "$correct"
+    printf '  Removed: %d\n' "$removed"
+    printf '  Conflicts: %d\n' "$conflicts"
+    printf '  Errors: %d\n' "$errors"
+}
+
+apply_change() {
+    local counter_name=$1 message_present=$2 message_past=$3 link=$4 target=$5
+    shift 5
+    if (( dry_run )); then
+        (( $counter_name++ ))
+        show_link "Would $message_present" "$link" "$target"
+    elif "$@"; then
+        (( $counter_name++ ))
+        show_link "$message_past" "$link" "$target"
+    else
+        printf 'Error: could not %s link: %q\n' "$message_present" "$link" >&2
+        (( errors++ ))
+    fi
+}
+
+update_link() {
+    rm "$1" && ln -s "$2" "$1"
+}
+
+link_destination() {
+    local link=$1 raw parent leaf
+
+    link_target_is_resolved=0
+    raw=$(readlink "$link") || return 1
+    if [[ "$raw" != /* ]]; then
+        raw="$(cd -P "$(dirname "$link")" && pwd -P)/$raw"
+    fi
+    parent=${raw%/*}
+    leaf=${raw##*/}
+    if [[ -d "$parent" ]]; then
+        parent=$(cd -P "$parent" && pwd -P) || return 1
+        link_target_is_resolved=1
+    fi
+    link_target=$parent/$leaf
+}
+
+if [[ -z "${HOME:-}" || "$HOME" != /* || ! -d "$HOME" ]]; then
+    printf 'Error: HOME must be an existing absolute directory.\n' >&2
+    (( errors++ ))
+    summary
+    exit 1
+fi
+
+script_path=${BASH_SOURCE[0]}
+while [[ -L "$script_path" ]]; do
+    script_dir=$(cd -P "$(dirname "$script_path")" && pwd -P) || exit 1
+    script_path=$(readlink "$script_path") || exit 1
+    [[ "$script_path" == /* ]] || script_path=$script_dir/$script_path
+done
+repo_root=$(cd -P "$(dirname "$script_path")" && pwd -P) || {
+    printf 'Error: could not resolve the repository root.\n' >&2
+    (( errors++ ))
+    summary
+    exit 1
+}
+
+shopt -s dotglob nullglob
+
+sync_target() {
+    local target_root skill name link
+
+    target_root=$HOME/$1/skills
+    printf '\nSyncing %q\n' "$target_root"
+
+    if [[ -L "$target_root" || ( -e "$target_root" && ! -d "$target_root" ) ]]; then
+        printf 'Error: target path is invalid or not a directory: %q\n' "$target_root" >&2
+        (( errors++ ))
+        return
+    fi
+    
+    if [[ ! -d "$target_root" ]]; then
+        if (( dry_run )); then
+            printf 'Would create directory: %q\n' "$target_root"
+        elif ! mkdir -p "$target_root"; then
+            printf 'Error: could not create directory: %q\n' "$target_root" >&2
+            (( errors++ ))
+            return
+        fi
+    fi
+
+    for skill in "$repo_root"/*; do
+        [[ -d "$skill" && -f "$skill/SKILL.md" ]] || continue
+
+        name=${skill##*/}
+        link=$target_root/$name
+
+        if [[ -L "$link" ]]; then
+            if ! link_destination "$link"; then
+                printf 'Error: could not read link: %q\n' "$link" >&2
+                (( errors++ ))
+            elif [[ "$link_target" == "$skill" ]]; then
+                (( correct++ ))
+                show_link 'Already correct' "$link" "$skill"
+            else
+                apply_change updated update Updated "$link" "$skill" update_link "$link" "$skill"
+            fi
+        elif [[ -e "$link" ]]; then
+            (( conflicts++ ))
+            printf 'Conflict: real path left unchanged: %q\n' "$link"
+        else
+            apply_change created create Created "$link" "$skill" ln -s "$skill" "$link"
+        fi
+    done
+
+    [[ -d "$target_root" ]] || return
+    for link in "$target_root"/*; do
+        [[ -L "$link" ]] || continue
+
+        name=${link##*/}
+        [[ -f "$repo_root/$name/SKILL.md" ]] && continue
+        if ! link_destination "$link"; then
+            printf 'Error: could not read link: %q\n' "$link" >&2
+            (( errors++ ))
+            continue
+        fi
+        (( link_target_is_resolved )) || continue
+        case "$link_target" in
+            "$repo_root"/*)
+                apply_change removed remove Removed "$link" "$link_target" rm "$link"
+                ;;
+        esac
+    done
+}
+
+for target in "${targets[@]}"; do
+    sync_target "$target"
+done
+
+summary
+(( conflicts == 0 && errors == 0 ))
