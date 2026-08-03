@@ -1,6 +1,0 @@
-interface:
-  display_name: "Bug Hunter"
-  short_description: "Find verified behavioral and security bugs"
-  default_prompt: "Use $bug-hunter to audit this code for verified functional, logic, runtime, and security bugs without fixing them."
-policy:
-  allow_implicit_invocation: false

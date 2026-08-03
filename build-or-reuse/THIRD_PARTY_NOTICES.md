@@ -43,7 +43,7 @@ and state plainly when web access is unavailable and current external facts rema
 **Routing to the collection's other skills.** `research` for external evidence, `prototype` when
 practical fit is the strongest uncertainty, `grilling` when unresolved requirements would change
 the candidate set, `apple-docs` and `deep-docs` for whether a platform already provides the
-capability, and `architecture-review` for a broad codebase-wide reuse audit. This skill keeps the
+capability, and `architecture-audit` for a broad codebase-wide reuse audit. This skill keeps the
 decision itself.
 
 **Scope boundaries.** Explicit non-triggers were added for general research, architecture reviews,

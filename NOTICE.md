@@ -12,7 +12,7 @@ It does not, and cannot, relicense third-party work that this repository vendors
 
 | Upstream | Author | Upstream license | Applies to |
 | --- | --- | --- | --- |
-| [mattpocock/skills](https://github.com/mattpocock/skills) | Matt Pocock | MIT | `architecture-review`, `diagnose-bug`, `domain-model`, `grilling`, `handoff`, `module-design`, `prototype`, `research`, `resolve-conflicts`, `review-changes`, `setup-agent-docs`, `skill-authoring`, `test-design` |
+| [mattpocock/skills](https://github.com/mattpocock/skills) | Matt Pocock | MIT | `architecture-audit`, `diagnose-bug`, `domain-model`, `grilling`, `handoff`, `module-design`, `prototype`, `research`, `resolve-conflicts`, `review-changes`, `setup-agent-docs`, `skill-authoring`, `test-design` |
 | [Ahrentlov/apple-docs-skill](https://github.com/Ahrentlov/apple-docs-skill) | Patrick Ahrentløv | MIT | `apple-docs` (vendored), `deep-docs` (adapted architecture) |
 | [Ahrentlov/appledeepdoc-mcp](https://github.com/Ahrentlov/appledeepdoc-mcp) | Patrick Ahrentløv | MIT | `deep-docs` (architecture reference only) |
 | [gccszs/disk-cleaner](https://github.com/gccszs/disk-cleaner) | Disk Cleaner Contributors | MIT | `disk-cleaner` (vendored) |
@@ -21,7 +21,7 @@ It does not, and cannot, relicense third-party work that this repository vendors
 | [jakubkrehel/skills](https://github.com/jakubkrehel/skills) | Jakub Krehel | MIT | `interface-audit` (adapted interface-review orchestration and criteria) |
 | [content-designer/ux-writing-skill](https://github.com/content-designer/ux-writing-skill) | Christopher Greer | MIT | `interface-audit` (adapted UX-writing review criteria) |
 | [Thecsiz/ux-critique](https://github.com/Thecsiz/ux-critique) | thecsiz | MIT and CC BY 4.0 by upstream path | `interface-audit` (adapted deep-critique method; no KB or scripts vendored) |
-| [codexstar69/bug-hunter](https://github.com/codexstar69/bug-hunter) | codexstar69 | MIT | `bug-hunter` (audit workflow adapted; no scripts vendored) |
+| [codexstar69/bug-hunter](https://github.com/codexstar69/bug-hunter) | codexstar69 | MIT | `bug-audit` (audit workflow adapted; no scripts vendored) |
 | [obra/superpowers](https://github.com/obra/superpowers) | obra | **none published** | `issue-plan` (adapted planning discipline) |
 | [NousResearch/hermes-agent](https://github.com/NousResearch/hermes-agent) | Hermes Agent | MIT | `issue-review` (adapted review mechanics) |
 | [SpillwaveSolutions/pr-reviewer-skill](https://github.com/SpillwaveSolutions/pr-reviewer-skill) | SpillwaveSolutions | **none published** | `issue-review` (adapted context collection) |

@@ -48,7 +48,7 @@ three states it came from, since the point of this skill is reviewing work befor
 **Audit boundary added.** Upstream states no mutation policy. This version is `mutation: none`,
 user-invoked, and prohibited from editing, staging, committing, pushing, branching, opening a pull
 request, or fixing a finding. Findings that need deeper work are routed by name to `test-design`,
-`module-design`, or `bug-hunter` rather than expanding the review.
+`module-design`, or `bug-audit` rather than expanding the review.
 
 **Word limits dropped.** Upstream caps each sub-agent report at 400 words. The cap was an artifact
 of the subagent transport, not a review property.

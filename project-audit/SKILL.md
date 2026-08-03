@@ -14,8 +14,8 @@ metadata:
 Run the audits that actually apply to this project and merge their output into one ranked list.
 
 The individual audits already exist and are good at their own lens. What none of them can do is
-tell you what to fix first, because each ranks only within itself: `bug-hunter` returns severities,
-`architecture-review` returns payoffs, `interface-audit` returns user consequences, and three
+tell you what to fix first, because each ranks only within itself: `bug-audit` returns severities,
+`architecture-audit` returns payoffs, `interface-audit` returns user consequences, and three
 ordered lists are not an answer. Producing the single order is this skill's whole job.
 
 ## Depth
@@ -38,8 +38,8 @@ report.
 
 | Lens | Delegate to | Applies when |
 | --- | --- | --- |
-| Behavioral defects | `bug-hunter` | Always, for any project with executable logic |
-| Structure and boundaries | `architecture-review` | More than a handful of modules, or churn concentrated in one area |
+| Behavioral defects | `bug-audit` | Always, for any project with executable logic |
+| Structure and boundaries | `architecture-audit` | More than a handful of modules, or churn concentrated in one area |
 | Interface and copy | `interface-audit` | The project has a user interface, CLI output, or user-facing copy |
 | Resource cost | `performance-audit` | Something waits on this project: a user, a request, a schedule, or a bounded resource |
 | Visual system | `design-system-audit` | The project declares visual decisions in code: tokens, theme, styles, or a component library |
@@ -48,7 +48,7 @@ report.
 State which lenses you selected and which you skipped, each with the reason. A CLI with no UI does
 not get an interface audit, and saying so is part of the report.
 
-`architecture-review` applies `module-design`'s criteria for boundaries, cohesion and dependency
+`architecture-audit` applies `module-design`'s criteria for boundaries, cohesion and dependency
 direction; do not invoke `module-design` separately here.
 
 Documentation truth is the one lens with no owning skill, and deliberately so: it is a comparison
@@ -80,7 +80,7 @@ report; that is a comparison task, and the previous report is still not evidence
 This is the step that justifies the skill.
 
 1. **Merge duplicates across lenses.** The same root cause often surfaces three times: a defect in
-   `bug-hunter`, a boundary problem in `architecture-review`, and a broken state in
+   `bug-audit`, a boundary problem in `architecture-audit`, and a broken state in
    `interface-audit`. Merge them into one finding, name the root cause, and list every symptom with
    the lens that found it. A cause that shows up in three lenses is more important than any of its
    three reports suggested, and that is exactly what separate reports hide.

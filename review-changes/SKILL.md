@@ -28,7 +28,7 @@ the wrong thing, and code that satisfies the request can break the repository's 
 them separately stops one from masking the other.
 
 This skill reports findings and never edits. `issue-review` owns the formal Validate phase for a
-pull request; do not use this skill in its place. `bug-hunter` owns adversarial defect hunting
+pull request; do not use this skill in its place. `bug-audit` owns adversarial defect hunting
 with runtime traces; this review reports a defect it happens to see but does not run that hunt.
 
 ## 1. Pin the fixed point
@@ -102,7 +102,7 @@ For each axis:
 
 Route out rather than expanding scope: a missing or weak test is a `test-design` question, an
 unstable boundary is a `module-design` question, and a suspected runtime defect that needs a
-reachability trace is a `bug-hunter` question. Name the route; do not perform it here.
+reachability trace is a `bug-audit` question. Name the route; do not perform it here.
 
 ## 5. Report
 

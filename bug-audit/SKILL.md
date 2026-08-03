@@ -1,6 +1,6 @@
 ---
-name: bug-hunter
-description: Audit an existing codebase for verified functional, logic, runtime, concurrency, data-integrity, contract, and security bugs without fixing them. Use only when the user explicitly invokes $bug-hunter for adversarial bug finding in a repository, path, staged change, or branch diff. Not for ordinary code review, style issues, missing tests, speculative hardening, implementation, auto-fix, or remediation work.
+name: bug-audit
+description: Audit an existing codebase for verified functional, logic, runtime, concurrency, data-integrity, contract, and security bugs without fixing them. Use only when the user explicitly invokes $bug-audit for adversarial bug finding in a repository, path, staged change, or branch diff. Not for ordinary code review, style issues, missing tests, speculative hardening, implementation, auto-fix, or remediation work.
 argument-hint: "[path|--staged|--branch <base>]"
 disable-model-invocation: true
 license: MIT
@@ -15,7 +15,7 @@ metadata:
   version: 3.1.0-personal.1
 ---
 
-# Bug Hunter
+# Bug Audit
 
 Find behavioral bugs that survive an adversarial evidence pass. Report them in the conversation; never edit production code, tests, configuration, or repository documentation.
 

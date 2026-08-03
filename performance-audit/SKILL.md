@@ -151,7 +151,7 @@ benchmark.
 
 - **Fixing a specific reported slowdown** is `diagnose-bug`, which reproduces one concrete defect.
   This skill searches for cost the user has not reported yet.
-- **A structural cause behind several findings** is `architecture-review` or `module-design`. Name
+- **A structural cause behind several findings** is `architecture-audit` or `module-design`. Name
   the route; do not perform it.
 - **Framework or platform behavior a finding depends on** must be verified through `apple-docs` for
   Apple platforms or `deep-docs` elsewhere. If authoritative behavior cannot be established,

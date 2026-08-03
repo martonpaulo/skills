@@ -101,7 +101,7 @@ Read [recommendation.md](references/recommendation.md) for concise and detailed 
 
 ## Explicit reuse audits
 
-Read [reuse-audit.md](references/reuse-audit.md) only when the user explicitly requests a reuse audit, replacement audit, or audit of custom capabilities. For a broad codebase-wide audit, use or recommend `architecture-review`; apply this skill only to the individual build-versus-reuse decisions inside that broader review.
+Read [reuse-audit.md](references/reuse-audit.md) only when the user explicitly requests a reuse audit, replacement audit, or audit of custom capabilities. For a broad codebase-wide audit, use or recommend `architecture-audit`; apply this skill only to the individual build-versus-reuse decisions inside that broader review.
 
 ## Safety and completion
 

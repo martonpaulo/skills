@@ -1,6 +1,6 @@
 ---
-name: architecture-review
-description: Review an existing codebase for high-value architectural improvements, using concrete code evidence to identify weak boundaries, shallow modules, duplication, coupling, scattered responsibilities, and unstable seams.
+name: architecture-audit
+description: Audit an existing codebase for high-value architectural improvements, using concrete code evidence to identify weak boundaries, shallow modules, duplication, coupling, scattered responsibilities, and unstable seams. Use only when the user explicitly invokes $architecture-audit for a broad read-only assessment of a codebase. Not for reviewing a change set, which belongs to review-changes or issue-review, not for designing one module's boundary, which belongs to module-design, and not for implementing any recommendation.
 disable-model-invocation: true
 metadata:
   scope: project
@@ -14,7 +14,7 @@ metadata:
   version: mattpocock-personal.1
 ---
 
-# Architecture Review
+# Architecture Audit
 
 Perform a broad, evidence-based assessment only when the user invokes this skill. This skill produces recommendations; it does not refactor the codebase.
 

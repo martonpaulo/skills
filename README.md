@@ -66,8 +66,8 @@ reaching for directly when you already know what you want.
 | Decide whether to build or reuse a capability    | [`build-or-reuse`](build-or-reuse/) |
 | Improve module boundaries and dependencies       | [`module-design`](module-design/)                     |
 | Resolve a merge, rebase, or cherry-pick conflict | [`resolve-conflicts`](resolve-conflicts/)             |
-| Review the architecture of a codebase            | [`architecture-review`](architecture-review/)         |
-| Search aggressively for real bugs                | [`bug-hunter`](bug-hunter/)                           |
+| Audit the architecture of a codebase             | [`architecture-audit`](architecture-audit/)           |
+| Search aggressively for real bugs                | [`bug-audit`](bug-audit/)                           |
 | Audit UI, UX, accessibility, or copy             | [`interface-audit`](interface-audit/)                 |
 | Find where the project wastes time or memory     | [`performance-audit`](performance-audit/)             |
 | Check the code expresses one visual system       | [`design-system-audit`](design-system-audit/)         |
@@ -301,7 +301,7 @@ Workflow skills complete one concrete engineering task from start to finish.
 
 `diagnose-bug` is for a concrete defect that must be diagnosed and fixed.
 
-`bug-hunter`, described below, is different: it audits a codebase for defects but does not fix them.
+`bug-audit`, described below, is different: it audits a codebase for defects but does not fix them.
 
 ### Audits
 
@@ -311,8 +311,8 @@ They do not implement their own findings.
 
 | Skill                                         | Invocation | Mutation    | What it does                                                                                         | Upstream                                                                                                                                                                                                              |
 | --------------------------------------------- | ---------- | ----------- | ---------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [`architecture-review`](architecture-review/) | User       | `docs`      | Assess a codebase and rank architecture improvements using concrete code evidence.                   | [mattpocock/skills → improve-codebase-architecture](https://github.com/mattpocock/skills/tree/main/skills/engineering/improve-codebase-architecture)                                                                  |
-| [`bug-hunter`](bug-hunter/)                   | User       | `temporary` | Search adversarially for verified functional, logic, runtime, and security bugs without fixing them. | [codexstar69/bug-hunter](https://github.com/codexstar69/bug-hunter)                                                                                                                                                   |
+| [`architecture-audit`](architecture-audit/) | User       | `docs`      | Assess a codebase and rank architecture improvements using concrete code evidence.                   | [mattpocock/skills → improve-codebase-architecture](https://github.com/mattpocock/skills/tree/main/skills/engineering/improve-codebase-architecture)                                                                  |
+| [`bug-audit`](bug-audit/)                   | User       | `temporary` | Search adversarially for verified functional, logic, runtime, and security bugs without fixing them. | [codexstar69/bug-hunter](https://github.com/codexstar69/bug-hunter)                                                                                                                                                   |
 | [`project-audit`](project-audit/)             | User       | `temporary` | Run every applicable audit and merge the findings into one ranked list across lenses.               | Written for this collection                                                                                                                                                                                             |
 | [`interface-audit`](interface-audit/)             | User       | `none`      | Audit UI, UX, accessibility, and copy at routed `low`, `medium`, or `high` depth.                    | [jakubkrehel/skills](https://github.com/jakubkrehel/skills), [content-designer/ux-writing-skill](https://github.com/content-designer/ux-writing-skill), [Thecsiz/ux-critique](https://github.com/Thecsiz/ux-critique) |
 | [`performance-audit`](performance-audit/)     | User       | `temporary` | Map the hot paths and rank resource-cost findings, refusing to call anything slow without evidence.  | Written for this collection                                                                                                                                                                                           |
@@ -322,6 +322,12 @@ They do not implement their own findings.
 An audit finding becomes implementation work only after it is selected and captured as a proper issue.
 
 This keeps optional improvements separate from immediate merge blockers.
+
+**`audit` and `review` are different jobs, and the names say which.** An `-audit` inspects a body of
+work that already exists and asks what is wrong with it. A `review` inspects a specific change set
+against what it was supposed to do: [`review-changes`](review-changes/) for a local diff,
+[`issue-review`](issue-review/) for a pull request. One is unbounded and finds problems nobody
+reported; the other is bounded by a diff and has a verdict to reach.
 
 Every audit starts from zero. Earlier conversation context, a verdict from a previous run, and any
 report or artifact one left behind are prior opinion, not evidence. An audit allowed to read its own
@@ -481,11 +487,11 @@ flowchart LR
 
   grilling -.canonical term or hard-to-reverse decision.-> domain-model
 
-  architecture-review --> module-design
+  architecture-audit --> module-design
 
   review-changes -.weak or missing test.-> test-design
   review-changes -.unstable boundary.-> module-design
-  review-changes -.needs a reachability trace.-> bug-hunter
+  review-changes -.needs a reachability trace.-> bug-audit
 
   test-design -.the seam itself.-> module-design
   test-design -.contradictory terms.-> domain-model
@@ -493,9 +499,9 @@ flowchart LR
 
   project-release -.no recorded versioning policy.-> project-setup
 
-  bug-hunter --> apple-docs
-  bug-hunter --> deep-docs
-  bug-hunter -.selected finding to fix.-> diagnose-bug
+  bug-audit --> apple-docs
+  bug-audit --> deep-docs
+  bug-audit -.selected finding to fix.-> diagnose-bug
 
   build-or-reuse --> research
   build-or-reuse --> prototype
@@ -544,8 +550,8 @@ flowchart LR
   project-groom --> issue-plan
   project-groom -.unresolved consequential conflicts.-> grilling
 
-  project-audit --> bug-hunter
-  project-audit --> architecture-review
+  project-audit --> bug-audit
+  project-audit --> architecture-audit
   project-audit -.project has an interface.-> interface-audit
   project-audit -.something waits on this project.-> performance-audit
   project-audit -.visual decisions declared in code.-> design-system-audit
@@ -554,7 +560,7 @@ flowchart LR
 
   performance-audit --> apple-docs
   performance-audit --> deep-docs
-  performance-audit -.structural root cause.-> architecture-review
+  performance-audit -.structural root cause.-> architecture-audit
   performance-audit -.selected finding to fix.-> diagnose-bug
 
   design-system-audit -.decision has no owner.-> module-design
@@ -580,19 +586,19 @@ It uses:
 * `research` when current external evidence is required
 * `apple-docs` or `deep-docs` when configuration depends on version-specific behavior
 
-`architecture-review` delegates to `module-design` when a finding requires deeper analysis of boundaries, interfaces, cohesion, or dependency direction.
+`architecture-audit` delegates to `module-design` when a finding requires deeper analysis of boundaries, interfaces, cohesion, or dependency direction.
 
-`review-changes` routes a finding out instead of growing into it: a weak or missing test to `test-design`, an unstable boundary to `module-design`, and a suspected defect that needs a reachability trace to `bug-hunter`. It names the route and stops there.
+`review-changes` routes a finding out instead of growing into it: a weak or missing test to `test-design`, an unstable boundary to `module-design`, and a suspected defect that needs a reachability trace to `bug-audit`. It names the route and stops there.
 
 `test-design` owns where a test attaches and whether it earns its keep. `module-design` owns the boundary the seam attaches to, so a contested seam goes there; contradictory domain terms go to `domain-model`; and a seam whose choice changes what ships goes to `grilling`. `diagnose-bug` delegates the placement of a regression test here when the seam is unclear.
 
 `project-release` executes the versioning contract that `project-setup` recorded. If no policy exists, it stops and points back rather than choosing a version scheme on the owner's behalf.
 
-`bug-hunter` routes documented Apple behavior to `apple-docs` and other framework or library behavior to `deep-docs`.
+`bug-audit` routes documented Apple behavior to `apple-docs` and other framework or library behavior to `deep-docs`.
 
 A confirmed bug is handed to `diagnose-bug` only after the user selects it for implementation in a separate task.
 
-`performance-audit` does the same, because a cost claim that depends on framework or runtime behavior has to be verified rather than assumed; where authoritative behavior cannot be established, the candidate is downgraded instead of guessed. It routes a structural cause shared by several findings to `architecture-review` and names the route without performing it. A reported slowdown with a known symptom is `diagnose-bug`'s job, not this one's: this audit looks for cost nobody has reported yet.
+`performance-audit` does the same, because a cost claim that depends on framework or runtime behavior has to be verified rather than assumed; where authoritative behavior cannot be established, the candidate is downgraded instead of guessed. It routes a structural cause shared by several findings to `architecture-audit` and names the route without performing it. A reported slowdown with a known symptom is `diagnose-bug`'s job, not this one's: this audit looks for cost nobody has reported yet.
 
 `design-system-audit` reports that a visual decision has no owner; where that owner should live is a `module-design` question. When a finding also harms a user, such as a state expressed by color alone, it routes to `interface-audit` rather than judging the user consequence itself.
 
@@ -601,7 +607,7 @@ A confirmed bug is handed to `diagnose-bug` only after the user selects it for i
 * `research` to investigate existing options
 * `prototype` when a small experiment provides better evidence
 * `grilling` when unresolved requirements would change the decision
-* `architecture-review` only when the user explicitly requests a broad reuse audit
+* `architecture-audit` only when the user explicitly requests a broad reuse audit
 
 `research`, `diagnose-bug`, and `build-or-reuse` route to documentation specialists only when their conclusions depend on documented behavior.
 

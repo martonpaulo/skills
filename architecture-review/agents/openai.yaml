@@ -1,6 +1,0 @@
-interface:
-  display_name: "Architecture Review"
-  short_description: "Assess architecture from concrete code evidence"
-  default_prompt: "Use $architecture-review to assess this codebase and rank evidence-backed architecture improvements."
-policy:
-  allow_implicit_invocation: false
