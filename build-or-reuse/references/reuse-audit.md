@@ -17,7 +17,7 @@ Use this reference only when the user explicitly requests a reuse audit, replace
 
 Preserve domain-specific and differentiating code. For each replacement opportunity, apply the replacement-safety rules in [scorecard.md](scorecard.md).
 
-If findings expand beyond focused reuse decisions into boundaries, ownership, coupling, or broader restructuring, recommend `architecture-review`. That skill owns the broad assessment; `dont-reinvent-the-wheel` owns individual reuse decisions.
+If findings expand beyond focused reuse decisions into boundaries, ownership, coupling, or broader restructuring, recommend `architecture-review`. That skill owns the broad assessment; `build-or-reuse` owns individual reuse decisions.
 
 ## Output
 

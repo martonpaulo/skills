@@ -25,6 +25,10 @@ upstream's, and is kept as the evidence-gaps section.
 
 ### What changed
 
+**Renamed to `diagnose-bug`.** Claude Code bundles a skill called `debug` that enables debug
+logging, which is a different job. The action-oriented form also matches upstream's own
+`diagnosing-bugs` more closely than the bare word did.
+
 **Compressed from 134 lines to 33.** Upstream is six numbered phases with checkbox gates. The
 retained version is a single workflow. The phase scaffolding did not change what the agent does;
 it changed how much context the skill costs on every run.

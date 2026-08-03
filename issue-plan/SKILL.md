@@ -26,7 +26,7 @@ Complete the SDD phases `Plan` and `Tasks` for exactly one GitHub Issue.
 4. If `Specify` or `Clarify` is materially incomplete, delegate to `issue-capture` or stop with an exact preparation gap.
 5. Inspect the current code instead of trusting stale file lists in the issue.
 6. Use `grilling` only for unresolved consequential choices.
-7. Route to `domain-model`, `module-design`, `research`, `prototype`, or `dont-reinvent-the-wheel` only when their exact triggers apply.
+7. Route to `domain-model`, `module-design`, `research`, `prototype`, or `build-or-reuse` only when their exact triggers apply.
 8. Update the canonical issue with `Plan` and proportional `Tasks`. Verify that every acceptance criterion, dependency, and major risk is covered.
 9. Refetch the issue before writing to avoid overwriting concurrent edits.
 

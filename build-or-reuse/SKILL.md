@@ -1,5 +1,5 @@
 ---
-name: dont-reinvent-the-wheel
+name: build-or-reuse
 description: Evaluate whether a specific requested software capability should use an existing project feature, native platform capability, maintained dependency, open-source project, external service, hybrid approach, or custom implementation. Use for explicit build-versus-reuse decisions or when evaluating replacements for one identified custom capability. Do not use for general research, architecture reviews, codebase-wide audits, implementation work, debugging, or requirements interviews.
 metadata:
   scope: project
@@ -12,7 +12,7 @@ metadata:
   upstream-checked: 2026-08-03
 ---
 
-# Don't Reinvent the Wheel
+# Build or Reuse
 
 Decide whether one specific software capability should be reused, integrated, bought, adapted, or built from scratch. Keep custom implementation as a real option; reuse is valuable only when total cost and risk are lower.
 
@@ -54,7 +54,7 @@ Detect the actual stack before external discovery. Read [discovery-sources.md](r
 
 ### 4. Verify external evidence
 
-Use or recommend `research` when the decision depends on current candidates, APIs, compatibility, maintenance, releases, advisories, pricing, licenses, deprecation, or platform support. `dont-reinvent-the-wheel` owns the decision; `research` owns deeper external evidence gathering.
+Use or recommend `research` when the decision depends on current candidates, APIs, compatibility, maintenance, releases, advisories, pricing, licenses, deprecation, or platform support. `build-or-reuse` owns the decision; `research` owns deeper external evidence gathering.
 
 When formal skill invocation is unavailable, apply the same evidence standard directly: use current web research when available, prefer primary sources, verify important claims, check dates, and separate confirmed facts from inference and uncertainty. Community sources may reveal candidates or risks, but verify consequential claims through primary sources when possible. When web access is unavailable, state that current external facts remain unverified.
 

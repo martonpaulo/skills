@@ -1,0 +1,4 @@
+interface:
+  display_name: "Build or Reuse"
+  short_description: "Decide whether to reuse, integrate, buy, or build"
+  default_prompt: "Use $build-or-reuse to decide whether this specific capability should reuse an existing solution or be built custom."

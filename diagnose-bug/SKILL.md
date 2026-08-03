@@ -1,5 +1,5 @@
 ---
-name: debug
+name: diagnose-bug
 description: Diagnose a non-trivial bug through reproduction, evidence gathering, hypothesis testing, root-cause analysis, a minimal fix, and regression verification. Use when the cause is not already obvious.
 metadata:
   scope: project
@@ -13,7 +13,7 @@ metadata:
   version: mattpocock-personal.1
 ---
 
-# Debug
+# Diagnose Bug
 
 Use this discipline for difficult bugs, intermittent failures, and performance regressions. For a local failure with an already-proven cause, use the normal implementation workflow.
 

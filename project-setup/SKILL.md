@@ -86,7 +86,7 @@ Write it to the path repository guidance configures, or `docs/product.md` when i
 
 Two routes out, both before the definition hardens: send contested vocabulary to `domain-model` and
 keep its canonical meaning, and send a capability that might not need building at all to
-`dont-reinvent-the-wheel`. A product defined around something it should have bought is expensive to
+`build-or-reuse`. A product defined around something it should have bought is expensive to
 undo.
 
 **This is not a specification.** Individual requirements, acceptance criteria and edge cases belong

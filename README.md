@@ -58,9 +58,9 @@ existing tree.
 | ------------------------------------------------ | ----------------------------------------------------- |
 | Start a new project's source tree                | [`scaffold`](scaffold/)                               |
 | Review my working diff before it becomes a PR    | [`review-changes`](review-changes/)                   |
-| Diagnose and fix a difficult bug                 | [`debug`](debug/)                                     |
+| Diagnose and fix a difficult bug                 | [`diagnose-bug`](diagnose-bug/)                                     |
 | Decide what to test and where the seam belongs   | [`test-design`](test-design/)                         |
-| Decide whether to build or reuse a capability    | [`dont-reinvent-the-wheel`](dont-reinvent-the-wheel/) |
+| Decide whether to build or reuse a capability    | [`build-or-reuse`](build-or-reuse/) |
 | Improve module boundaries and dependencies       | [`module-design`](module-design/)                     |
 | Resolve a merge, rebase, or cherry-pick conflict | [`resolve-conflicts`](resolve-conflicts/)             |
 | Review the architecture of a codebase            | [`architecture-review`](architecture-review/)         |
@@ -283,13 +283,13 @@ Workflow skills complete one concrete engineering task from start to finish.
 
 | Skill                                                 | Invocation    | Mutation | What it does                                                                                                               | Upstream                                                                                                                                               |
 | ----------------------------------------------------- | ------------- | -------- | -------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| [`debug`](debug/)                                     | Model or user | `write`  | Reproduce a difficult bug, form hypotheses, identify the root cause, apply the smallest valid fix, and verify it.          | [mattpocock/skills → diagnosing-bugs](https://github.com/mattpocock/skills/tree/main/skills/engineering/diagnosing-bugs)                               |
-| [`dont-reinvent-the-wheel`](dont-reinvent-the-wheel/) | Model or user | `none`   | Decide whether one capability should reuse an existing feature, native API, dependency, service, or custom implementation. | [felinto-dev/felinto-skills → dont-reinvent-the-wheel](https://github.com/felinto-dev/felinto-skills/tree/main/.agents/skills/dont-reinvent-the-wheel) |
+| [`diagnose-bug`](diagnose-bug/)                                     | Model or user | `write`  | Reproduce a difficult bug, form hypotheses, identify the root cause, apply the smallest valid fix, and verify it.          | [mattpocock/skills → diagnosing-bugs](https://github.com/mattpocock/skills/tree/main/skills/engineering/diagnosing-bugs)                               |
+| [`build-or-reuse`](build-or-reuse/) | Model or user | `none`   | Decide whether one capability should reuse an existing feature, native API, dependency, service, or custom implementation. | [felinto-dev/felinto-skills → dont-reinvent-the-wheel](https://github.com/felinto-dev/felinto-skills/tree/main/.agents/skills/dont-reinvent-the-wheel) |
 | [`project-release`](project-release/)                                 | User          | `write`  | Cut one release under the versioning policy the repository already recorded: bump, changelog, tag, publication.            | Written for this collection                                                                                                                            |
 | [`module-design`](module-design/)                     | Model or user | `write`  | Improve module boundaries, interfaces, dependency direction, cohesion, and test seams.                                     | [mattpocock/skills → codebase-design](https://github.com/mattpocock/skills/tree/main/skills/engineering/codebase-design)                               |
 | [`resolve-conflicts`](resolve-conflicts/)             | Model or user | `write`  | Resolve a merge, rebase, or cherry-pick conflict by reconstructing the intent of both sides.                               | [mattpocock/skills → resolving-merge-conflicts](https://github.com/mattpocock/skills/tree/main/skills/engineering/resolving-merge-conflicts)           |
 
-`debug` is for a concrete defect that must be diagnosed and fixed.
+`diagnose-bug` is for a concrete defect that must be diagnosed and fixed.
 
 `bug-hunter`, described below, is different: it audits a codebase for defects but does not fix them.
 
@@ -446,10 +446,10 @@ A connection does not mean that the target skill always runs. Dashed edges repre
 flowchart LR
   project-setup --> grilling
   project-setup -.contested vocabulary.-> domain-model
-  project-setup -.capability may not need building.-> dont-reinvent-the-wheel
+  project-setup -.capability may not need building.-> build-or-reuse
 
   scaffold --> grilling
-  scaffold -.adding to a live project instead.-> dont-reinvent-the-wheel
+  scaffold -.adding to a live project instead.-> build-or-reuse
 
   project-setup --> scaffold
   project-setup --> setup-agent-docs
@@ -474,17 +474,17 @@ flowchart LR
 
   bug-hunter --> apple-docs
   bug-hunter --> deep-docs
-  bug-hunter -.selected finding to fix.-> debug
+  bug-hunter -.selected finding to fix.-> diagnose-bug
 
-  dont-reinvent-the-wheel --> research
-  dont-reinvent-the-wheel --> prototype
+  build-or-reuse --> research
+  build-or-reuse --> prototype
 
   research --> apple-docs
   research --> deep-docs
   research --> context7
 
-  debug --> deep-docs
-  debug -.regression test seam.-> test-design
+  diagnose-bug --> deep-docs
+  diagnose-bug -.regression test seam.-> test-design
 
   deep-docs -.Apple questions.-> apple-docs
   deep-docs -.indexed snippet is enough.-> context7
@@ -503,15 +503,15 @@ flowchart LR
   issue-plan -.when applicable.-> module-design
   issue-plan -.when applicable.-> research
   issue-plan -.when applicable.-> prototype
-  issue-plan -.when applicable.-> dont-reinvent-the-wheel
+  issue-plan -.when applicable.-> build-or-reuse
   issue-plan -.test strategy.-> test-design
 
-  issue-implement -.when applicable.-> debug
+  issue-implement -.when applicable.-> diagnose-bug
   issue-implement -.when applicable.-> domain-model
   issue-implement -.when applicable.-> module-design
   issue-implement -.when applicable.-> research
   issue-implement -.when applicable.-> prototype
-  issue-implement -.when applicable.-> dont-reinvent-the-wheel
+  issue-implement -.when applicable.-> build-or-reuse
   issue-implement -.when applicable.-> resolve-conflicts
   issue-implement -.when applicable.-> test-design
   issue-implement -.Plan missing.-> issue-plan
@@ -526,7 +526,7 @@ flowchart LR
   project-audit --> bug-hunter
   project-audit --> architecture-review
   project-audit -.project has an interface.-> interface-audit
-  project-audit -.selected finding to fix.-> debug
+  project-audit -.selected finding to fix.-> diagnose-bug
   project-audit -.selected finding to capture.-> issue-capture
 ```
 
@@ -537,7 +537,7 @@ flowchart LR
 
 `project-setup` settles what the product is before anything is built. `issue-capture` later checks a request against its non-goals and raises a contradiction rather than silently widening the product.
 
-`scaffold` generates a new project's tree and stops. Adding a framework or dependency to a project that already runs is not scaffolding; that decision goes to `dont-reinvent-the-wheel` and then to ordinary implementation.
+`scaffold` generates a new project's tree and stops. Adding a framework or dependency to a project that already runs is not scaffolding; that decision goes to `build-or-reuse` and then to ordinary implementation.
 
 `issue-implement` writes the plan itself through `issue-plan` when the issue is small, and stops for a human read when it is not. Missing `Specify` or `Clarify` always goes back to `issue-capture`, because a product decision is the owner's.
 
@@ -553,22 +553,22 @@ It uses:
 
 `review-changes` routes a finding out instead of growing into it: a weak or missing test to `test-design`, an unstable boundary to `module-design`, and a suspected defect that needs a reachability trace to `bug-hunter`. It names the route and stops there.
 
-`test-design` owns where a test attaches and whether it earns its keep. `module-design` owns the boundary the seam attaches to, so a contested seam goes there; contradictory domain terms go to `domain-model`; and a seam whose choice changes what ships goes to `grilling`. `debug` delegates the placement of a regression test here when the seam is unclear.
+`test-design` owns where a test attaches and whether it earns its keep. `module-design` owns the boundary the seam attaches to, so a contested seam goes there; contradictory domain terms go to `domain-model`; and a seam whose choice changes what ships goes to `grilling`. `diagnose-bug` delegates the placement of a regression test here when the seam is unclear.
 
 `project-release` executes the versioning contract that `project-setup` recorded. If no policy exists, it stops and points back rather than choosing a version scheme on the owner's behalf.
 
 `bug-hunter` routes documented Apple behavior to `apple-docs` and other framework or library behavior to `deep-docs`.
 
-A confirmed bug is handed to `debug` only after the user selects it for implementation in a separate task.
+A confirmed bug is handed to `diagnose-bug` only after the user selects it for implementation in a separate task.
 
-`dont-reinvent-the-wheel` may use:
+`build-or-reuse` may use:
 
 * `research` to investigate existing options
 * `prototype` when a small experiment provides better evidence
 * `grilling` when unresolved requirements would change the decision
 * `architecture-review` only when the user explicitly requests a broad reuse audit
 
-`research`, `debug`, and `dont-reinvent-the-wheel` route to documentation specialists only when their conclusions depend on documented behavior.
+`research`, `diagnose-bug`, and `build-or-reuse` route to documentation specialists only when their conclusions depend on documented behavior.
 
 `context7` and `deep-docs` may delegate to one another:
 
@@ -581,7 +581,7 @@ A confirmed bug is handed to `debug` only after the user selects it for implemen
 
 It may also use specialized architecture, research, reuse, or prototyping skills when those capabilities are directly relevant to the implementation plan.
 
-`issue-implement` may use specialized workflows such as `debug`, `module-design`, `prototype`, or `resolve-conflicts`, but only when they directly support implementation of the single prepared issue.
+`issue-implement` may use specialized workflows such as `diagnose-bug`, `module-design`, `prototype`, or `resolve-conflicts`, but only when they directly support implementation of the single prepared issue.
 
 `project-backlog` delegates incomplete issue phases to `issue-capture` or `issue-plan`.
 
@@ -627,6 +627,6 @@ The original work in this repository, including its adaptations, documentation, 
 
 That grant covers only the work created for this collection. Vendored or adapted upstream work retains its original license.
 
-The MIT grant does not extend to the upstream material inside `issue-review`, `issue-implement`, `issue-plan`, `dont-reinvent-the-wheel`, and `grey-market`. Those upstream repositories publish no license, so that permission is not mine to give. [`NOTICE.md`](NOTICE.md) is authoritative on this.
+The MIT grant does not extend to the upstream material inside `issue-review`, `issue-implement`, `issue-plan`, `build-or-reuse`, and `grey-market`. Those upstream repositories publish no license, so that permission is not mine to give. [`NOTICE.md`](NOTICE.md) is authoritative on this.
 
 See [`NOTICE.md`](NOTICE.md) for the exact attribution and licensing status of every component.

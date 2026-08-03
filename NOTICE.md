@@ -12,12 +12,12 @@ It does not, and cannot, relicense third-party work that this repository vendors
 
 | Upstream | Author | Upstream license | Applies to |
 | --- | --- | --- | --- |
-| [mattpocock/skills](https://github.com/mattpocock/skills) | Matt Pocock | MIT | `architecture-review`, `debug`, `domain-model`, `grill-and-document`, `grilling`, `handoff`, `module-design`, `prototype`, `research`, `resolve-conflicts`, `review-changes`, `setup-agent-docs`, `skill-authoring`, `test-design` |
+| [mattpocock/skills](https://github.com/mattpocock/skills) | Matt Pocock | MIT | `architecture-review`, `diagnose-bug`, `domain-model`, `grill-and-document`, `grilling`, `handoff`, `module-design`, `prototype`, `research`, `resolve-conflicts`, `review-changes`, `setup-agent-docs`, `skill-authoring`, `test-design` |
 | [Ahrentlov/apple-docs-skill](https://github.com/Ahrentlov/apple-docs-skill) | Patrick Ahrentløv | MIT | `apple-docs` (vendored), `deep-docs` (adapted architecture) |
 | [Ahrentlov/appledeepdoc-mcp](https://github.com/Ahrentlov/appledeepdoc-mcp) | Patrick Ahrentløv | MIT | `deep-docs` (architecture reference only) |
 | [gccszs/disk-cleaner](https://github.com/gccszs/disk-cleaner) | Disk Cleaner Contributors | MIT | `disk-cleaner` (vendored) |
 | [upstash/context7](https://github.com/upstash/context7) | Upstash, Inc. | MIT | `context7` (skill prose rewritten; the CLI itself is not vendored) |
-| [felinto-dev/felinto-skills](https://github.com/felinto-dev/felinto-skills) | felinto-dev | **none published** | `dont-reinvent-the-wheel`, `grey-market` |
+| [felinto-dev/felinto-skills](https://github.com/felinto-dev/felinto-skills) | felinto-dev | **none published** | `build-or-reuse`, `grey-market` |
 | [jakubkrehel/skills](https://github.com/jakubkrehel/skills) | Jakub Krehel | MIT | `interface-audit` (adapted interface-review orchestration and criteria) |
 | [content-designer/ux-writing-skill](https://github.com/content-designer/ux-writing-skill) | Christopher Greer | MIT | `interface-audit` (adapted UX-writing review criteria) |
 | [Thecsiz/ux-critique](https://github.com/Thecsiz/ux-critique) | thecsiz | MIT and CC BY 4.0 by upstream path | `interface-audit` (adapted deep-critique method; no KB or scripts vendored) |
@@ -40,7 +40,7 @@ A branch name is never recorded as a revision. See [Upstream provenance](README.
 
 ## Unlicensed upstream
 
-`issue-review`, `dont-reinvent-the-wheel`, `grey-market`, `issue-implement`, and `issue-plan` derive
+`issue-review`, `build-or-reuse`, `grey-market`, `issue-implement`, and `issue-plan` derive
 partly from repositories that publish no license.
 
 The MIT grant in `LICENSE` **does not extend to the upstream material in those directories**. That

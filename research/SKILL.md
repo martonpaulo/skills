@@ -17,7 +17,7 @@ metadata:
 
 Use this skill when external evidence or current documentation materially affects a decision. For questions answerable from the local codebase alone, inspect the code directly.
 
-For a build-versus-reuse decision, gather and verify external evidence here while `dont-reinvent-the-wheel` owns the recommendation.
+For a build-versus-reuse decision, gather and verify external evidence here while `build-or-reuse` owns the recommendation.
 
 Use `apple-docs` for authoritative Apple development documentation, `deep-docs` for precise version-aware software documentation, and `context7` when an indexed snippet of a library's current API settles the point. This skill retains broader external investigation, comparisons, current events, product questions, academic evidence, and questions spanning multiple source types.
 

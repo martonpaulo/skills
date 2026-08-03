@@ -24,6 +24,10 @@ single decision label.
 
 ### What changed
 
+**Renamed to `build-or-reuse`.** Upstream's name is a slogan: memorable, but it states a
+preference rather than what the skill produces, and this version deliberately keeps building
+custom as a real option rather than a last resort. The new name says which decision comes out.
+
 **The repository is inspected before anything external.** Manifests, lockfiles, installed
 dependencies, framework and platform configuration, and existing abstractions are read first, with
 a standing rule never to recommend adding what the project already has.

@@ -125,7 +125,7 @@ storage and state per test so one test's leftovers cannot decide another's verdi
 ## Regression tests
 
 A regression test for a fixed defect attaches to the same seam as the behavior it protects, and
-must be observed failing against the unfixed code. `debug` owns diagnosis and the fix, and
+must be observed failing against the unfixed code. `diagnose-bug` owns diagnosis and the fix, and
 delegates the test's placement here when the seam is unclear.
 
 ## Safety and completion

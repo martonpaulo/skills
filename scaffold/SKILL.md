@@ -26,7 +26,7 @@ with real dependencies, or commits beyond an initial empty one. A scaffolder ove
 skill exists only for an empty start.
 
 Adding a framework, a dependency, or a new package to a project that already runs is ordinary
-implementation work. Route it to `dont-reinvent-the-wheel` for the decision and then to normal
+implementation work. Route it to `build-or-reuse` for the decision and then to normal
 implementation. Do not scaffold over a live tree.
 
 ## Workflow

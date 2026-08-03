@@ -72,6 +72,6 @@ Calibrate security severity from reachability, privileges, exploitability, and a
 
 Temporary work is limited to a uniquely named system temporary directory, must contain no secrets or personal data, and must be removed and reported before completion. Do not create `.bug-hunter/`, modify `.gitignore`, install tools, create branches or commits, stash changes, write reports into the repository, probe production or third-party systems, use destructive or persistence-changing payloads, or bypass access controls.
 
-Recommendations stop at remediation intent and regression coverage. If the user later selects a confirmed finding for implementation, use `debug` in a separate change task; this audit does not transition into fixing on its own.
+Recommendations stop at remediation intent and regression coverage. If the user later selects a confirmed finding for implementation, use `diagnose-bug` in a separate change task; this audit does not transition into fixing on its own.
 
 The audit is complete when every reported bug has a reachable trigger and verified consequence, every material candidate has a verdict, coverage is honest, temporary artifacts are gone, and no repository or external state was mutated.

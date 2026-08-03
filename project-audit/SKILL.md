@@ -93,8 +93,8 @@ never creates issues, branches, commits or pull requests, and never fixes a find
 
 Three things people expect here and that do not belong:
 
-- **Fixing a defect** is `debug`, in a separate task, after the owner selects a finding.
-- **Deciding to replace a capability** is `dont-reinvent-the-wheel`, once a finding has made the
+- **Fixing a defect** is `diagnose-bug`, in a separate task, after the owner selects a finding.
+- **Deciding to replace a capability** is `build-or-reuse`, once a finding has made the
   case that something should be replaced.
 - **Interviewing the owner** is `grilling`. This skill reads evidence; it does not resolve product
   decisions, and a finding that depends on one is reported as exactly that.

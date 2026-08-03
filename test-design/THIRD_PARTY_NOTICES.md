@@ -36,7 +36,7 @@ only a genuinely contested seam that changes what ships is routed to `grilling`.
 
 **Cross-references corrected to this collection.** Upstream points at its own `code-review` skill
 for the refactoring stage and reads `CONTEXT.md` directly. Those now point at `review-changes`,
-`module-design`, `domain-model`, `debug`, and `prototype`, which are the skills that actually own
+`module-design`, `domain-model`, `diagnose-bug`, and `prototype`, which are the skills that actually own
 the referenced work here.
 
 **A weak test is worse than no test.** This is the owner's rule and it governs the whole skill.

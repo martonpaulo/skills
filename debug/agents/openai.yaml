@@ -1,4 +1,0 @@
-interface:
-  display_name: "Debug"
-  short_description: "Diagnose non-trivial bugs from evidence"
-  default_prompt: "Use $debug to reproduce, diagnose, fix, and verify this non-trivial bug."

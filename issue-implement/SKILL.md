@@ -23,7 +23,7 @@ Perform the SDD phase `Implement` for exactly one prepared issue.
 3. Confirm the issue contains implementation-safe `Specify`, `Clarify`, `Plan`, and proportional `Tasks`. Do not silently invent a missing product decision.
 4. When preparation is insufficient, identify the exact missing phase or decision and resolve it through [Missing preparation](#missing-preparation) before writing any code.
 5. Check Git status, current branch, base branch, remotes, repository policy, existing issue branches, and existing PRs.
-6. Route specialized work only when applicable: `debug`, `domain-model`, `module-design`, `research`, `prototype`, `dont-reinvent-the-wheel`, `resolve-conflicts`. Keep issue ownership and scope inside `issue-implement`.
+6. Route specialized work only when applicable: `diagnose-bug`, `domain-model`, `module-design`, `research`, `prototype`, `build-or-reuse`, `resolve-conflicts`. Keep issue ownership and scope inside `issue-implement`.
 7. Implement the smallest coherent solution satisfying the issue. Preserve behavior outside scope.
 8. Update focused tests and canonical documentation with the change.
 9. Run the narrowest relevant validation first, expanding validation according to risk and repository guidance.
