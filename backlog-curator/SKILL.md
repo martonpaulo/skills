@@ -1,6 +1,6 @@
 ---
 name: backlog-curator
-description: Maintain the quality, consistency, and implementability of the repository's GitHub Issue backlog. Detects duplicates, obsolete issues, and delegates missing SDD phases to capture-issue or plan-issue. Closes with a Mermaid graph of the blocking order across open issues.
+description: Maintain the quality, consistency, and implementability of the repository's GitHub Issue backlog. Detects duplicates, obsolete issues, and delegates missing SDD phases to flow-capture-issue or plan-issue. Closes with a Mermaid graph of the blocking order across open issues.
 disable-model-invocation: true
 metadata:
   scope: project
@@ -20,12 +20,12 @@ Maintain the quality, consistency, and implementability of the repository's GitH
 
 1. Read repository instructions, issue templates, existing labels, milestones, open issues, relevant recent closed issues, linked PRs, project documentation, and current code when necessary to verify obsolescence or dependencies.
 2. Build a backlog map containing type, area, priority, effort, SDD phase completeness, dependencies, blockers, overlap, conflicts, linked implementation, and possible obsolescence.
-3. Use the repository's existing metadata taxonomy. Do not create a new label system without explicit authorization. When the repository has no convention of its own, audit against the taxonomy `capture-issue` documents: closed value sets for `type:`, `priority:` and `effort:`, an open set for `area:`.
+3. Use the repository's existing metadata taxonomy. Do not create a new label system without explicit authorization. When the repository has no convention of its own, audit against the taxonomy `flow-capture-issue` documents: closed value sets for `type:`, `priority:` and `effort:`, an open set for `area:`.
 4. Detect strong duplicates, partial duplicates, overlapping scope, missing dependencies, conflicting requirements, stale decisions, issues already implemented, obsolete issues, and issues with missing Specify, Clarify, Plan, or Tasks.
 5. Refetch each issue before mutation to preserve concurrent edits and provenance.
 6. Apply low-risk metadata changes only when evidence is clear. Add dependency and coordination links when supported.
 7. Use `grilling` for consequential conflicts that evidence cannot resolve.
-8. Delegate missing `Specify` or `Clarify` to `capture-issue`. Delegate missing `Plan` or `Tasks` to `plan-issue`.
+8. Delegate missing `Specify` or `Clarify` to `flow-capture-issue`. Delegate missing `Plan` or `Tasks` to `plan-issue`.
 9. Keep comments sparse. Prefer updating the canonical issue body. Use comments for provenance, explicit supersession, duplicate resolution, cross-issue coordination, and unresolved human decisions.
 10. Close every pass with the dependency graph described in [DEPENDENCY-GRAPH.md](DEPENDENCY-GRAPH.md), covering the open issues the pass considered and reflecting the links applied during it.
 

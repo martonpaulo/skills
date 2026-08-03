@@ -23,10 +23,10 @@ It does not, and cannot, relicense third-party work that this repository vendors
 | [Thecsiz/ux-critique](https://github.com/Thecsiz/ux-critique) | thecsiz | MIT and CC BY 4.0 by upstream path | `product-audit` (adapted deep-critique method; no KB or scripts vendored) |
 | [codexstar69/bug-hunter](https://github.com/codexstar69/bug-hunter) | codexstar69 | MIT | `bug-hunter` (audit workflow adapted; no scripts vendored) |
 | [obra/superpowers](https://github.com/obra/superpowers) | obra | **none published** | `plan-issue` (adapted planning discipline) |
-| [NousResearch/hermes-agent](https://github.com/NousResearch/hermes-agent) | Hermes Agent | MIT | `code-review` (adapted review mechanics) |
-| [SpillwaveSolutions/pr-reviewer-skill](https://github.com/SpillwaveSolutions/pr-reviewer-skill) | SpillwaveSolutions | **none published** | `code-review` (adapted context collection) |
-| [openclaw/openclaw](https://github.com/openclaw/openclaw) | openclaw | **none published** | `implement-issue` (design input only) |
-| [github/spec-kit](https://github.com/github/spec-kit) | GitHub | MIT | `implement-issue` (design input only) |
+| [NousResearch/hermes-agent](https://github.com/NousResearch/hermes-agent) | Hermes Agent | MIT | `flow-code-review` (adapted review mechanics) |
+| [SpillwaveSolutions/pr-reviewer-skill](https://github.com/SpillwaveSolutions/pr-reviewer-skill) | SpillwaveSolutions | **none published** | `flow-code-review` (adapted context collection) |
+| [openclaw/openclaw](https://github.com/openclaw/openclaw) | openclaw | **none published** | `flow-implement-issue` (design input only) |
+| [github/spec-kit](https://github.com/github/spec-kit) | GitHub | MIT | `flow-implement-issue` (design input only) |
 | [github/gh-aw](https://github.com/github/gh-aw) | GitHub | MIT | `backlog-curator` (behavioral reference only) |
 
 Every skill above keeps a `THIRD_PARTY_NOTICES.md` in its own directory recording the upstream
@@ -39,7 +39,7 @@ A branch name is never recorded as a revision. See [Upstream provenance](README.
 
 ## Unlicensed upstream
 
-`code-review`, `dont-reinvent-the-wheel`, `grey-market`, `implement-issue`, and `plan-issue` derive
+`flow-code-review`, `dont-reinvent-the-wheel`, `grey-market`, `flow-implement-issue`, and `plan-issue` derive
 partly from repositories that publish no license.
 
 The MIT grant in `LICENSE` **does not extend to the upstream material in those directories**. That

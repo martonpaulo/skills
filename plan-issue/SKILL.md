@@ -23,7 +23,7 @@ Complete the SDD phases `Plan` and `Tasks` for exactly one GitHub Issue.
 1. Accept exactly one issue number or URL.
 2. Read the issue title and body, every issue comment, linked issues, linked PRs, applicable `AGENTS.md`, code, tests, documentation, and relevant history.
 3. Reconstruct the canonical `Specify` and `Clarify` contract. Do not assume the newest comment automatically overrides older content. Look for explicit decisions, confirmations, and supersession.
-4. If `Specify` or `Clarify` is materially incomplete, delegate to `capture-issue` or stop with an exact preparation gap.
+4. If `Specify` or `Clarify` is materially incomplete, delegate to `flow-capture-issue` or stop with an exact preparation gap.
 5. Inspect the current code instead of trusting stale file lists in the issue.
 6. Use `grilling` only for unresolved consequential choices.
 7. Route to `domain-model`, `module-design`, `research`, `prototype`, or `dont-reinvent-the-wheel` only when their exact triggers apply.
@@ -50,7 +50,7 @@ Include when applicable:
 ## Task sizing
 
 Planning is where the size becomes knowable, so apply the issue's `effort:` label once the Plan
-exists, using the repository's own scale or the closed set `capture-issue` documents. An issue
+exists, using the repository's own scale or the closed set `flow-capture-issue` documents. An issue
 sized `XL` is a prompt to check whether it should be split before Tasks are written.
 
 Use repository labels or conventions when available. Fallback behavior:

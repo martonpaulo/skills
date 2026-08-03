@@ -1,6 +1,6 @@
 ---
 name: setup-agent-docs
-description: Configure lightweight per-repository conventions for optional domain glossaries, ADRs, research notes, handoffs, and disposable prototypes. Use when the user directly requests these artifact paths or when setup-project delegates this step after establishing root guidance. Do not use for complete project setup, ordinary documentation edits, personal-skill configuration, trackers, tickets, labels, or backlog workflows.
+description: Configure lightweight per-repository conventions for the optional product definition, domain glossaries, ADRs, research notes, handoffs, and disposable prototypes. Use when the user directly requests these artifact paths or when flow-setup-project delegates this step after establishing root guidance. Do not use for complete project setup, ordinary documentation edits, personal-skill configuration, trackers, tickets, labels, or backlog workflows.
 metadata:
   scope: meta
   role: setup
@@ -15,9 +15,9 @@ metadata:
 
 # Setup Agent Docs
 
-Run this setup once per repository when the user wants explicit paths for artifacts written by the project skills in this collection. It may be invoked directly or as the delegated final documentation step of `setup-project`, and it must remain safe to run again.
+Run this setup once per repository when the user wants explicit paths for artifacts written by the project skills in this collection. The product definition usually already exists by then, because `flow-define-product` runs before `flow-setup-project`; record where it actually is rather than moving it. It may be invoked directly or as the delegated final documentation step of `flow-setup-project`, and it must remain safe to run again.
 
-Keep this skill model-invocable because `setup-project` calls it through the agent's skill tool. The already explicit parent setup request authorizes this narrow documentation step; it does not authorize any broader project mutation.
+Keep this skill model-invocable because `flow-setup-project` calls it through the agent's skill tool. The already explicit parent setup request authorizes this narrow documentation step; it does not authorize any broader project mutation.
 
 Scope: only project skills produce repository artifacts. Personal-use skills such as `disk-cleaner` and `grey-market` operate on the user's machine, not on a repository, never configure paths, conventions, or guidance for them.
 
@@ -32,6 +32,7 @@ Scope: only project skills produce repository artifacts. Personal-use skills suc
    - existing glossary, ADR, research, handoff, and prototype paths
 2. Reuse established paths where they are clear. Ask only which still-unconfigured artifact types the user actually wants.
 3. Suggested defaults when no convention exists:
+   - product definition: `docs/product.md`
    - domain glossary: `CONTEXT.md`
    - ADRs: `docs/adr/`
    - research: `docs/research/`
@@ -46,6 +47,7 @@ Example block:
 ```markdown
 ## Agent skill paths
 
+- Product definition: `docs/product.md`
 - Domain glossary: `CONTEXT.md` (optional; create only when useful)
 - Research notes: `docs/research/` (create only when persisting research)
 - Handoffs: `.scratch/handoffs/`

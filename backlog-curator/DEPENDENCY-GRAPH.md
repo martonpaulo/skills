@@ -36,7 +36,7 @@ N091[["#091<br/>Workspace passa a aceitar de um a quatro panes<br/><br/>type: fe
 Drop a line entirely when the issue does not carry that label, rather than printing an empty or
 invented value. An issue with no `effort:` yet is an issue nobody has sized, and the graph
 should show that gap instead of papering over it. The taxonomy behind these values is the one
-`capture-issue` documents.
+`flow-capture-issue` documents.
 
 ## Links
 

@@ -1,5 +1,5 @@
 ---
-name: implement-issue
+name: flow-implement-issue
 description: Perform the Implement SDD phase for exactly one prepared issue. Triggers when the user provides an issue number/URL to implement.
 disable-model-invocation: true
 metadata:
@@ -21,9 +21,9 @@ Perform the SDD phase `Implement` for exactly one prepared issue.
 1. Resolve the current repository and exact issue.
 2. Read the issue body, all comments, linked issues/PRs, applicable repository instructions, current code, tests, documentation, and relevant Git history.
 3. Confirm the issue contains implementation-safe `Specify`, `Clarify`, `Plan`, and proportional `Tasks`. Do not silently invent a missing product decision.
-4. When preparation is insufficient, identify the exact missing phase/decision, recommend or delegate to `capture-issue` or `plan-issue`, and do not continue into speculative implementation.
+4. When preparation is insufficient, identify the exact missing phase or decision and resolve it through [Missing preparation](#missing-preparation) before writing any code.
 5. Check Git status, current branch, base branch, remotes, repository policy, existing issue branches, and existing PRs.
-6. Route specialized work only when applicable: `debug`, `domain-model`, `module-design`, `research`, `prototype`, `dont-reinvent-the-wheel`, `resolve-conflicts`. Keep issue ownership and scope inside `implement-issue`.
+6. Route specialized work only when applicable: `debug`, `domain-model`, `module-design`, `research`, `prototype`, `dont-reinvent-the-wheel`, `resolve-conflicts`. Keep issue ownership and scope inside `flow-implement-issue`.
 7. Implement the smallest coherent solution satisfying the issue. Preserve behavior outside scope.
 8. Update focused tests and canonical documentation with the change.
 9. Run the narrowest relevant validation first, expanding validation according to risk and repository guidance.
@@ -32,6 +32,18 @@ Perform the SDD phase `Implement` for exactly one prepared issue.
 12. Commit according to repository policy using focused Conventional Commits. Push normally when authorized.
 13. When using a PR workflow, open a PR that targets the correct base branch, links the issue, and explains the problem, implementation, impact, tests, docs, and risk. Open as ready when validation passes, or draft if a real blocker remains.
 14. If publication is unavailable, finish local work and provide branch, commit, validation results, remaining blockers, and a ready-to-use PR handoff.
+
+## Missing preparation
+
+An issue reaching this skill without a `Plan` is the common case, not an error. What to do depends on how much a wrong plan would cost.
+
+**Missing `Specify` or `Clarify`.** Stop. Report the exact missing decision and hand back to `flow-capture-issue`. A product decision is the user's, and inventing one here is how the wrong thing gets built correctly.
+
+**Missing `Plan` or `Tasks`, small issue.** Delegate to `plan-issue`, then continue in the same run. Small means the issue carries `effort: S`, or carries no effort label and the change is plainly contained: one area, no interface or data-format change, no migration, and nothing hard to reverse. Say that the plan was written and continue.
+
+**Missing `Plan` or `Tasks`, anything larger.** Delegate to `plan-issue` and then stop. Report that the plan is written and awaiting a read. A plan for a large change is worth a human minute before code exists, because reversing it afterwards costs hours.
+
+When the effort label and the actual change disagree, believe the change. An issue labelled `S` that turns out to alter a stored format or a public interface is not small; write the plan and stop.
 
 ## GitHub is the only platform
 

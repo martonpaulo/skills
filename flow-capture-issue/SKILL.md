@@ -1,5 +1,5 @@
 ---
-name: capture-issue
+name: flow-capture-issue
 description: Convert a newly reported or discovered bug, defect, problem, or feature request into one canonical, implementation-ready GitHub Issue containing the Specify and Clarify phases. Do not trigger when the defect will be fixed immediately, an adequate issue exists, the user only wants an explanation, or the request is already in later phases.
 metadata:
   scope: project
@@ -30,10 +30,11 @@ Keep this skill model-invocable because `backlog-curator` and `plan-issue` deleg
    - known workaround
    - blockers or dependencies
 5. Apply `grilling` for material unresolved decisions.
-6. Route to `domain-model` when domain terminology, states, rules, entities, or relationships are materially ambiguous.
-7. Route to `research` when current external evidence affects the requested behavior.
-8. Create or update exactly one canonical issue. Label it following the repository's own convention, or [LABELS.md](LABELS.md) when it has none. Apply only clearly applicable values, and never invent one to fill a field.
-9. Refetch the issue before mutation when concurrent editing is possible.
+6. Check the request against the product definition when one exists, at the path repository guidance configures or `docs/product.md`. A request that contradicts a stated non-goal is raised with the owner before an issue is written, quoting the non-goal and its reason. Do not silently widen the product, and do not refuse either; the owner may be deliberately changing the boundary, in which case the definition is what gets updated first.
+7. Route to `domain-model` when domain terminology, states, rules, entities, or relationships are materially ambiguous.
+8. Route to `research` when current external evidence affects the requested behavior.
+9. Create or update exactly one canonical issue. Label it following the repository's own convention, or [LABELS.md](LABELS.md) when it has none. Apply only clearly applicable values, and never invent one to fill a field.
+10. Refetch the issue before mutation when concurrent editing is possible.
 
 ## Specify Phase
 

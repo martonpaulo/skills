@@ -1,5 +1,5 @@
 ---
-name: code-review
+name: flow-code-review
 description: Perform the Validate SDD phase for exactly one pull request. Triggers when the user provides a PR number/URL to review.
 disable-model-invocation: true
 license: MIT

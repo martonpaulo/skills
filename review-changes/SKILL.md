@@ -1,6 +1,6 @@
 ---
 name: review-changes
-description: Review the working diff against a fixed point on two independent axes, standards and intent, before the change becomes a pull request. Use only when the user explicitly invokes $review-changes for uncommitted work, staged work, a local branch, or a range such as "review since main". Not for reviewing a pull request, which belongs to code-review, and not for adversarial bug hunting, implementing the findings, or reviewing an untouched codebase.
+description: Review the working diff against a fixed point on two independent axes, standards and intent, before the change becomes a pull request. Use only when the user explicitly invokes $review-changes for uncommitted work, staged work, a local branch, or a range such as "review since main". Not for reviewing a pull request, which belongs to flow-code-review, and not for adversarial bug hunting, implementing the findings, or reviewing an untouched codebase.
 argument-hint: "[fixed point, e.g. main | HEAD~3 | <sha>]"
 disable-model-invocation: true
 license: MIT
@@ -27,7 +27,7 @@ A change can pass one axis and fail the other. Code that follows every conventio
 the wrong thing, and code that satisfies the request can break the repository's rules. Reporting
 them separately stops one from masking the other.
 
-This skill reports findings and never edits. `code-review` owns the formal Validate phase for a
+This skill reports findings and never edits. `flow-code-review` owns the formal Validate phase for a
 pull request; do not use this skill in its place. `bug-hunter` owns adversarial defect hunting
 with runtime traces; this review reports a defect it happens to see but does not run that hunt.
 

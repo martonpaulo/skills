@@ -10,20 +10,55 @@ Every upstream project is credited below. If a skill is useful, credit belongs t
 
 ## 🧭 Start here
 
-Choose a skill based on the result you need.
+Everything named `flow-` is the main path. Follow it and the rest of the collection is pulled in
+for you: the flow skills delegate to `grilling`, `plan-issue`, `test-design`, `debug`, `research`,
+`module-design` and the others whenever a step actually needs them.
+
+```mermaid
+flowchart LR
+  subgraph once["once per project"]
+    direction LR
+    dp["flow-define-product"] --> sc["flow-scaffold"] --> sp["flow-setup-project"]
+  end
+  subgraph loop["per delivery"]
+    direction LR
+    ci["flow-capture-issue"] --> ii["flow-implement-issue"] --> cr["flow-code-review"]
+  end
+  once --> loop
+  loop --> rel["flow-release"]
+```
+
+| Step                          | What it settles                                                      | When |
+| ----------------------------- | -------------------------------------------------------------------- | ---- |
+| [`flow-define-product`](flow-define-product/)     | What the product is, who for, and what it will never do             | Once, first |
+| [`flow-scaffold`](flow-scaffold/)                 | The initial source tree, from a maintained scaffolder               | Once, new projects only |
+| [`flow-setup-project`](flow-setup-project/)       | Identity, Git policy, versioning, licence, public metadata          | Once |
+| [`flow-capture-issue`](flow-capture-issue/)       | One request becomes one canonical issue                             | Per delivery |
+| [`flow-implement-issue`](flow-implement-issue/)   | The code, tests, docs, and the pull request                         | Per delivery |
+| [`flow-code-review`](flow-code-review/)           | The formal verdict on that pull request                             | Per delivery |
+| [`flow-release`](flow-release/)                   | Version, changelog, tag, publication                                | When a version is due |
+
+`flow-scaffold` runs only for a brand-new project with no source yet. Skip it otherwise.
+
+`flow-implement-issue` writes the plan itself when the issue is small and stops for your read when
+it is not, so `plan-issue` is usually not a step you invoke by hand.
+
+[`backlog-curator`](backlog-curator/) is deliberately off this path. It sweeps the whole backlog
+for duplicates, obsolete issues, taxonomy drift and blocking order, which is periodic maintenance
+rather than something worth running per issue.
+
+### Everything else
+
+The other 22 skills stay directly invocable whenever you want them, and the flow reaches for them
+on its own when a step needs one.
 
 | I need to…                                       | Use                                                   |
 | ------------------------------------------------ | ----------------------------------------------------- |
-| Set up or align a repository                     | [`setup-project`](setup-project/)                     |
-| Convert a request into a complete GitHub Issue   | [`capture-issue`](capture-issue/)                     |
-| Plan the implementation of one issue             | [`plan-issue`](plan-issue/)                           |
-| Implement one prepared issue                     | [`implement-issue`](implement-issue/)                 |
-| Validate a pull request before merging           | [`code-review`](code-review/)                         |
-| Review my working diff before it becomes a PR    | [`review-changes`](review-changes/)                   |
 | Organize and prioritize the complete backlog     | [`backlog-curator`](backlog-curator/)                 |
+| Plan one issue explicitly                        | [`plan-issue`](plan-issue/)                           |
+| Review my working diff before it becomes a PR    | [`review-changes`](review-changes/)                   |
 | Diagnose and fix a difficult bug                 | [`debug`](debug/)                                     |
 | Decide what to test and where the seam belongs   | [`test-design`](test-design/)                         |
-| Cut a release under the repository's policy      | [`release`](release/)                                 |
 | Decide whether to build or reuse a capability    | [`dont-reinvent-the-wheel`](dont-reinvent-the-wheel/) |
 | Improve module boundaries and dependencies       | [`module-design`](module-design/)                     |
 | Resolve a merge, rebase, or cherry-pick conflict | [`resolve-conflicts`](resolve-conflicts/)             |
@@ -36,8 +71,11 @@ Choose a skill based on the result you need.
 | Quickly look up a library API                    | [`context7`](context7/)                               |
 | Pressure-test a plan through questions           | [`grilling`](grilling/)                               |
 | Preserve decisions from an interview             | [`grill-and-document`](grill-and-document/)           |
+| Clarify contradictory domain language            | [`domain-model`](domain-model/)                       |
+| Answer a question by running a small experiment  | [`prototype`](prototype/)                             |
 | Create a continuation note for another session   | [`handoff`](handoff/)                                 |
 | Create, review, or simplify an Agent Skill       | [`skill-authoring`](skill-authoring/)                 |
+| Configure this repo's artifact paths             | [`setup-agent-docs`](setup-agent-docs/)               |
 | Audit and reclaim disk space safely              | [`disk-cleaner`](disk-cleaner/)                       |
 | Research cheaper regional digital-product offers | [`grey-market`](grey-market/)                         |
 
@@ -63,12 +101,12 @@ Each phase has one owner, one primary goal, and one exit condition.
 
 | Phase         | Lead role   | Goal                                                              | Skill                                 |
 | ------------- | ----------- | ----------------------------------------------------------------- | ------------------------------------- |
-| **Specify**   | Product     | Define what must be done and which requirements must be satisfied | [`capture-issue`](capture-issue/)     |
-| **Clarify**   | Product     | Resolve ambiguities, decisions, edge cases, and open questions    | [`capture-issue`](capture-issue/)     |
+| **Specify**   | Product     | Define what must be done and which requirements must be satisfied | [`flow-capture-issue`](flow-capture-issue/)     |
+| **Clarify**   | Product     | Resolve ambiguities, decisions, edge cases, and open questions    | [`flow-capture-issue`](flow-capture-issue/)     |
 | **Plan**      | Architect   | Decide the implementation architecture and strategy               | [`plan-issue`](plan-issue/)           |
 | **Tasks**     | Architect   | Break the plan into executable tasks and dependencies             | [`plan-issue`](plan-issue/)           |
-| **Implement** | Implementer | Execute the tasks and produce the code                            | [`implement-issue`](implement-issue/) |
-| **Validate**  | Validator   | Verify requirements, tests, regressions, and repository rules     | [`code-review`](code-review/)         |
+| **Implement** | Implementer | Execute the tasks and produce the code                            | [`flow-implement-issue`](flow-implement-issue/) |
+| **Validate**  | Validator   | Verify requirements, tests, regressions, and repository rules     | [`flow-code-review`](flow-code-review/)         |
 
 `Specify`, `Clarify`, `Plan`, `Tasks`, and `Implement` follow the workflow established by [GitHub spec-kit](https://github.com/github/spec-kit).
 
@@ -94,7 +132,7 @@ Its final output includes a dependency graph showing the order in which issues s
 
 ### Issue labels
 
-[`capture-issue`](capture-issue/) owns the default label taxonomy documented in [`capture-issue/LABELS.md`](capture-issue/LABELS.md).
+[`flow-capture-issue`](flow-capture-issue/) owns the default label taxonomy documented in [`capture-issue/LABELS.md`](flow-capture-issue/LABELS.md).
 
 When a repository does not already define its own convention:
 
@@ -118,7 +156,7 @@ They reach the official GitHub API through the available native integration or `
 from a higher-level `gh` command to the API whenever that command cannot express the operation.
 Two consequences are load-bearing:
 
-* **Findings are anchored.** `code-review` publishes one formal review whose inline comments are
+* **Findings are anchored.** `flow-code-review` publishes one formal review whose inline comments are
   attached to the exact lines, through
   `POST /repos/{owner}/{repo}/pulls/{number}/reviews`. Writing "line 84 should change" into a
   summary body, when the API could have attached that text to line 84, counts as a defective
@@ -156,7 +194,7 @@ disable-model-invocation: true
 
 This restriction is used for broad reviews, interviews, and workflows whose side effects should never begin without being asked for.
 
-Writing to external state does not by itself force this restriction. A narrow child workflow that a user-invoked parent has to reach through the skill tool stays model-invocable, states that delegation in its own file, and may not exceed the mutation its parent already authorized. `capture-issue` and `setup-agent-docs` are the two cases.
+Writing to external state does not by itself force this restriction. A narrow child workflow that a user-invoked parent has to reach through the skill tool stays model-invocable, states that delegation in its own file, and may not exceed the mutation its parent already authorized. `flow-capture-issue` and `setup-agent-docs` are the two cases.
 
 ### Mutation boundaries
 
@@ -182,10 +220,13 @@ Setup skills establish repository-level conventions and operating rules.
 
 | Skill                                   | Invocation    | Mutation | What it does                                                                                                                  | Upstream                                                                                                                                   |
 | --------------------------------------- | ------------- | -------- | ----------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
-| [`setup-project`](setup-project/)       | User          | `write`  | Bootstrap or align a repository's identity, operating rules, Git policy, public metadata, and applicable project foundations. | Written for this collection                                                                                                                |
+| [`flow-scaffold`](flow-scaffold/)       | User          | `write`  | Generate a brand-new project's initial source tree from a maintained scaffolder, then hand over to setup.                     | Written for this collection                                                                                                                |
+| [`flow-setup-project`](flow-setup-project/)       | User          | `write`  | Bootstrap or align a repository's identity, operating rules, Git policy, public metadata, and applicable project foundations. | Written for this collection                                                                                                                |
 | [`setup-agent-docs`](setup-agent-docs/) | Model or user | `docs`   | Configure optional per-repository paths for glossaries, ADRs, research, handoffs, and prototypes.                             | [mattpocock/skills → setup-matt-pocock-skills](https://github.com/mattpocock/skills/tree/main/skills/engineering/setup-matt-pocock-skills) |
 
-`setup-project` owns the repository's general operating model.
+`flow-scaffold` runs first and only for a new project with no source yet. It generates code and nothing else; `flow-setup-project` refuses to scaffold precisely so that running setup against a real codebase can never inject source into it.
+
+`flow-setup-project` owns the repository's general operating model.
 
 When optional documentation paths are needed, it delegates that narrower configuration to `setup-agent-docs`.
 
@@ -195,10 +236,10 @@ These skills move one issue from an initial request to a validated pull request.
 
 | Skill                                 | Invocation    | Mutation | What it does                                                                                                                  | Upstream                                                                                                                                                                      |
 | ------------------------------------- | ------------- | -------- | ----------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [`capture-issue`](capture-issue/)     | Model or user | `write`  | Convert one problem or request into one canonical GitHub Issue. Owns Specify, Clarify, and the default label taxonomy.        | Written for this collection                                                                                                                                                   |
+| [`flow-capture-issue`](flow-capture-issue/)     | Model or user | `write`  | Convert one problem or request into one canonical GitHub Issue. Owns Specify, Clarify, and the default label taxonomy.        | Written for this collection                                                                                                                                                   |
 | [`plan-issue`](plan-issue/)           | User          | `write`  | Produce the implementation architecture, strategy, executable tasks, dependencies, and effort estimate for exactly one issue. | [obra/superpowers](https://github.com/obra/superpowers)                                                                                                                       |
-| [`implement-issue`](implement-issue/) | User          | `write`  | Implement exactly one prepared GitHub Issue, including code, tests, documentation, and validation evidence.                   | [openclaw/openclaw](https://github.com/openclaw/openclaw), [github/spec-kit](https://github.com/github/spec-kit) |
-| [`code-review`](code-review/)         | User          | `write`  | Validate exactly one pull request against its controlling issue and repository rules.                                         | [NousResearch/hermes-agent](https://github.com/NousResearch/hermes-agent), [SpillwaveSolutions/pr-reviewer-skill](https://github.com/SpillwaveSolutions/pr-reviewer-skill)    |
+| [`flow-implement-issue`](flow-implement-issue/) | User          | `write`  | Implement exactly one prepared GitHub Issue, including code, tests, documentation, and validation evidence.                   | [openclaw/openclaw](https://github.com/openclaw/openclaw), [github/spec-kit](https://github.com/github/spec-kit) |
+| [`flow-code-review`](flow-code-review/)         | User          | `write`  | Validate exactly one pull request against its controlling issue and repository rules.                                         | [NousResearch/hermes-agent](https://github.com/NousResearch/hermes-agent), [SpillwaveSolutions/pr-reviewer-skill](https://github.com/SpillwaveSolutions/pr-reviewer-skill)    |
 | [`backlog-curator`](backlog-curator/) | User          | `write`  | Review the complete backlog for duplicates, obsolete issues, taxonomy drift, missing phases, and dependencies.                | [github/gh-aw](https://github.com/github/gh-aw), behavioral reference                                                                                                         |
 
 Each issue-level skill owns a narrow part of the workflow.
@@ -243,7 +284,7 @@ Workflow skills complete one concrete engineering task from start to finish.
 | ----------------------------------------------------- | ------------- | -------- | -------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | [`debug`](debug/)                                     | Model or user | `write`  | Reproduce a difficult bug, form hypotheses, identify the root cause, apply the smallest valid fix, and verify it.          | [mattpocock/skills → diagnosing-bugs](https://github.com/mattpocock/skills/tree/main/skills/engineering/diagnosing-bugs)                               |
 | [`dont-reinvent-the-wheel`](dont-reinvent-the-wheel/) | Model or user | `none`   | Decide whether one capability should reuse an existing feature, native API, dependency, service, or custom implementation. | [felinto-dev/felinto-skills → dont-reinvent-the-wheel](https://github.com/felinto-dev/felinto-skills/tree/main/.agents/skills/dont-reinvent-the-wheel) |
-| [`release`](release/)                                 | User          | `write`  | Cut one release under the versioning policy the repository already recorded: bump, changelog, tag, publication.            | Written for this collection                                                                                                                            |
+| [`flow-release`](flow-release/)                                 | User          | `write`  | Cut one release under the versioning policy the repository already recorded: bump, changelog, tag, publication.            | Written for this collection                                                                                                                            |
 | [`module-design`](module-design/)                     | Model or user | `write`  | Improve module boundaries, interfaces, dependency direction, cohesion, and test seams.                                     | [mattpocock/skills → codebase-design](https://github.com/mattpocock/skills/tree/main/skills/engineering/codebase-design)                               |
 | [`resolve-conflicts`](resolve-conflicts/)             | Model or user | `write`  | Resolve a merge, rebase, or cherry-pick conflict by reconstructing the intent of both sides.                               | [mattpocock/skills → resolving-merge-conflicts](https://github.com/mattpocock/skills/tree/main/skills/engineering/resolving-merge-conflicts)           |
 
@@ -274,6 +315,7 @@ These skills produce durable documentation as their primary result.
 
 | Skill                                       | Invocation | Mutation | What it does                                                                                      | Upstream                                                                                                                            |
 | ------------------------------------------- | ---------- | -------- | ------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| [`flow-define-product`](flow-define-product/) | User     | `docs`   | Decide what the product is, who it serves, and the non-goals it will never take on.               | Written for this collection                                                                                                         |
 | [`grill-and-document`](grill-and-document/) | User       | `docs`   | Run the `grilling` interview while preserving canonical domain language and consequential decisions. | [mattpocock/skills → grill-with-docs](https://github.com/mattpocock/skills/tree/main/skills/engineering/grill-with-docs)            |
 | [`handoff`](handoff/)                       | User       | `docs`   | Produce a compact continuation note for another agent or a later session.                         | [mattpocock/skills → handoff](https://github.com/mattpocock/skills/tree/main/skills/productivity/handoff)                           |
 | [`skill-authoring`](skill-authoring/)       | User       | `write`  | Create, review, or simplify Agent Skills.                                                         | [mattpocock/skills → writing-great-skills](https://github.com/mattpocock/skills/tree/main/skills/productivity/writing-great-skills) |
@@ -385,7 +427,7 @@ Every top-level skill directory remains self-contained and independently copyabl
 
 The issue-pipeline skills are grouped by phase in this README rather than by role because the phase is what distinguishes them operationally.
 
-For example, `capture-issue` and `plan-issue` are both authoring skills, but one owns Specify and Clarify while the other owns Plan and Tasks.
+For example, `flow-capture-issue` and `plan-issue` are both authoring skills, but one owns Specify and Clarify while the other owns Plan and Tasks.
 
 <br />
 
@@ -400,11 +442,18 @@ A connection does not mean that the target skill always runs. Dashed edges repre
 
 ```mermaid
 flowchart LR
-  setup-project --> setup-agent-docs
-  setup-project --> grilling
-  setup-project -.current external evidence.-> research
-  setup-project -.version-specific Apple setup.-> apple-docs
-  setup-project -.version-specific non-Apple setup.-> deep-docs
+  flow-define-product --> grilling
+  flow-define-product -.contested vocabulary.-> domain-model
+  flow-define-product -.capability may not need building.-> dont-reinvent-the-wheel
+
+  flow-scaffold --> grilling
+  flow-scaffold -.adding to a live project instead.-> dont-reinvent-the-wheel
+
+  flow-setup-project --> setup-agent-docs
+  flow-setup-project --> grilling
+  flow-setup-project -.current external evidence.-> research
+  flow-setup-project -.version-specific Apple setup.-> apple-docs
+  flow-setup-project -.version-specific non-Apple setup.-> deep-docs
 
   grill-and-document --> grilling
   grill-and-document --> domain-model
@@ -419,7 +468,7 @@ flowchart LR
   test-design -.contradictory terms.-> domain-model
   test-design -.contested seam.-> grilling
 
-  release -.no recorded versioning policy.-> setup-project
+  flow-release -.no recorded versioning policy.-> flow-setup-project
 
   bug-hunter --> apple-docs
   bug-hunter --> deep-docs
@@ -441,11 +490,12 @@ flowchart LR
   context7 -.Apple questions.-> apple-docs
   context7 -.authoritative source required.-> deep-docs
 
-  capture-issue --> grilling
-  capture-issue -.when applicable.-> domain-model
-  capture-issue -.when applicable.-> research
+  flow-capture-issue --> grilling
+  flow-capture-issue -.request contradicts a non-goal.-> flow-define-product
+  flow-capture-issue -.when applicable.-> domain-model
+  flow-capture-issue -.when applicable.-> research
 
-  plan-issue -.Specify or Clarify is incomplete.-> capture-issue
+  plan-issue -.Specify or Clarify is incomplete.-> flow-capture-issue
   plan-issue -.consequential decisions remain.-> grilling
   plan-issue -.when applicable.-> domain-model
   plan-issue -.when applicable.-> module-design
@@ -454,18 +504,20 @@ flowchart LR
   plan-issue -.when applicable.-> dont-reinvent-the-wheel
   plan-issue -.test strategy.-> test-design
 
-  implement-issue -.when applicable.-> debug
-  implement-issue -.when applicable.-> domain-model
-  implement-issue -.when applicable.-> module-design
-  implement-issue -.when applicable.-> research
-  implement-issue -.when applicable.-> prototype
-  implement-issue -.when applicable.-> dont-reinvent-the-wheel
-  implement-issue -.when applicable.-> resolve-conflicts
-  implement-issue -.when applicable.-> test-design
+  flow-implement-issue -.when applicable.-> debug
+  flow-implement-issue -.when applicable.-> domain-model
+  flow-implement-issue -.when applicable.-> module-design
+  flow-implement-issue -.when applicable.-> research
+  flow-implement-issue -.when applicable.-> prototype
+  flow-implement-issue -.when applicable.-> dont-reinvent-the-wheel
+  flow-implement-issue -.when applicable.-> resolve-conflicts
+  flow-implement-issue -.when applicable.-> test-design
+  flow-implement-issue -.Plan missing.-> plan-issue
+  flow-implement-issue -.Specify or Clarify missing.-> flow-capture-issue
 
-  code-review -.investigation discipline.-> grilling
+  flow-code-review -.investigation discipline.-> grilling
 
-  backlog-curator --> capture-issue
+  backlog-curator --> flow-capture-issue
   backlog-curator --> plan-issue
   backlog-curator -.unresolved consequential conflicts.-> grilling
 ```
@@ -475,7 +527,13 @@ flowchart LR
 <details>
 <summary><strong>How conditional delegation works</strong></summary>
 
-`setup-project` establishes the repository's main guidance before delegating optional documentation-path configuration to `setup-agent-docs`.
+`flow-define-product` settles what the product is before anything is built. `flow-capture-issue` later checks a request against its non-goals and raises a contradiction rather than silently widening the product.
+
+`flow-scaffold` generates a new project's tree and stops. Adding a framework or dependency to a project that already runs is not scaffolding; that decision goes to `dont-reinvent-the-wheel` and then to ordinary implementation.
+
+`flow-implement-issue` writes the plan itself through `plan-issue` when the issue is small, and stops for a human read when it is not. Missing `Specify` or `Clarify` always goes back to `flow-capture-issue`, because a product decision is the owner's.
+
+`flow-setup-project` establishes the repository's main guidance before delegating optional documentation-path configuration to `setup-agent-docs`.
 
 It uses:
 
@@ -489,7 +547,7 @@ It uses:
 
 `test-design` owns where a test attaches and whether it earns its keep. `module-design` owns the boundary the seam attaches to, so a contested seam goes there; contradictory domain terms go to `domain-model`; and a seam whose choice changes what ships goes to `grilling`. `debug` delegates the placement of a regression test here when the seam is unclear.
 
-`release` executes the versioning contract that `setup-project` recorded. If no policy exists, it stops and points back rather than choosing a version scheme on the owner's behalf.
+`flow-release` executes the versioning contract that `flow-setup-project` recorded. If no policy exists, it stops and points back rather than choosing a version scheme on the owner's behalf.
 
 `bug-hunter` routes documented Apple behavior to `apple-docs` and other framework or library behavior to `deep-docs`.
 
@@ -509,15 +567,15 @@ A confirmed bug is handed to `debug` only after the user selects it for implemen
 * `context7` is the fast path when an indexed snippet is sufficient
 * `deep-docs` takes over when an authoritative source is required or the library is not indexed
 
-`capture-issue` uses `domain-model` or `research` only when ambiguity or missing evidence prevents the issue from being captured correctly.
+`flow-capture-issue` uses `domain-model` or `research` only when ambiguity or missing evidence prevents the issue from being captured correctly.
 
-`plan-issue` delegates back to `capture-issue` when Specify or Clarify is incomplete.
+`plan-issue` delegates back to `flow-capture-issue` when Specify or Clarify is incomplete.
 
 It may also use specialized architecture, research, reuse, or prototyping skills when those capabilities are directly relevant to the implementation plan.
 
-`implement-issue` may use specialized workflows such as `debug`, `module-design`, `prototype`, or `resolve-conflicts`, but only when they directly support implementation of the single prepared issue.
+`flow-implement-issue` may use specialized workflows such as `debug`, `module-design`, `prototype`, or `resolve-conflicts`, but only when they directly support implementation of the single prepared issue.
 
-`backlog-curator` delegates incomplete issue phases to `capture-issue` or `plan-issue`.
+`backlog-curator` delegates incomplete issue phases to `flow-capture-issue` or `plan-issue`.
 
 </details>
 
@@ -561,6 +619,6 @@ The original work in this repository, including its adaptations, documentation, 
 
 That grant covers only the work created for this collection. Vendored or adapted upstream work retains its original license.
 
-The MIT grant does not extend to the upstream material inside `code-review`, `dont-reinvent-the-wheel`, `grey-market`, `implement-issue`, and `plan-issue`. Those upstream repositories publish no license, so that permission is not mine to give. [`NOTICE.md`](NOTICE.md) is authoritative on this.
+The MIT grant does not extend to the upstream material inside `flow-code-review`, `dont-reinvent-the-wheel`, `grey-market`, `flow-implement-issue`, and `plan-issue`. Those upstream repositories publish no license, so that permission is not mine to give. [`NOTICE.md`](NOTICE.md) is authoritative on this.
 
 See [`NOTICE.md`](NOTICE.md) for the exact attribution and licensing status of every component.

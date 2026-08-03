@@ -1,6 +1,6 @@
 interface:
   display_name: "Code Review"
   short_description: "Validate one pull request before merge"
-  default_prompt: "Use $code-review to validate this pull request."
+  default_prompt: "Use $flow-code-review to validate this pull request."
 policy:
   allow_implicit_invocation: false

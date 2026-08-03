@@ -83,6 +83,20 @@ exactly. Everything else is optional and belongs inside the skill's own director
 documents loaded on demand, executable scripts, agent-specific metadata, and the licensing and
 attribution files required when upstream work is vendored.
 
+### The `flow-` prefix
+
+The seven skills prefixed `flow-` are the main delivery path, in this order: `flow-define-product`,
+`flow-scaffold`, `flow-setup-project`, `flow-capture-issue`, `flow-implement-issue`,
+`flow-code-review`, `flow-release`. The prefix exists so they group together in a skill menu; it
+carries no other meaning and implies no order beyond what the README states.
+
+Adding a prefix is a decision about the whole path, not about one skill. Do not prefix a skill
+merely because it feels important. A skill joins the path only when a user would otherwise have to
+know to invoke it by hand at a fixed point in every project, and everything a flow skill can reach
+by delegation stays unprefixed.
+
+### Directory layout
+
 Skill directories stay **flat**, one level under the repository root. Do not group them into
 `audits/`, `workflows/` or any other folder: the taxonomy is metadata, and nesting would only
 break paths, cross-references, and copying a single skill elsewhere.

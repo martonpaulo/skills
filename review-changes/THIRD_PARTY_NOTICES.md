@@ -23,10 +23,10 @@ but the selection and the what-it-is/how-to-fix pairing are upstream's.
 
 ### What changed
 
-**Renamed to `review-changes`.** The name `code-review` is already taken in this collection by the
-pull-request Validate phase. The two skills now state each other as non-triggers instead of
-competing: `code-review` owns a pull request, `review-changes` owns the local diff before one
-exists.
+**Renamed to `review-changes`.** This collection already had a pull-request Validate skill under
+the name `code-review`, since renamed to `flow-code-review`. The two now state each other as
+non-triggers instead of competing: `flow-code-review` owns a pull request, `review-changes` owns
+the local diff before one exists.
 
 **Subagents are optional.** Upstream requires spawning two `general-purpose` sub-agents in
 parallel and pastes the baseline into their prompts, because they have no other access to it.

@@ -1,5 +1,5 @@
 ---
-name: release
+name: flow-release
 description: Cut one release of a project according to the versioning policy the repository already recorded, covering the version bump, changelog entry, tag, and publication. Use only when the user explicitly asks to release, cut a version, bump the version, or publish a build. Do not use for ordinary commits and pushes, for merging a pull request, for deciding a versioning policy that does not exist yet, or for configuring release automation.
 argument-hint: "[explicit version, e.g. 1.4.0]"
 disable-model-invocation: true
@@ -14,7 +14,7 @@ metadata:
 Cut exactly one release, following the policy the repository already recorded. This skill executes
 a contract; it does not invent one.
 
-`setup-project` owns establishing the versioning policy and writes it to `## Project identity and
+`flow-setup-project` owns establishing the versioning policy and writes it to `## Project identity and
 policy`. If no policy exists, stop and say so. Do not choose a version scheme, a canonical source,
 or a release trigger on the user's behalf, and do not release a project that policy says is
 unversioned.
@@ -34,7 +34,7 @@ the canonical source is a manifest. When several files carry the version, list e
 now; they all have to move together.
 
 Stop with an exact gap when the policy is missing, contradictory, or silent on something this
-release needs. Recommend `setup-project` and do not continue.
+release needs. Recommend `flow-setup-project` and do not continue.
 
 ## 2. Establish the release is safe to cut
 

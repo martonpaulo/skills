@@ -1,5 +1,5 @@
 ---
-name: setup-project
+name: flow-setup-project
 description: Initialize or align one of the owner's repositories with its durable project identity, Git and release policies, root AGENTS.md rules, CLAUDE.md alias, public documentation, licensing, ignore rules, GitHub metadata, and applicable CI or release foundations. Use only when the user explicitly asks to set up a new personal project or adopt this complete baseline in an existing repository; do not use for ordinary implementation, a single documentation edit, or artifact-path configuration alone.
 disable-model-invocation: true
 metadata:
@@ -12,7 +12,9 @@ metadata:
 
 Establish the repository's durable operating contract before ordinary implementation begins. Keep the setup idempotent: reuse recorded decisions, ask only for missing or explicitly reopened choices, and update existing files instead of duplicating policy.
 
-Own repository policy and its supporting configuration, not product implementation. Do not scaffold application source, features, domain code, UI, fixtures, or a speculative technology stack. If the user also requests product scaffolding, complete and validate setup first, then handle implementation as a separate concern under normal skill-triggering rules.
+Own repository policy and its supporting configuration, not product implementation. Do not scaffold application source, features, domain code, UI, fixtures, or a speculative technology stack. Generating a new project's initial tree belongs to `flow-scaffold`, which runs before this skill; this one then aligns whatever exists. If the user asks for scaffolding here, complete and validate setup first, then treat it as a separate concern.
+
+Read the product definition first when one exists, at the path repository guidance configures or `docs/product.md`. The benefit-first description, the GitHub topics, and the landing-page decision below are all derived from it, so having it already settled is what stops this interview from asking the owner to invent their product's positioning while choosing a license. When none exists and the answers are not obvious, `flow-define-product` is the skill that produces one.
 
 Read [`assets/AGENTS.template.md`](assets/AGENTS.template.md) in full before writing project guidance. Adapt its rules to the project; never leave template placeholders in the target repository.
 
