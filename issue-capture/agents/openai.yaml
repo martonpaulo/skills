@@ -1,0 +1,4 @@
+interface:
+  display_name: "Capture Issue"
+  short_description: "Turn a report into one canonical issue"
+  default_prompt: "Use $issue-capture to turn this into a complete GitHub Issue."

@@ -1,0 +1,6 @@
+interface:
+  display_name: "Project Setup"
+  short_description: "Set up new or existing repositories"
+  default_prompt: "Use $project-setup to set up or align this repository with my project rules and one-time decisions."
+policy:
+  allow_implicit_invocation: false

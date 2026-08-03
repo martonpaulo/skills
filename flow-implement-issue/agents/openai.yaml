@@ -1,6 +1,0 @@
-interface:
-  display_name: "Implement Issue"
-  short_description: "Implement one prepared issue end to end"
-  default_prompt: "Use $flow-implement-issue to implement this prepared issue."
-policy:
-  allow_implicit_invocation: false

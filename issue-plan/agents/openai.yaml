@@ -1,0 +1,6 @@
+interface:
+  display_name: "Plan Issue"
+  short_description: "Produce the plan and tasks for one issue"
+  default_prompt: "Use $issue-plan to plan this issue."
+policy:
+  allow_implicit_invocation: false

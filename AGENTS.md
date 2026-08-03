@@ -83,17 +83,22 @@ exactly. Everything else is optional and belongs inside the skill's own director
 documents loaded on demand, executable scripts, agent-specific metadata, and the licensing and
 attribution files required when upstream work is vendored.
 
-### The `flow-` prefix
+### The `project-` and `issue-` prefixes
 
-The seven skills prefixed `flow-` are the main delivery path, in this order: `flow-define-product`,
-`flow-scaffold`, `flow-setup-project`, `flow-capture-issue`, `flow-implement-issue`,
-`flow-code-review`, `flow-release`. The prefix exists so they group together in a skill menu; it
-carries no other meaning and implies no order beyond what the README states.
+Eight skills carry two prefixes that describe **what they act on**, not how important they are.
 
-Adding a prefix is a decision about the whole path, not about one skill. Do not prefix a skill
-merely because it feels important. A skill joins the path only when a user would otherwise have to
-know to invoke it by hand at a fixed point in every project, and everything a flow skill can reach
-by delegation stays unprefixed.
+`project-` acts on the whole project: `project-setup`, `project-backlog`, `project-audit`,
+`project-release`.
+
+`issue-` acts on exactly one issue, and the four are the SDD phases in order: `issue-capture`
+(Specify, Clarify), `issue-plan` (Plan, Tasks), `issue-implement` (Implement), `issue-review`
+(Validate).
+
+The prefix is a scope claim, so it has to stay true. A skill joins `issue-` only if it refuses to
+operate on more than one issue, and joins `project-` only if its unit of work really is the whole
+project. Do not prefix a skill because it feels central, and do not prefix one that a prefixed
+skill can already reach by delegation: `scaffold` is invoked by `project-setup` and stays
+unprefixed, as does everything in the audit and foundation sets.
 
 ### Directory layout
 

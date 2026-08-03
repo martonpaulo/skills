@@ -1,6 +1,0 @@
-interface:
-  display_name: "Scaffold"
-  short_description: "Generate a new project from a maintained scaffolder"
-  default_prompt: "Use $flow-scaffold to create the initial source tree for this new project."
-policy:
-  allow_implicit_invocation: false

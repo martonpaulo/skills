@@ -18,16 +18,17 @@ It does not, and cannot, relicense third-party work that this repository vendors
 | [gccszs/disk-cleaner](https://github.com/gccszs/disk-cleaner) | Disk Cleaner Contributors | MIT | `disk-cleaner` (vendored) |
 | [upstash/context7](https://github.com/upstash/context7) | Upstash, Inc. | MIT | `context7` (skill prose rewritten; the CLI itself is not vendored) |
 | [felinto-dev/felinto-skills](https://github.com/felinto-dev/felinto-skills) | felinto-dev | **none published** | `dont-reinvent-the-wheel`, `grey-market` |
-| [jakubkrehel/skills](https://github.com/jakubkrehel/skills) | Jakub Krehel | MIT | `product-audit` (adapted interface-review orchestration and criteria) |
-| [content-designer/ux-writing-skill](https://github.com/content-designer/ux-writing-skill) | Christopher Greer | MIT | `product-audit` (adapted UX-writing review criteria) |
-| [Thecsiz/ux-critique](https://github.com/Thecsiz/ux-critique) | thecsiz | MIT and CC BY 4.0 by upstream path | `product-audit` (adapted deep-critique method; no KB or scripts vendored) |
+| [jakubkrehel/skills](https://github.com/jakubkrehel/skills) | Jakub Krehel | MIT | `interface-audit` (adapted interface-review orchestration and criteria) |
+| [content-designer/ux-writing-skill](https://github.com/content-designer/ux-writing-skill) | Christopher Greer | MIT | `interface-audit` (adapted UX-writing review criteria) |
+| [Thecsiz/ux-critique](https://github.com/Thecsiz/ux-critique) | thecsiz | MIT and CC BY 4.0 by upstream path | `interface-audit` (adapted deep-critique method; no KB or scripts vendored) |
 | [codexstar69/bug-hunter](https://github.com/codexstar69/bug-hunter) | codexstar69 | MIT | `bug-hunter` (audit workflow adapted; no scripts vendored) |
-| [obra/superpowers](https://github.com/obra/superpowers) | obra | **none published** | `plan-issue` (adapted planning discipline) |
-| [NousResearch/hermes-agent](https://github.com/NousResearch/hermes-agent) | Hermes Agent | MIT | `flow-code-review` (adapted review mechanics) |
-| [SpillwaveSolutions/pr-reviewer-skill](https://github.com/SpillwaveSolutions/pr-reviewer-skill) | SpillwaveSolutions | **none published** | `flow-code-review` (adapted context collection) |
-| [openclaw/openclaw](https://github.com/openclaw/openclaw) | openclaw | **none published** | `flow-implement-issue` (design input only) |
-| [github/spec-kit](https://github.com/github/spec-kit) | GitHub | MIT | `flow-implement-issue` (design input only) |
-| [github/gh-aw](https://github.com/github/gh-aw) | GitHub | MIT | `backlog-curator` (behavioral reference only) |
+| [obra/superpowers](https://github.com/obra/superpowers) | obra | **none published** | `issue-plan` (adapted planning discipline) |
+| [NousResearch/hermes-agent](https://github.com/NousResearch/hermes-agent) | Hermes Agent | MIT | `issue-review` (adapted review mechanics) |
+| [SpillwaveSolutions/pr-reviewer-skill](https://github.com/SpillwaveSolutions/pr-reviewer-skill) | SpillwaveSolutions | **none published** | `issue-review` (adapted context collection) |
+| [openclaw/openclaw](https://github.com/openclaw/openclaw) | openclaw | **none published** | `issue-implement` (design input only) |
+| [github/spec-kit](https://github.com/github/spec-kit) | GitHub | MIT | `issue-implement` (design input only) |
+| [github/gh-aw](https://github.com/github/gh-aw) | GitHub | MIT | `project-backlog` (behavioral reference only) |
+| [product-on-purpose/pm-skills](https://github.com/product-on-purpose/pm-skills) | product-on-purpose | Apache-2.0 | `project-setup` (product-definition half only) |
 
 Every skill above keeps a `THIRD_PARTY_NOTICES.md` in its own directory recording the upstream
 repository, the pinned commit, the import date, the date of the last comparison against upstream,
@@ -39,7 +40,7 @@ A branch name is never recorded as a revision. See [Upstream provenance](README.
 
 ## Unlicensed upstream
 
-`flow-code-review`, `dont-reinvent-the-wheel`, `grey-market`, `flow-implement-issue`, and `plan-issue` derive
+`issue-review`, `dont-reinvent-the-wheel`, `grey-market`, `issue-implement`, and `issue-plan` derive
 partly from repositories that publish no license.
 
 The MIT grant in `LICENSE` **does not extend to the upstream material in those directories**. That

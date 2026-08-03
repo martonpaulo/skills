@@ -1,6 +1,0 @@
-interface:
-  display_name: "Release"
-  short_description: "Cut one release under the repository's recorded policy"
-  default_prompt: "Use $flow-release to cut a release of this project following its recorded versioning policy."
-policy:
-  allow_implicit_invocation: false

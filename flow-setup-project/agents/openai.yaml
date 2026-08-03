@@ -1,6 +1,0 @@
-interface:
-  display_name: "Setup Project"
-  short_description: "Set up new or existing repositories"
-  default_prompt: "Use $flow-setup-project to set up or align this repository with my project rules and one-time decisions."
-policy:
-  allow_implicit_invocation: false

@@ -42,7 +42,7 @@ symbolic link to it, so the preference is reversed. `.gemini/rules/agents.md` is
 active guidance.
 
 **Model-invocable on purpose.** Upstream is user-invoked. This version omits
-`disable-model-invocation` because `flow-setup-project` calls it as its final documentation step, and
+`disable-model-invocation` because `project-setup` calls it as its final documentation step, and
 the skill states that the parent's already-explicit setup request is what authorizes it and that
 it authorizes nothing broader.
 
