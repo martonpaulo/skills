@@ -88,4 +88,4 @@ A pass that changes nothing posts nothing. Do not comment to announce that the b
 
 ## Fallback
 
-When GitHub access is unavailable, accept a supplied issue export or issue list, produce an ordered mutation plan, and do not claim any labels, comments, edits, closures, or links were applied. Still emit the dependency graph, omitting the `click` lines when issue URLs are unknown.
+When GitHub access is unavailable, accept a supplied issue export or issue list, produce an ordered mutation plan, and do not claim any labels, comments, edits, closures, or links were applied. Still emit the dependency graph.
