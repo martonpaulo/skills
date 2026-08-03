@@ -1,6 +1,0 @@
-interface:
-  display_name: "Grill"
-  short_description: "Pressure-test a plan without writing files"
-  default_prompt: "Use $grill to pressure-test this plan without writing files or implementing it."
-policy:
-  allow_implicit_invocation: false
