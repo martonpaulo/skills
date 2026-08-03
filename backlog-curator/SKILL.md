@@ -16,7 +16,7 @@ Maintain the quality, consistency, and implementability of the repository's GitH
 
 1. Read repository instructions, issue templates, existing labels, milestones, open issues, relevant recent closed issues, linked PRs, project documentation, and current code when necessary to verify obsolescence or dependencies.
 2. Build a backlog map containing type, area, priority, effort, SDD phase completeness, dependencies, blockers, overlap, conflicts, linked implementation, and possible obsolescence.
-3. Use the repository's existing metadata taxonomy. Do not create a new label system without explicit authorization.
+3. Use the repository's existing metadata taxonomy. Do not create a new label system without explicit authorization. When the repository has no convention of its own, audit against the taxonomy `capture-issue` documents: closed value sets for `type:`, `priority:` and `effort:`, an open set for `area:`.
 4. Detect strong duplicates, partial duplicates, overlapping scope, missing dependencies, conflicting requirements, stale decisions, issues already implemented, obsolete issues, and issues with missing Specify, Clarify, Plan, or Tasks.
 5. Refetch each issue before mutation to preserve concurrent edits and provenance.
 6. Apply low-risk metadata changes only when evidence is clear. Add dependency and coordination links when supported.

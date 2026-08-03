@@ -18,21 +18,25 @@ flowchart TD
 
 ## Node label
 
-Four lines, separated by `<br/>`. `\n` does not break lines in a Mermaid label; `<br/>` does.
+An identity block, a blank line, then the labels. Lines break on `<br/>` and the blank line is
+`<br/><br/>`; `\n` does nothing inside a Mermaid label.
 
 ```
-N091[["#091<br/>Workspace passa a aceitar de um a quatro panes<br/>effort: L<br/>priority: P1"]]
+N091[["#091<br/>Workspace passa a aceitar de um a quatro panes<br/><br/>type: feature<br/>priority: P1<br/>effort: L<br/>area: workspace"]]
 ```
 
-- Line 1: the number, zero-padded to three digits (`#003`, `#021`, `#245`). Past three digits,
-  every digit is kept as it is (`#2952`).
-- Line 2: a short description written by the agent in the language of the conversation, saying
-  what the issue *does* rather than repeating its title.
-- Line 3: `effort: <value>`, using the repository's own scale.
-- Line 4: `priority: <value>`, using the repository's own scale.
+- The number, zero-padded to three digits (`#003`, `#021`, `#245`). Past three digits, every
+  digit is kept as it is (`#2952`).
+- A short description written by the agent in the language of the conversation, saying what the
+  issue *does* rather than repeating its title.
+- Then, after the blank line, one line each for `type:`, `priority:`, `effort:` and `area:`,
+  in that order, carrying the issue's real label values. Several areas go on the one `area:`
+  line, comma separated.
 
-Drop line 3 or line 4 entirely when the repository does not track that field. Never invent a
-value, and never substitute a guess for a missing one.
+Drop a line entirely when the issue does not carry that label, rather than printing an empty or
+invented value. An issue with no `effort:` yet is an issue nobody has sized, and the graph
+should show that gap instead of papering over it. The taxonomy behind these values is the one
+`capture-issue` documents.
 
 ## Links
 

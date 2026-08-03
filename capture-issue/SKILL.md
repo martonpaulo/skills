@@ -30,7 +30,7 @@ Convert a newly reported or discovered problem, bug, or feature request into one
 5. Apply `grilling` directly for material unresolved decisions. Do not route through `grill`, because `grill` is a manual conversational wrapper and does not create work artifacts.
 6. Route to `domain-model` when domain terminology, states, rules, entities, or relationships are materially ambiguous.
 7. Route to `research` when current external evidence affects the requested behavior.
-8. Create or update exactly one canonical issue. Apply only existing, clearly applicable labels and metadata.
+8. Create or update exactly one canonical issue. Label it following the repository's own convention, or [LABELS.md](LABELS.md) when it has none. Apply only clearly applicable values, and never invent one to fill a field.
 9. Refetch the issue before mutation when concurrent editing is possible.
 
 ## Specify Phase

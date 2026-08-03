@@ -55,6 +55,11 @@ metadata:
 Directories stay flat. The taxonomy is metadata, not a path, so every skill directory remains
 copyable on its own.
 
+One group below breaks the role grouping on purpose. The **issue pipeline** skills are listed by
+the SDD phase they own, because the phase is what tells them apart and the role does not:
+`capture-issue` and `plan-issue` are both `authoring`, which says nothing about one coming
+before the other. Their `role` is still declared in frontmatter and unchanged.
+
 ---
 
 ## 🛠️ Project skills
@@ -65,6 +70,39 @@ copyable on its own.
 | --- | --- | --- | --- | --- |
 | [`setup-agent-docs`](setup-agent-docs/) | Model or user | `docs` | Configure optional **per-repository paths** for glossaries, ADRs, research, handoffs and prototypes. | [mattpocock/skills → setup-matt-pocock-skills](https://github.com/mattpocock/skills/tree/main/skills/engineering/setup-matt-pocock-skills) |
 | [`setup-project`](setup-project/) | User | `write` | Bootstrap or align a repository's **identity, operating rules, Git policy, public metadata and applicable project foundations**. | Written for this collection. |
+
+### Issue pipeline
+
+One issue travels six [spec-driven](https://github.com/github/spec-kit) phases, and each phase
+has an owner. There is no separate Review phase: `code-review` declares itself the `Validate`
+phase, because a pull request is verified against the issue that commissioned it.
+
+| Order | Phase | Lead role | Goal | Skill |
+| --- | --- | --- | --- | --- |
+| 1 | **Specify** | Product | State what has to be done, and the requirements it has to satisfy | [`capture-issue`](capture-issue/) |
+| 2 | **Clarify** | Product | Settle the ambiguities, decisions and open cases | [`capture-issue`](capture-issue/) |
+| 3 | **Plan** | Architect | Decide how to implement it: architecture and strategy | [`plan-issue`](plan-issue/) |
+| 4 | **Tasks** | Architect | Break the plan into executable tasks and their dependencies | [`plan-issue`](plan-issue/) |
+| 5 | **Implement** | Implementer | Execute the tasks and produce the code | [`implement-issue`](implement-issue/) |
+| 6 | **Validate** | Validator | Verify requirements, tests, regressions and quality | [`code-review`](code-review/) |
+
+`backlog-curator` sits across all six rather than inside one. It reads the whole backlog, finds
+the issues stuck without a phase, and hands them to the skill that owns it.
+
+| Skill | Invocation | Writes | What it does | Upstream |
+| --- | --- | --- | --- | --- |
+| [`capture-issue`](capture-issue/) | Model or user | `write` | **Convert a problem or request** into one canonical GitHub Issue (Specify, Clarify). Owns the [label taxonomy](capture-issue/LABELS.md). | Written for this collection. |
+| [`plan-issue`](plan-issue/) | User | `write` | **Plan the implementation and tasks** for exactly one GitHub Issue, and size its effort. | [obra/superpowers](https://github.com/obra/superpowers) |
+| [`implement-issue`](implement-issue/) | User | `write` | **Implement exactly one prepared GitHub Issue** by writing code, tests, and documentation. | [martonpaulo/tabelo](https://github.com/martonpaulo/tabelo), [openclaw/openclaw](https://github.com/openclaw/openclaw), [github/spec-kit](https://github.com/github/spec-kit) |
+| [`code-review`](code-review/) | User | `write` | **Validate exactly one pull request** against the controlling issue and repository rules. | [NousResearch/hermes-agent](https://github.com/NousResearch/hermes-agent), [SpillwaveSolutions/pr-reviewer-skill](https://github.com/SpillwaveSolutions/pr-reviewer-skill) |
+| [`backlog-curator`](backlog-curator/) | User | `write` | **Review the whole backlog**: duplicates, obsolete issues, taxonomy drift, missing phases. Ends on a [dependency graph](backlog-curator/DEPENDENCY-GRAPH.md) of the blocking order. | [github/gh-aw](https://github.com/github/gh-aw) (behavioral ref) |
+
+#### Labels
+
+The pipeline is only as sortable as its labels, so the taxonomy is closed where it can be:
+exactly one `type:` and one `priority:` per issue, at most one `effort:`, and any number of open
+`area:` values. A repository with its own convention wins; this is the default when it has none.
+[capture-issue/LABELS.md](capture-issue/LABELS.md) has the values and the rules.
 
 ### Foundations
 
@@ -84,11 +122,9 @@ Reusable capabilities. Invocable directly, but their real job is being delegated
 
 | Skill | Invocation | Writes | What it does | Upstream |
 | --- | --- | --- | --- | --- |
-| [`backlog-curator`](backlog-curator/) | User | `write` | **Review the GitHub Issue backlog**: detect duplicates, obsolete issues, and delegate missing SDD phases. Ends on a Mermaid graph of the blocking order. | [github/gh-aw](https://github.com/github/gh-aw) (behavioral ref) |
 | [`debug`](debug/) | Model or user | `write` | **Diagnose a hard bug**: reproduce, hypothesize, find the root cause, minimal fix, verify. | [mattpocock/skills → diagnosing-bugs](https://github.com/mattpocock/skills/tree/main/skills/engineering/diagnosing-bugs) |
 | [`dont-reinvent-the-wheel`](dont-reinvent-the-wheel/) | Model or user | `none` | **Build or reuse?** Decide whether one capability should use an existing feature, a native capability, a dependency, a service, or custom code. | [felinto-dev/felinto-skills → dont-reinvent-the-wheel](https://github.com/felinto-dev/felinto-skills/tree/main/.agents/skills/dont-reinvent-the-wheel) |
 | [`grill`](grill/) | User | `none` | **Pressure-test a plan** through a focused interview. Writes nothing. | [mattpocock/skills → grill-me](https://github.com/mattpocock/skills/tree/main/skills/productivity/grill-me) |
-| [`implement-issue`](implement-issue/) | User | `write` | **Implement exactly one prepared GitHub Issue** by writing code, tests, and documentation. | [martonpaulo/tabelo](https://github.com/martonpaulo/tabelo), [openclaw/openclaw](https://github.com/openclaw/openclaw), [github/spec-kit](https://github.com/github/spec-kit) |
 | [`module-design`](module-design/) | Model or user | `write` | Improve **module boundaries**, interfaces, dependency direction, cohesion and test seams. | [mattpocock/skills → codebase-design](https://github.com/mattpocock/skills/tree/main/skills/engineering/codebase-design) |
 | [`resolve-conflicts`](resolve-conflicts/) | Model or user | `write` | Resolve a **merge, rebase or cherry-pick** by reconstructing the intent of both sides. | [mattpocock/skills → resolving-merge-conflicts](https://github.com/mattpocock/skills/tree/main/skills/engineering/resolving-merge-conflicts) |
 
@@ -100,17 +136,14 @@ Read what exists, rank what is worth fixing, change nothing on their own.
 | --- | --- | --- | --- | --- |
 | [`architecture-review`](architecture-review/) | User | `docs` | Assess a codebase and **rank architecture improvements** against concrete code evidence. | [mattpocock/skills → improve-codebase-architecture](https://github.com/mattpocock/skills/tree/main/skills/engineering/improve-codebase-architecture) |
 | [`bug-hunter`](bug-hunter/) | User | `temporary` | Find **verified functional, logic, runtime and security bugs** through an adversarial audit; never fixes them. | [codexstar69/bug-hunter](https://github.com/codexstar69/bug-hunter) |
-| [`code-review`](code-review/) | User | `write` | **Validate exactly one pull request** against the controlling issue and repository rules. | [NousResearch/hermes-agent](https://github.com/NousResearch/hermes-agent), [SpillwaveSolutions/pr-reviewer-skill](https://github.com/SpillwaveSolutions/pr-reviewer-skill) |
 | [`product-audit`](product-audit/) | User | `none` | Audit **UI, UX, accessibility and copy** at routed `low`, `medium` or `high` depth; never implements findings. | [jakubkrehel/skills](https://github.com/jakubkrehel/skills), [content-designer/ux-writing-skill](https://github.com/content-designer/ux-writing-skill), [Thecsiz/ux-critique](https://github.com/Thecsiz/ux-critique) |
 
 ### Authoring
 
 | Skill | Invocation | Writes | What it does | Upstream |
 | --- | --- | --- | --- | --- |
-| [`capture-issue`](capture-issue/) | Model or user | `write` | **Convert a problem or request** into one canonical GitHub Issue (Specify, Clarify). | Written for this collection. |
 | [`grill-and-document`](grill-and-document/) | User | `docs` | The `grill` interview, but **preserves** canonical domain language and consequential decisions. | [mattpocock/skills → grill-with-docs](https://github.com/mattpocock/skills/tree/main/skills/engineering/grill-with-docs) |
 | [`handoff`](handoff/) | User | `docs` | Write a compact **continuation note** for another agent or a later session. | [mattpocock/skills → handoff](https://github.com/mattpocock/skills/tree/main/skills/productivity/handoff) |
-| [`plan-issue`](plan-issue/) | User | `write` | **Plan the implementation and tasks** for exactly one GitHub Issue. | [obra/superpowers](https://github.com/obra/superpowers) |
 | [`skill-authoring`](skill-authoring/) | User | `write` | Create, review or simplify **Agent Skills**. | [mattpocock/skills → writing-great-skills](https://github.com/mattpocock/skills/tree/main/skills/productivity/writing-great-skills) |
 
 ---
@@ -236,20 +269,22 @@ repository changes are available immediately without copying files. They are saf
 repeatedly and can be called from any working directory:
 
 ```sh
-/path/to/skills/sync-skills
+/path/to/skills/sync-all
 /path/to/skills/sync-agents
 /path/to/skills/sync-claude
+/path/to/skills/sync-gemini
 ```
 
-`sync-skills` updates both `~/.agents/skills` and `~/.claude/skills`; the other two commands update
-only their named destination. Use `--dry-run` to preview any command. Existing real files and
-directories are reported as conflicts and left untouched.
+`sync-all` updates every destination at once: `~/.agents/skills`, `~/.claude/skills` and
+`~/.gemini/config/skills`. The other three update only their named destination. Use `--dry-run`
+to preview any command. Existing real files and directories are reported as conflicts and left
+untouched.
 
 To make the combined command available in zsh, link it from a directory already on `PATH`:
 
 ```sh
 mkdir -p ~/.local/bin
-ln -s /path/to/skills/sync-skills ~/.local/bin/sync-skills
+ln -s /path/to/skills/sync-all ~/.local/bin/sync-all
 ```
 
 ---

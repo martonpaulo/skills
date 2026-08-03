@@ -46,6 +46,10 @@ Include when applicable:
 
 ## Task sizing
 
+Planning is where the size becomes knowable, so apply the issue's `effort:` label once the Plan
+exists, using the repository's own scale or the closed set `capture-issue` documents. An issue
+sized `XL` is a prompt to check whether it should be split before Tasks are written.
+
 Use repository labels or conventions when available. Fallback behavior:
 
 - **Small**: Do not add a separate Tasks checklist that merely repeats the Plan. The Plan itself must be directly executable.
