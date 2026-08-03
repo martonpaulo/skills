@@ -184,6 +184,7 @@ bump the `-personal.N` suffix, and record the change in `THIRD_PARTY_NOTICES.md`
 - Every relative Markdown link resolves.
 - No reference to a renamed, uninstalled, or upstream-only skill name.
 - Python compiles (`python3 -m compileall -q <skill>`) and the skill's own tests pass.
+- `tests/sync-all.test.sh` passes when `sync-all` changed.
 - No file left with a non-English user-facing string.
 - README tables match the skill directories actually on disk.
 - Every derived skill has a `THIRD_PARTY_NOTICES.md` and the five `upstream-*` fields, with a full

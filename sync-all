@@ -97,10 +97,21 @@ update_link() {
     rm "$1" && ln -s "$2" "$1"
 }
 
+# Resolves a symlink's destination into link_target, and its containing directory into
+# link_target_parent. link_target_is_resolved reports whether that directory exists, which is
+# what makes link_target_parent usable for the identity comparisons below.
+#
+# Compare directories with -ef, never as strings. pwd -P resolves symlinks but does not
+# normalise letter case, so on a case-insensitive filesystem the same directory reached as
+# /Users/x/tools and /Users/x/Tools yields two spellings that no string comparison can equate.
+# -ef compares device and inode, so it answers "the same directory" exactly: it equates those two
+# spellings, and still separates two directories that genuinely differ by case on a
+# case-sensitive filesystem.
 link_destination() {
     local link=$1 raw parent leaf
 
     link_target_is_resolved=0
+    link_target_parent=
     raw=$(readlink "$link") || return 1
     if [[ "$raw" != /* ]]; then
         raw="$(cd -P "$(dirname "$link")" && pwd -P)/$raw"
@@ -109,6 +120,7 @@ link_destination() {
     leaf=${raw##*/}
     if [[ -d "$parent" ]]; then
         parent=$(cd -P "$parent" && pwd -P) || return 1
+        link_target_parent=$parent
         link_target_is_resolved=1
     fi
     link_target=$parent/$leaf
@@ -168,7 +180,7 @@ sync_target() {
             if ! link_destination "$link"; then
                 printf 'Error: could not read link: %q\n' "$link" >&2
                 (( errors++ ))
-            elif [[ "$link_target" == "$skill" ]]; then
+            elif [[ "$link_target" -ef "$skill" ]]; then
                 (( correct++ ))
                 show_link 'Already correct' "$link" "$skill"
             else
@@ -194,11 +206,12 @@ sync_target() {
             continue
         fi
         (( link_target_is_resolved )) || continue
-        case "$link_target" in
-            "$repo_root"/*)
-                apply_change removed remove Removed "$link" "$link_target" rm "$link"
-                ;;
-        esac
+        # Only prune links this script owns: ones pointing directly at a child of the repository
+        # root. Comparing the containing directory by identity also confines the removal to that
+        # one level, where every link created here lives.
+        if [[ "$link_target_parent" -ef "$repo_root" ]]; then
+            apply_change removed remove Removed "$link" "$link_target" rm "$link"
+        fi
     done
 }
 
