@@ -77,6 +77,6 @@ If the repository requires/permits issue branches, follow its naming policy. Fal
 - implement multiple unrelated issues
 - create duplicate branches or PRs
 - force-push or bypass branch protection
-- use external repository-specific rules (e.g. Tabelo) outside their repo
+- carry another repository's specific rules into this one
 - create a branch when the repository explicitly requires direct-to-main work
 - work directly on main when the repository explicitly requires issue branches

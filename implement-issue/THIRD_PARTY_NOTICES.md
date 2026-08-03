@@ -26,14 +26,3 @@ This skill adapts high-level workflows and SDD concepts from the following open-
 - Adapted SDD Implement principles: verify prerequisites, read specification and plan, respect task dependencies, validate against specification, and do not claim completion early.
 - Removed `.specify/` requirements, separate `.md` file structures, extension hooks, ignore-file generation, fixed phase names, and specific command requirements.
 
-## tabelo (implement-issue)
-- **Repository**: https://github.com/martonpaulo/tabelo
-- **Imported revision**: `196bab5a1fe63616a429ac7ad3147554b9b19995`
-- **Imported on**: 2026-07-30
-- **Last checked against upstream**: 2026-08-03
-- **Author**: Marton Paulo
-- **License**: MIT
-
-### Changes
-- Generalized principles: issue scope contract, distinguishing rules, inspecting before editing, checking dependencies from code, and routing to specialized skills.
-- Removed all Tabelo-specific product rules, testing commands, hardcoded design-system paths, direct-to-main policy assumptions, and Tabelo-local skill dependencies.

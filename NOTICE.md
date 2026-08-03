@@ -25,7 +25,6 @@ It does not, and cannot, relicense third-party work that this repository vendors
 | [obra/superpowers](https://github.com/obra/superpowers) | obra | **none published** | `plan-issue` (adapted planning discipline) |
 | [NousResearch/hermes-agent](https://github.com/NousResearch/hermes-agent) | Hermes Agent | MIT | `code-review` (adapted review mechanics) |
 | [SpillwaveSolutions/pr-reviewer-skill](https://github.com/SpillwaveSolutions/pr-reviewer-skill) | SpillwaveSolutions | **none published** | `code-review` (adapted context collection) |
-| [martonpaulo/tabelo](https://github.com/martonpaulo/tabelo) | Marton Paulo | MIT | `implement-issue` (design input only) |
 | [openclaw/openclaw](https://github.com/openclaw/openclaw) | openclaw | **none published** | `implement-issue` (design input only) |
 | [github/spec-kit](https://github.com/github/spec-kit) | GitHub | MIT | `implement-issue` (design input only) |
 | [github/gh-aw](https://github.com/github/gh-aw) | GitHub | MIT | `backlog-curator` (behavioral reference only) |

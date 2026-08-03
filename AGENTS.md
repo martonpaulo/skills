@@ -54,6 +54,10 @@ own arguments. Neither is duplicated into `metadata`; a second copy is a drift b
   Update the README table and [NOTICE.md](NOTICE.md) too. Never present someone else's work as
   original. An upstream that publishes no license is fine to adapt; say so explicitly in the
   notice, attribute the author, and do not extend this repository's MIT grant over it.
+- **Never credit the owner as a third party.** Material moved here from another repository of the
+  owner's own, such as `martonpaulo/tabelo`, is not third-party work. It gets no
+  `THIRD_PARTY_NOTICES.md` entry, no `upstream-*` fields, and no row in `NOTICE.md`. Say where an
+  idea came from in the commit message if it helps, and leave attribution for other people's work.
 - **Pin the upstream.** Provenance is a commit and a date, never a branch name. `main (July 2026)`
   is not a revision: the branch moves and the claim silently becomes false. See
   [Provenance](#provenance).
