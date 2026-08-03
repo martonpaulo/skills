@@ -24,7 +24,7 @@ Use this skill only when domain language or rules are ambiguous, contradictory, 
 3. Distinguish entities, value concepts, states, transitions, rules, ownership, and relationships only as far as the current ambiguity requires. Separate them on two axes: what kind of concept it is, and how long it is meant to live. See [Data lifetime](#data-lifetime).
 4. Prefer precise existing project terminology. When a term is overloaded, propose a canonical meaning and identify the concepts that need separate names.
 5. Validate the model with concrete scenarios and edge cases.
-6. If durable glossary changes are useful, update the path configured by repository guidance or default to `CONTEXT.md`.
+6. If durable glossary changes are useful, update the path configured by repository guidance or default to `CONTEXT.md`. Write each entry as it becomes canonical rather than batching them at the end; a term settled in conversation and recorded later is a term that gets recorded wrong or not at all.
 
 ## Data lifetime
 

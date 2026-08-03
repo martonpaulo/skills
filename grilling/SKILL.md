@@ -30,6 +30,16 @@ Focus on decisions that materially affect behavior, scope, architecture, data, s
 
 Stop when the remaining uncertainty can be handled by reasonable, reversible implementation choices. Do not continue for exhaustiveness.
 
+## Recording what the interview settles
+
+By default the outcome is the summary below and nothing else. Two answers earn a durable artifact,
+and both belong to `domain-model`: a term that became canonical, and a decision that is hard to
+reverse, surprising without context, and the result of a real tradeoff. Route there as the
+interview settles them rather than at the end, so nothing survives only in the conversation.
+
+Create no other artifact. An interview does not open issues, write plans, or produce
+work-management records, whatever the caller intends to do afterwards.
+
 ## Completion
 
 Conclude with a concise shared-understanding summary, assumptions, constraints, decisions, and any unresolved choices. Do not start implementation.

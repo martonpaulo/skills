@@ -12,7 +12,7 @@ It does not, and cannot, relicense third-party work that this repository vendors
 
 | Upstream | Author | Upstream license | Applies to |
 | --- | --- | --- | --- |
-| [mattpocock/skills](https://github.com/mattpocock/skills) | Matt Pocock | MIT | `architecture-review`, `diagnose-bug`, `domain-model`, `grill-and-document`, `grilling`, `handoff`, `module-design`, `prototype`, `research`, `resolve-conflicts`, `review-changes`, `setup-agent-docs`, `skill-authoring`, `test-design` |
+| [mattpocock/skills](https://github.com/mattpocock/skills) | Matt Pocock | MIT | `architecture-review`, `diagnose-bug`, `domain-model`, `grilling`, `handoff`, `module-design`, `prototype`, `research`, `resolve-conflicts`, `review-changes`, `setup-agent-docs`, `skill-authoring`, `test-design` |
 | [Ahrentlov/apple-docs-skill](https://github.com/Ahrentlov/apple-docs-skill) | Patrick Ahrentløv | MIT | `apple-docs` (vendored), `deep-docs` (adapted architecture) |
 | [Ahrentlov/appledeepdoc-mcp](https://github.com/Ahrentlov/appledeepdoc-mcp) | Patrick Ahrentløv | MIT | `deep-docs` (architecture reference only) |
 | [gccszs/disk-cleaner](https://github.com/gccszs/disk-cleaner) | Disk Cleaner Contributors | MIT | `disk-cleaner` (vendored) |

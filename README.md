@@ -71,7 +71,6 @@ existing tree.
 | Research another framework, SDK, API, or CLI     | [`deep-docs`](deep-docs/)                             |
 | Quickly look up a library API                    | [`context7`](context7/)                               |
 | Pressure-test a plan through questions           | [`grilling`](grilling/)                               |
-| Preserve decisions from an interview             | [`grill-and-document`](grill-and-document/)           |
 | Clarify contradictory domain language            | [`domain-model`](domain-model/)                       |
 | Answer a question by running a small experiment  | [`prototype`](prototype/)                             |
 | Create a continuation note for another session   | [`handoff`](handoff/)                                 |
@@ -318,13 +317,12 @@ These skills produce durable documentation as their primary result.
 | Skill                                       | Invocation | Mutation | What it does                                                                                      | Upstream                                                                                                                            |
 | ------------------------------------------- | ---------- | -------- | ------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
 | [`project-setup`](project-setup/) | User     | `docs`   | Decide what the product is, who it serves, and the non-goals it will never take on.               | Written for this collection                                                                                                         |
-| [`grill-and-document`](grill-and-document/) | User       | `docs`   | Run the `grilling` interview while preserving canonical domain language and consequential decisions. | [mattpocock/skills → grill-with-docs](https://github.com/mattpocock/skills/tree/main/skills/engineering/grill-with-docs)            |
 | [`handoff`](handoff/)                       | User       | `docs`   | Produce a compact continuation note for another agent or a later session.                         | [mattpocock/skills → handoff](https://github.com/mattpocock/skills/tree/main/skills/productivity/handoff)                           |
 | [`skill-authoring`](skill-authoring/)       | User       | `write`  | Create, review, or simplify Agent Skills.                                                         | [mattpocock/skills → writing-great-skills](https://github.com/mattpocock/skills/tree/main/skills/productivity/writing-great-skills) |
 
 Use `grilling` directly when only the conversation matters.
 
-Use `grill-and-document` when the terminology and decisions must be preserved as a canonical artifact.
+`grilling` records nothing by itself. When an interview settles a canonical term or a hard-to-reverse decision, it routes to `domain-model`, which owns the glossary and the ADR.
 
 Use `handoff` when the work must continue in another session or with another agent.
 
@@ -457,8 +455,7 @@ flowchart LR
   project-setup -.version-specific Apple setup.-> apple-docs
   project-setup -.version-specific non-Apple setup.-> deep-docs
 
-  grill-and-document --> grilling
-  grill-and-document --> domain-model
+  grilling -.canonical term or hard-to-reverse decision.-> domain-model
 
   architecture-review --> module-design
 
