@@ -1,0 +1,4 @@
+interface:
+  display_name: "Context7"
+  short_description: "Fast indexed library documentation lookup"
+  default_prompt: "Use $context7 to look up this library's current API."

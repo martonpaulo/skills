@@ -1,0 +1,4 @@
+interface:
+  display_name: "Grey Market"
+  short_description: "Find cheaper regional digital offers"
+  default_prompt: "Use $grey-market to find cheaper regional offers for this."

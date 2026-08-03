@@ -19,8 +19,11 @@ Choose a skill based on the result you need.
 | Plan the implementation of one issue             | [`plan-issue`](plan-issue/)                           |
 | Implement one prepared issue                     | [`implement-issue`](implement-issue/)                 |
 | Validate a pull request before merging           | [`code-review`](code-review/)                         |
+| Review my working diff before it becomes a PR    | [`review-changes`](review-changes/)                   |
 | Organize and prioritize the complete backlog     | [`backlog-curator`](backlog-curator/)                 |
 | Diagnose and fix a difficult bug                 | [`debug`](debug/)                                     |
+| Decide what to test and where the seam belongs   | [`test-design`](test-design/)                         |
+| Cut a release under the repository's policy      | [`release`](release/)                                 |
 | Decide whether to build or reuse a capability    | [`dont-reinvent-the-wheel`](dont-reinvent-the-wheel/) |
 | Improve module boundaries and dependencies       | [`module-design`](module-design/)                     |
 | Resolve a merge, rebase, or cherry-pick conflict | [`resolve-conflicts`](resolve-conflicts/)             |
@@ -31,7 +34,7 @@ Choose a skill based on the result you need.
 | Research Apple platform behavior                 | [`apple-docs`](apple-docs/)                           |
 | Research another framework, SDK, API, or CLI     | [`deep-docs`](deep-docs/)                             |
 | Quickly look up a library API                    | [`context7`](context7/)                               |
-| Pressure-test a plan through questions           | [`grill`](grill/)                                     |
+| Pressure-test a plan through questions           | [`grilling`](grilling/)                               |
 | Preserve decisions from an interview             | [`grill-and-document`](grill-and-document/)           |
 | Create a continuation note for another session   | [`handoff`](handoff/)                                 |
 | Create, review, or simplify an Agent Skill       | [`skill-authoring`](skill-authoring/)                 |
@@ -103,6 +106,30 @@ When a repository does not already define its own convention:
 An established repository convention always takes precedence over this default.
 
 
+
+### GitHub only
+
+The issue-pipeline skills target GitHub Issues and pull requests, and deliberately support nothing
+else. No GitLab, Bitbucket, Jira, Linear, or local-Markdown tracker fallback. Supporting several
+forges means every skill degrades to the weakest common denominator, and the whole point of these
+skills is to use what GitHub actually offers.
+
+They reach the official GitHub API through the available native integration or `gh api`, and drop
+from a higher-level `gh` command to the API whenever that command cannot express the operation.
+Two consequences are load-bearing:
+
+* **Findings are anchored.** `code-review` publishes one formal review whose inline comments are
+  attached to the exact lines, through
+  `POST /repos/{owner}/{repo}/pulls/{number}/reviews`. Writing "line 84 should change" into a
+  summary body, when the API could have attached that text to line 84, counts as a defective
+  review.
+* **Dependencies are read, not guessed.** `backlog-curator` builds its blocking order from
+  GitHub's own `blockedBy` and `blocking` issue dependencies, not from sentences in issue bodies.
+
+Every mutation is read back before it is reported. An issue, comment, review, or link exists when
+the API says it does, never because a command exited zero.
+
+
 <br />
 
 ## ⚙️ How skills run
@@ -127,7 +154,9 @@ Its frontmatter contains:
 disable-model-invocation: true
 ```
 
-This restriction is used for broad reviews, interviews, and workflows that write files or modify external state and therefore should not begin automatically.
+This restriction is used for broad reviews, interviews, and workflows whose side effects should never begin without being asked for.
+
+Writing to external state does not by itself force this restriction. A narrow child workflow that a user-invoked parent has to reach through the skill tool stays model-invocable, states that delegation in its own file, and may not exceed the mutation its parent already authorized. `capture-issue` and `setup-agent-docs` are the two cases.
 
 ### Mutation boundaries
 
@@ -191,6 +220,7 @@ They may be invoked directly, but their primary purpose is to support other skil
 | [`grilling`](grilling/)         | Model or user | `none`      | Provide the shared interview discipline used by other skills: one decision at a time, always with a recommendation.                                                                                  | [mattpocock/skills → grilling](https://github.com/mattpocock/skills/tree/main/skills/productivity/grilling)                                                                                    |
 | [`prototype`](prototype/)       | Model or user | `temporary` | Run a disposable experiment when executing code provides stronger evidence than discussing possibilities.                                                                                            | [mattpocock/skills → prototype](https://github.com/mattpocock/skills/tree/main/skills/engineering/prototype)                                                                                   |
 | [`research`](research/)         | Model or user | `docs`      | Answer a technical or product question using current primary sources and preserve the result when useful.                                                                                            | [mattpocock/skills → research](https://github.com/mattpocock/skills/tree/main/skills/engineering/research)                                                                                     |
+| [`test-design`](test-design/)   | Model or user | `write`     | Decide what to test, where the seam belongs, and whether a test earns its keep. Declines to write a weak test rather than filling the gap with one.                                                  | [mattpocock/skills → tdd](https://github.com/mattpocock/skills/tree/main/skills/engineering/tdd)                                                                                               |
 
 #### Documentation routing
 
@@ -213,7 +243,7 @@ Workflow skills complete one concrete engineering task from start to finish.
 | ----------------------------------------------------- | ------------- | -------- | -------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | [`debug`](debug/)                                     | Model or user | `write`  | Reproduce a difficult bug, form hypotheses, identify the root cause, apply the smallest valid fix, and verify it.          | [mattpocock/skills → diagnosing-bugs](https://github.com/mattpocock/skills/tree/main/skills/engineering/diagnosing-bugs)                               |
 | [`dont-reinvent-the-wheel`](dont-reinvent-the-wheel/) | Model or user | `none`   | Decide whether one capability should reuse an existing feature, native API, dependency, service, or custom implementation. | [felinto-dev/felinto-skills → dont-reinvent-the-wheel](https://github.com/felinto-dev/felinto-skills/tree/main/.agents/skills/dont-reinvent-the-wheel) |
-| [`grill`](grill/)                                     | User          | `none`   | Pressure-test a plan through a focused interview without modifying files.                                                  | [mattpocock/skills → grill-me](https://github.com/mattpocock/skills/tree/main/skills/productivity/grill-me)                                            |
+| [`release`](release/)                                 | User          | `write`  | Cut one release under the versioning policy the repository already recorded: bump, changelog, tag, publication.            | Written for this collection                                                                                                                            |
 | [`module-design`](module-design/)                     | Model or user | `write`  | Improve module boundaries, interfaces, dependency direction, cohesion, and test seams.                                     | [mattpocock/skills → codebase-design](https://github.com/mattpocock/skills/tree/main/skills/engineering/codebase-design)                               |
 | [`resolve-conflicts`](resolve-conflicts/)             | Model or user | `write`  | Resolve a merge, rebase, or cherry-pick conflict by reconstructing the intent of both sides.                               | [mattpocock/skills → resolving-merge-conflicts](https://github.com/mattpocock/skills/tree/main/skills/engineering/resolving-merge-conflicts)           |
 
@@ -232,6 +262,7 @@ They do not implement their own findings.
 | [`architecture-review`](architecture-review/) | User       | `docs`      | Assess a codebase and rank architecture improvements using concrete code evidence.                   | [mattpocock/skills → improve-codebase-architecture](https://github.com/mattpocock/skills/tree/main/skills/engineering/improve-codebase-architecture)                                                                  |
 | [`bug-hunter`](bug-hunter/)                   | User       | `temporary` | Search adversarially for verified functional, logic, runtime, and security bugs without fixing them. | [codexstar69/bug-hunter](https://github.com/codexstar69/bug-hunter)                                                                                                                                                   |
 | [`product-audit`](product-audit/)             | User       | `none`      | Audit UI, UX, accessibility, and copy at routed `low`, `medium`, or `high` depth.                    | [jakubkrehel/skills](https://github.com/jakubkrehel/skills), [content-designer/ux-writing-skill](https://github.com/content-designer/ux-writing-skill), [Thecsiz/ux-critique](https://github.com/Thecsiz/ux-critique) |
+| [`review-changes`](review-changes/)           | User       | `none`      | Review the local diff against a fixed point on two separate axes: standards and intent.             | [mattpocock/skills → code-review](https://github.com/mattpocock/skills/tree/main/skills/engineering/code-review)                                                                                                     |
 
 An audit finding becomes implementation work only after it is selected and captured as a proper issue.
 
@@ -243,11 +274,11 @@ These skills produce durable documentation as their primary result.
 
 | Skill                                       | Invocation | Mutation | What it does                                                                                      | Upstream                                                                                                                            |
 | ------------------------------------------- | ---------- | -------- | ------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
-| [`grill-and-document`](grill-and-document/) | User       | `docs`   | Run the `grill` interview while preserving canonical domain language and consequential decisions. | [mattpocock/skills → grill-with-docs](https://github.com/mattpocock/skills/tree/main/skills/engineering/grill-with-docs)            |
+| [`grill-and-document`](grill-and-document/) | User       | `docs`   | Run the `grilling` interview while preserving canonical domain language and consequential decisions. | [mattpocock/skills → grill-with-docs](https://github.com/mattpocock/skills/tree/main/skills/engineering/grill-with-docs)            |
 | [`handoff`](handoff/)                       | User       | `docs`   | Produce a compact continuation note for another agent or a later session.                         | [mattpocock/skills → handoff](https://github.com/mattpocock/skills/tree/main/skills/productivity/handoff)                           |
 | [`skill-authoring`](skill-authoring/)       | User       | `write`  | Create, review, or simplify Agent Skills.                                                         | [mattpocock/skills → writing-great-skills](https://github.com/mattpocock/skills/tree/main/skills/productivity/writing-great-skills) |
 
-Use `grill` when only the conversation matters.
+Use `grilling` directly when only the conversation matters.
 
 Use `grill-and-document` when the terminology and decisions must be preserved as a canonical artifact.
 
@@ -312,6 +343,40 @@ Frequency is intentionally not part of the classification.
 
 A skill such as `resolve-conflicts` may go unused for months and still remain a workflow because it completes one concrete operational task.
 
+
+### Upstream provenance
+
+A skill adapted from someone else's work pins that work with a commit and a date, never a branch
+name. A branch moves and the claim silently becomes false.
+
+```yaml
+metadata:
+  upstream: https://github.com/owner/repo   # repository URL, not a /tree/<branch>/ deep link
+  upstream-author: Author Name
+  upstream-path: skills/engineering/thing   # omitted when the skill is the repository root
+  upstream-revision: <full 40-character SHA in the upstream repository>
+  upstream-checked: 2026-08-03              # ISO date of the last comparison
+```
+
+The five fields travel together and answer two different questions.
+
+`upstream-revision` answers **what changed**. It is the SHA in the upstream repository, not the
+SHA of the local baseline commit, which is what makes drift measurable:
+
+```sh
+gh api "repos/<owner>/<repo>/commits?path=<upstream-path>&since=<date>" --jq 'length'
+```
+
+`upstream-checked` answers **is this stale**. It is the date of the last comparison against
+upstream, not the import date. Comparing and finding nothing changed advances this date on its
+own, with no other edit. Only a recent date can answer the question, so a check that finds nothing
+is still worth recording.
+
+When a skill draws on several upstreams, the frontmatter names the primary one and that skill's
+`THIRD_PARTY_NOTICES.md` is authoritative for the full set, pinning each separately.
+
+Skills written for this collection carry no `upstream-*` fields at all.
+
 ### Why directories remain flat
 
 The taxonomy exists in metadata, not in paths.
@@ -341,11 +406,20 @@ flowchart LR
   setup-project -.version-specific Apple setup.-> apple-docs
   setup-project -.version-specific non-Apple setup.-> deep-docs
 
-  grill --> grilling
   grill-and-document --> grilling
   grill-and-document --> domain-model
 
   architecture-review --> module-design
+
+  review-changes -.weak or missing test.-> test-design
+  review-changes -.unstable boundary.-> module-design
+  review-changes -.needs a reachability trace.-> bug-hunter
+
+  test-design -.the seam itself.-> module-design
+  test-design -.contradictory terms.-> domain-model
+  test-design -.contested seam.-> grilling
+
+  release -.no recorded versioning policy.-> setup-project
 
   bug-hunter --> apple-docs
   bug-hunter --> deep-docs
@@ -359,6 +433,7 @@ flowchart LR
   research --> context7
 
   debug --> deep-docs
+  debug -.regression test seam.-> test-design
 
   deep-docs -.Apple questions.-> apple-docs
   deep-docs -.indexed snippet is enough.-> context7
@@ -377,6 +452,7 @@ flowchart LR
   plan-issue -.when applicable.-> research
   plan-issue -.when applicable.-> prototype
   plan-issue -.when applicable.-> dont-reinvent-the-wheel
+  plan-issue -.test strategy.-> test-design
 
   implement-issue -.when applicable.-> debug
   implement-issue -.when applicable.-> domain-model
@@ -385,6 +461,7 @@ flowchart LR
   implement-issue -.when applicable.-> prototype
   implement-issue -.when applicable.-> dont-reinvent-the-wheel
   implement-issue -.when applicable.-> resolve-conflicts
+  implement-issue -.when applicable.-> test-design
 
   code-review -.investigation discipline.-> grilling
 
@@ -407,6 +484,12 @@ It uses:
 * `apple-docs` or `deep-docs` when configuration depends on version-specific behavior
 
 `architecture-review` delegates to `module-design` when a finding requires deeper analysis of boundaries, interfaces, cohesion, or dependency direction.
+
+`review-changes` routes a finding out instead of growing into it: a weak or missing test to `test-design`, an unstable boundary to `module-design`, and a suspected defect that needs a reachability trace to `bug-hunter`. It names the route and stops there.
+
+`test-design` owns where a test attaches and whether it earns its keep. `module-design` owns the boundary the seam attaches to, so a contested seam goes there; contradictory domain terms go to `domain-model`; and a seam whose choice changes what ships goes to `grilling`. `debug` delegates the placement of a regression test here when the seam is unclear.
+
+`release` executes the versioning contract that `setup-project` recorded. If no policy exists, it stops and points back rather than choosing a version scheme on the owner's behalf.
 
 `bug-hunter` routes documented Apple behavior to `apple-docs` and other framework or library behavior to `deep-docs`.
 
@@ -478,6 +561,6 @@ The original work in this repository, including its adaptations, documentation, 
 
 That grant covers only the work created for this collection. Vendored or adapted upstream work retains its original license.
 
-The MIT grant does not extend to: `dont-reinvent-the-wheel` and `grey-market`. Their upstream repositories do not publish a license.
+The MIT grant does not extend to the upstream material inside `code-review`, `dont-reinvent-the-wheel`, `grey-market`, `implement-issue`, and `plan-issue`. Those upstream repositories publish no license, so that permission is not mine to give. [`NOTICE.md`](NOTICE.md) is authoritative on this.
 
 See [`NOTICE.md`](NOTICE.md) for the exact attribution and licensing status of every component.
