@@ -126,7 +126,7 @@ is a rename nobody needs.
 in one operation and with no history loss:
 
 ```bash
-gh label edit "bug" --name "type:bug"
+gh label edit "bug" --name "type: bug"
 ```
 
 Recreating instead means applying the new label to every issue by hand and losing whatever the
