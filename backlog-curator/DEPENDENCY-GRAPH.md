@@ -11,19 +11,42 @@ flowchart TD
 ```
 
 - `flowchart TD`, never `LR`.
-- No `%%` comments inside the block.
+- No `%%` comments anywhere in the block. The `%%{init}%%` line above is a configuration
+  directive, not a comment, and stays.
 - Strip accents and diacritics from every label. They break the import in some renderers.
-- Node id is `N<issue number>`.
-- Node label is `#<number> · <short phrase> · <effort>`. The phrase is written by the agent in
-  the language of the conversation and says what the issue *does*, rather than repeating its
-  title. Drop the effort segment when the repository does not track effort.
-- One `click N<number> "<issue url>" _blank` line per node, after the `classDef` lines.
+- Node id is `N<zero-padded number>`.
+
+## Node label
+
+Four lines, separated by `<br/>`. `\n` does not break lines in a Mermaid label; `<br/>` does.
+
+```
+N091[["#091<br/>Workspace passa a aceitar de um a quatro panes<br/>effort: L<br/>priority: P1"]]
+```
+
+- Line 1: the number, zero-padded to three digits (`#003`, `#021`, `#245`). Past three digits,
+  every digit is kept as it is (`#2952`).
+- Line 2: a short description written by the agent in the language of the conversation, saying
+  what the issue *does* rather than repeating its title.
+- Line 3: `effort: <value>`, using the repository's own scale.
+- Line 4: `priority: <value>`, using the repository's own scale.
+
+Drop line 3 or line 4 entirely when the repository does not track that field. Never invent a
+value, and never substitute a guess for a missing one.
+
+## Links
+
+One `click N<zero-padded number> "<issue url>" _blank` line per node, after the `classDef`
+lines, matching the node ids exactly. Mermaid
+links the whole node, not a fragment of the label, so the number cannot carry the link on its
+own. Anchor tags inside a label are ignored under the default `securityLevel` and must not be
+used.
 
 ## Edges
 
 - Solid `-->` only for real blocking order: the source must land before the target.
 - Dashed `-.->` with an inline label only for cycles that must be broken before anyone starts:
-  `N73 -.->|"cycle, #70 lists Move pane but #73 says it comes after #70"| N70`.
+  `N073 -.->|"cycle, #070 lists Move pane but #073 says it comes after #070"| N070`.
 - Nothing else becomes an edge. Coordination, overlap, supersession, duplicates, conflicts and
   umbrella issues belong in the written report; as edges they make the graph unreadable.
 - Never add an edge to make the graph connected.
@@ -34,21 +57,32 @@ flowchart TD
 - `[ ]` has something in front of it.
 - No emoji or symbol markers inside labels. They disappear on render.
 
+The side bars of `[[ ]]` read clearly on the darker fills and get faint on the pale ones, so
+the shape is a reinforcement rather than the primary signal. The subgraph is what carries
+"nothing is in front of this" for the fully isolated issues.
+
 ## Color
 
-Color encodes **how many issues depend on it**, never how many it waits for. Use plain colors
-that any renderer accepts, through `classDef`:
+Color encodes **how many issues depend on it**, never how many it waits for. It has to read as
+an ordered scale at a glance, so the ramp runs in one direction only, pale to dark, and the
+border thickens along with it. Two channels, same direction, which survives a grayscale print
+and a dark theme:
 
 ```
-classDef d0 fill:#eeeeee,stroke:#9e9e9e,stroke-width:1px,color:#212121
-classDef d1 fill:#a5d6a7,stroke:#388e3c,stroke-width:1px,color:#1b5e20
-classDef d2 fill:#ffb74d,stroke:#e65100,stroke-width:2px,color:#3e2723
-classDef d3 fill:#ffab40,stroke:#bf360c,stroke-width:2px,color:#3e2723
+classDef d0 fill:#eceff1,stroke:#b0bec5,stroke-width:1px,color:#263238
+classDef d1 fill:#fff59d,stroke:#fbc02d,stroke-width:1px,color:#3e2723
+classDef d2 fill:#ffb74d,stroke:#ef6c00,stroke-width:2px,color:#3e2723
+classDef d3 fill:#ff7043,stroke:#bf360c,stroke-width:2px,color:#3e2723
 classDef d4 fill:#e53935,stroke:#b71c1c,stroke-width:3px,color:#ffffff
+classDef d5 fill:#b71c1c,stroke:#7f0000,stroke-width:4px,color:#ffffff
 ```
 
-Grey is zero, then one step per dependent count. Collapse unused steps and keep the strongest
-red for the highest count actually present, so the scale always ends on the root of the backlog.
+Never insert a hue that breaks the ramp, green in particular. The eye reads pale to dark as
+"few to many" instantly, and reads a hue jump as a different category.
+
+Collapse the unused steps and always land the darkest class on the highest count actually
+present, so the top of the scale is the root of the backlog rather than a fixed number. The
+legend states the exact count behind each step it used.
 
 ## Grouping
 
