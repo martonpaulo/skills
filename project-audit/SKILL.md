@@ -41,6 +41,8 @@ report.
 | Behavioral defects | `bug-hunter` | Always, for any project with executable logic |
 | Structure and boundaries | `architecture-review` | More than a handful of modules, or churn concentrated in one area |
 | Interface and copy | `interface-audit` | The project has a user interface, CLI output, or user-facing copy |
+| Resource cost | `performance-audit` | Something waits on this project: a user, a request, a schedule, or a bounded resource |
+| Visual system | `design-system-audit` | The project declares visual decisions in code: tokens, theme, styles, or a component library |
 | Documentation truth | direct inspection | `AGENTS.md`, README, or guidance claims behavior the code contradicts |
 
 State which lenses you selected and which you skipped, each with the reason. A CLI with no UI does
@@ -48,6 +50,13 @@ not get an interface audit, and saying so is part of the report.
 
 `architecture-review` applies `module-design`'s criteria for boundaries, cohesion and dependency
 direction; do not invoke `module-design` separately here.
+
+Documentation truth is the one lens with no owning skill, and deliberately so: it is a comparison
+between two things this audit is already reading, not a method of its own. Run it inline. Read what
+the repository's guidance and README claim the project does, and report each claim the code
+contradicts as a finding with both locations, the claim and the code. A convention the code has
+silently abandoned is a finding in the same way, because the guidance is what the next change will
+be judged against.
 
 ## 2. Run each lens under its own contract
 
@@ -58,6 +67,13 @@ what must be reported as a coverage gap.
 Run them independently so one lens's conclusions cannot seed another's. If independent agents are
 available and the user wants them, the lenses may run in parallel as read-only agents; that is an
 optimization, and a single sequential pass must produce the same report.
+
+**Every run starts from zero.** Ignore earlier conversation context, conclusions you reached in a
+previous run, and any report, artifact, or generated output left behind by one. They are prior
+opinion, not evidence. An audit that reads its own last report confirms it, and the second run then
+looks like corroboration when it is an echo. Read the code, the tests, the repository's guidance,
+and real measurement output only. The user may of course ask you to compare against a previous
+report; that is a comparison task, and the previous report is still not evidence for a finding.
 
 ## 3. Consolidate
 
@@ -84,7 +100,12 @@ This is the step that justifies the skill.
    smallest correction.
 3. **Cross-lens root causes:** findings that merged, with every symptom and the lens that saw it.
 4. **Per-lens coverage gaps:** what each audit could not verify, kept in its own words.
-5. **Start here:** the single recommendation to act on first, and why it outranks the rest.
+5. **Do not touch yet:** areas where acting on a finding is currently unsafe, and why. A correction
+   that depends on a measurement nobody has taken, a cleanup blocked by an unresolved product
+   decision, a boundary that several open findings all pass through. Ranking says what matters most;
+   this says what would go wrong if someone started there anyway, and without it a ranked list reads
+   as a work queue.
+6. **Start here:** the single recommendation to act on first, and why it outranks the rest.
 
 ## Boundaries
 

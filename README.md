@@ -69,6 +69,8 @@ reaching for directly when you already know what you want.
 | Review the architecture of a codebase            | [`architecture-review`](architecture-review/)         |
 | Search aggressively for real bugs                | [`bug-hunter`](bug-hunter/)                           |
 | Audit UI, UX, accessibility, or copy             | [`interface-audit`](interface-audit/)                 |
+| Find where the project wastes time or memory     | [`performance-audit`](performance-audit/)             |
+| Check the code expresses one visual system       | [`design-system-audit`](design-system-audit/)         |
 | Research a current technical or product question | [`research`](research/)                               |
 | Research Apple platform behavior                 | [`apple-docs`](apple-docs/)                           |
 | Research another framework, SDK, API, or CLI     | [`deep-docs`](deep-docs/)                             |
@@ -313,11 +315,27 @@ They do not implement their own findings.
 | [`bug-hunter`](bug-hunter/)                   | User       | `temporary` | Search adversarially for verified functional, logic, runtime, and security bugs without fixing them. | [codexstar69/bug-hunter](https://github.com/codexstar69/bug-hunter)                                                                                                                                                   |
 | [`project-audit`](project-audit/)             | User       | `temporary` | Run every applicable audit and merge the findings into one ranked list across lenses.               | Written for this collection                                                                                                                                                                                             |
 | [`interface-audit`](interface-audit/)             | User       | `none`      | Audit UI, UX, accessibility, and copy at routed `low`, `medium`, or `high` depth.                    | [jakubkrehel/skills](https://github.com/jakubkrehel/skills), [content-designer/ux-writing-skill](https://github.com/content-designer/ux-writing-skill), [Thecsiz/ux-critique](https://github.com/Thecsiz/ux-critique) |
+| [`performance-audit`](performance-audit/)     | User       | `temporary` | Map the hot paths and rank resource-cost findings, refusing to call anything slow without evidence.  | Written for this collection                                                                                                                                                                                           |
+| [`design-system-audit`](design-system-audit/) | User       | `none`      | Judge whether the code expresses one visual system: token ownership, bypass, and duplicate components. | Written for this collection                                                                                                                                                                                         |
 | [`review-changes`](review-changes/)           | User       | `none`      | Review the local diff against a fixed point on two separate axes: standards and intent.             | [mattpocock/skills → code-review](https://github.com/mattpocock/skills/tree/main/skills/engineering/code-review)                                                                                                     |
 
 An audit finding becomes implementation work only after it is selected and captured as a proper issue.
 
 This keeps optional improvements separate from immediate merge blockers.
+
+Every audit starts from zero. Earlier conversation context, a verdict from a previous run, and any
+report or artifact one left behind are prior opinion, not evidence. An audit allowed to read its own
+last report confirms it, and the second run then reads as corroboration when it is an echo.
+
+`interface-audit` and `design-system-audit` look at the same pixels and answer different questions.
+`interface-audit` judges the interface as a user perceives it: does this screen work. `design-system-audit`
+judges how that appearance is expressed in code: does each visual decision have exactly one owner.
+A product can pass the first and fail the second, which means its consistency is being maintained by
+hand and will drift.
+
+`performance-audit` holds one line that the others do not need: a cost claim nobody measured is not a
+finding, it is a profiling plan. Findings carry `Verified`, `Likely`, `Needs profiling`, or `Unknown`,
+and severity never drops just because the magnitude is unmeasured.
 
 ### Authoring and continuity
 
@@ -529,8 +547,18 @@ flowchart LR
   project-audit --> bug-hunter
   project-audit --> architecture-review
   project-audit -.project has an interface.-> interface-audit
+  project-audit -.something waits on this project.-> performance-audit
+  project-audit -.visual decisions declared in code.-> design-system-audit
   project-audit -.selected finding to fix.-> diagnose-bug
   project-audit -.selected finding to capture.-> issue-capture
+
+  performance-audit --> apple-docs
+  performance-audit --> deep-docs
+  performance-audit -.structural root cause.-> architecture-review
+  performance-audit -.selected finding to fix.-> diagnose-bug
+
+  design-system-audit -.decision has no owner.-> module-design
+  design-system-audit -.user-facing consequence.-> interface-audit
 ```
 
 </details>
@@ -563,6 +591,10 @@ It uses:
 `bug-hunter` routes documented Apple behavior to `apple-docs` and other framework or library behavior to `deep-docs`.
 
 A confirmed bug is handed to `diagnose-bug` only after the user selects it for implementation in a separate task.
+
+`performance-audit` does the same, because a cost claim that depends on framework or runtime behavior has to be verified rather than assumed; where authoritative behavior cannot be established, the candidate is downgraded instead of guessed. It routes a structural cause shared by several findings to `architecture-review` and names the route without performing it. A reported slowdown with a known symptom is `diagnose-bug`'s job, not this one's: this audit looks for cost nobody has reported yet.
+
+`design-system-audit` reports that a visual decision has no owner; where that owner should live is a `module-design` question. When a finding also harms a user, such as a state expressed by color alone, it routes to `interface-audit` rather than judging the user consequence itself.
 
 `build-or-reuse` may use:
 

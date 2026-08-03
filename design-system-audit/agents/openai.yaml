@@ -1,0 +1,6 @@
+interface:
+  display_name: "Design System Audit"
+  short_description: "Does the code express one visual system"
+  default_prompt: "Use $design-system-audit to check whether this project has one visual system or several."
+policy:
+  allow_implicit_invocation: false

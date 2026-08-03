@@ -1,0 +1,6 @@
+interface:
+  display_name: "Performance Audit"
+  short_description: "Where this project spends what it does not need to"
+  default_prompt: "Use $performance-audit to find this project's real performance costs."
+policy:
+  allow_implicit_invocation: false
