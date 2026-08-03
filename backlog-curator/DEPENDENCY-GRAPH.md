@@ -57,28 +57,39 @@ used.
 - `[ ]` has something in front of it.
 - No emoji or symbol markers inside labels. They disappear on render.
 
-The side bars of `[[ ]]` read clearly on the darker fills and get faint on the pale ones, so
-the shape is a reinforcement rather than the primary signal. The subgraph is what carries
-"nothing is in front of this" for the fully isolated issues.
+A fully isolated issue is `[[ ]]` like any other issue that waits for nobody. It needs no extra
+marking: no arrow points at it and none leaves it.
+
+The side bars of `[[ ]]` show clearly on the darker fills and get faint on the palest one, so
+the shape is a reinforcement rather than the primary signal. That is acceptable, because the
+pale end of the ramp is exactly where a node has no dependents and the absent arrows already
+say it.
 
 ## Color
 
 Color encodes **how many issues depend on it**, never how many it waits for. It has to read as
-an ordered scale at a glance, so the ramp runs in one direction only, pale to dark, and the
-border thickens along with it. Two channels, same direction, which survives a grayscale print
-and a dark theme:
+an ordered scale at a glance, so it walks one continuous path, green to teal to blue to indigo
+to purple, getting darker at every step, with the border thickening along with it. Two channels
+in the same direction, which survives a grayscale print and a dark theme:
 
 ```
-classDef d0 fill:#eceff1,stroke:#b0bec5,stroke-width:1px,color:#263238
-classDef d1 fill:#fff59d,stroke:#fbc02d,stroke-width:1px,color:#3e2723
-classDef d2 fill:#ffb74d,stroke:#ef6c00,stroke-width:2px,color:#3e2723
-classDef d3 fill:#ff7043,stroke:#bf360c,stroke-width:2px,color:#3e2723
-classDef d4 fill:#e53935,stroke:#b71c1c,stroke-width:3px,color:#ffffff
-classDef d5 fill:#b71c1c,stroke:#7f0000,stroke-width:4px,color:#ffffff
+classDef d0 fill:#cdeac0,stroke:#7cb342,stroke-width:1px,color:#1b5e20
+classDef d1 fill:#8ed3b8,stroke:#2e9e75,stroke-width:2px,color:#0b3d2e
+classDef d2 fill:#4fb3c9,stroke:#0f7f96,stroke-width:2px,color:#053540
+classDef d3 fill:#2b6cb0,stroke:#174e7c,stroke-width:3px,color:#ffffff
+classDef d4 fill:#3b4b9e,stroke:#1f2a6b,stroke-width:3px,color:#ffffff
+classDef d5 fill:#5b2a86,stroke:#37134f,stroke-width:4px,color:#ffffff
 ```
 
-Never insert a hue that breaks the ramp, green in particular. The eye reads pale to dark as
-"few to many" instantly, and reads a hue jump as a different category.
+Two constraints hold whatever the palette:
+
+- **Lightness only ever decreases.** A step that is lighter than the one before it destroys the
+  ordering, however pleasant the hue.
+- **The bottom step still has to be a color.** Near-white and light grey wash out against a
+  white page and read as "unstyled" rather than as "zero".
+
+Avoid the red and amber family here. It reads as severity, not as quantity, and the backlog
+already has priority for that.
 
 Collapse the unused steps and always land the darkest class on the highest count actually
 present, so the top of the scale is the root of the backlog rather than a fixed number. The
@@ -86,10 +97,11 @@ legend states the exact count behind each step it used.
 
 ## Grouping
 
-- No subgraphs by area, epic or milestone. They are the main source of unreadability.
-- Exactly one subgraph, `direction LR`, holding every issue with no dependency in either
-  direction, titled so it reads as "can start at any time".
-- Isolated issues are always included, never filtered out. Being free to start is the signal.
+No subgraphs at all: not by area, not by epic, not by milestone, and not for the free issues
+either. Every node sits loose on the canvas.
+
+Issues with no dependency in either direction are always included and never filtered out. They
+need no box and no caption, because having no edge attached is already the whole statement.
 
 ## Legend
 
