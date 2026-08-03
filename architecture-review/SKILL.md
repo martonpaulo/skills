@@ -30,6 +30,18 @@ For an explicitly requested broad reuse or replacement audit, use `build-or-reus
 6. Rank findings by impact, confidence, effort, implementation risk, and expected payoff. Prefer a few high-value findings over an exhaustive catalog.
 7. Write a concise Markdown report in the conversation unless the user requests a file or repository guidance specifies a review location.
 
+## Removal is a claim that needs evidence
+
+Absence of direct usage is not evidence that something is unused. Before recommending that a module,
+type, abstraction, or dependency be removed, check derived definitions built on it, guarded branches
+for a platform, environment, or feature flag, dynamic resolution that assembles the name at runtime,
+tests, fixtures, examples, and documentation, and consumers outside this repository when anything
+here is published. Say which of those you checked.
+
+A candidate that survives all of them is a removal recommendation. A candidate that fails one is a
+dependency, not dead weight. A candidate you could not fully trace is reported as uncertain, never
+as safe to delete.
+
 ## Report shape
 
 For each finding include:

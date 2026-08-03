@@ -41,6 +41,8 @@ If the target is too large for credible full coverage, audit complete risk-bound
 
 Subagents, background agents, issue trackers, branches, and artifact pipelines are never required. If an independent agent is explicitly available and requested, it may perform a read-only challenge pass, but this skill retains the final evidence and coverage contract.
 
+Every hunt starts from zero. Ignore earlier conversation context, findings you reached in a previous run, and any report or generated artifact one left behind. They are prior opinion, not evidence, and a run that reads its own last report will re-confirm dismissed candidates instead of re-challenging them. Code, tests, repository guidance, and safe reproductions are the only inputs. Comparing against a previous report is a task the user may ask for separately; the report is still not evidence for a finding.
+
 ## Evidence threshold
 
 - `Confirmed`: reproduced safely, or established by a deterministic end-to-end trace that includes all relevant guards and contracts.

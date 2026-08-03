@@ -105,6 +105,29 @@ shape is unknown until something runs. A test written afterwards is still valid 
 observed failing against the unfixed code. Do not force the order onto prototypes; `prototype`
 owns disposable experiments and they are not required to carry tests.
 
+### Where the order pays most
+
+Test-first is a default, not a doctrine. It repays the discipline most where the expected value is
+knowable before the implementation exists and the behavior has more cases than a reader can hold in
+their head:
+
+- business rules and the policies that decide something
+- validation, and the boundaries between valid and invalid
+- data transformation, mapping, parsing, and serialization
+- states and the transitions between them, including the illegal ones
+- contracts at an interface other code depends on
+- a fixed defect, where the test is the proof the fix works and the guard against its return
+- anything whose edge cases outnumber its happy path
+
+It repays least where the expected value only becomes knowable by running something: layout and
+appearance, wiring and configuration, integration with a system whose real responses are the
+specification, and exploration where the shape of the answer is the open question. There, build
+first and pin the behavior once it is known, and be explicit that this is what you did.
+
+The distinction is not unit versus end-to-end, and not important versus unimportant. It is whether
+you can state the expected result independently of the code that will produce it. When you cannot,
+writing the test first only records a guess.
+
 Refactoring is not part of the write-then-pass loop. It is a separate pass, and `review-changes`
 owns reviewing the result.
 

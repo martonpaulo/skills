@@ -45,6 +45,36 @@ An issue reaching this skill without a `Plan` is the common case, not an error. 
 
 When the effort label and the actual change disagree, believe the change. An issue labelled `S` that turns out to alter a stored format or a public interface is not small; write the plan and stop.
 
+## When validation fails
+
+Read the output that failed before running anything again. The failure already says which check, at
+which location, for which reason, and rerunning discards that for a slower copy of it.
+
+Never rerun a command against unchanged code. A rerun with nothing changed cannot produce a
+different result, and treating it as a retry is how a real failure gets recorded as flakiness. Change
+something that could plausibly affect the failure, or state that the failure is environmental and
+say what evidence supports that.
+
+Fix the narrowest failing thing first and rerun only the narrow check. Expand back to the full
+validation once it passes, once, at the end.
+
+## Behavior-preserving changes
+
+Part of an issue often changes structure without changing behavior: a rename, an extraction, a
+boundary moved, duplication collapsed. Three rules apply to that part specifically.
+
+- **Say what proves the behavior is unchanged.** Existing tests passing counts only where they cover
+  the behavior being moved. Where they do not, say which behavior is now unprotected rather than
+  claiming the change is safe because the suite is green.
+- **Do not smuggle a feature into a restructuring.** A diff that both moves code and changes what it
+  does cannot be reviewed for either. Keep them separable, and say which commits are which.
+- **Delete only with evidence.** Absence of direct usage is not proof something is unused; check
+  derived definitions, guarded branches, dynamic resolution, tests, fixtures, examples, and
+  documentation first. Removing something an audit merely listed as a candidate is not evidence.
+
+If the restructuring turns out to be larger than the issue, stop and say so. Widening the scope of
+one issue is how a reviewable change becomes an unreviewable one.
+
 ## GitHub is the only platform
 
 This skill targets GitHub Issues and pull requests and nothing else. Do not add support for, degrade towards, or produce output shaped for another forge or tracker. The official GitHub API is the interface; reach it through the available native GitHub integration or `gh api`, and drop from a higher-level `gh` command to the API whenever that command does not cover the operation exactly, in particular when linking the PR to its issue or editing an issue body precisely.

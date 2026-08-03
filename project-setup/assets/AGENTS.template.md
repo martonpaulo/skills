@@ -46,6 +46,7 @@ Treat these values as stable project decisions. Change an established identifier
 - Keep changes scoped to the requested result. Do not mix unrelated cleanup, redesign, dependency updates, broad refactors, or future work.
 - Preserve behavior outside the task and preserve unrelated or uncommitted user changes.
 - Search for existing components, services, types, helpers, tokens, configuration, tests, and platform capabilities before creating new ones.
+- Follow the patterns this project already repeats. When a change would break a recorded pattern or establish a new one, stop and ask first, naming the existing pattern, the proposed one, and why the existing one does not fit. Deviating is allowed; deviating silently is not.
 - Prefer the smallest correct, readable, reversible, and low-operational-cost solution.
 - Maintain one owner and one source of truth for each business rule, state, mapping, default, and copy value.
 - Keep business rules out of presentation, transport, CLI, and external-adapter layers when a domain owner exists.

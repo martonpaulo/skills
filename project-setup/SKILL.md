@@ -163,6 +163,28 @@ Create or merge the root `AGENTS.md` from the template:
 4. Surface conflicts among existing guidance, the baseline, code, and approved specifications. Do not silently choose one source as universally authoritative.
 5. Keep project-specific commands and stable contracts exact. Omit speculative inventories and details likely to drift.
 
+### Record the patterns, and how a new one gets established
+
+A project's real conventions are the ones it repeats, and most of them are never written down.
+Whichever agent or person arrives next then invents a second way of doing the same thing, in good
+faith, and the project now has two.
+
+Settle two things during setup and record them with the other rules:
+
+1. **Where the project's patterns are written.** Read the code and name the patterns it already
+   repeats: how a module is laid out, how errors are surfaced, how state is owned, how a visual
+   decision is declared, how something is named. Record the ones that are real and load-bearing.
+   Record nothing speculative and nothing the code does not already do. If the list is long enough
+   to bury the rest of the guidance, give it its own file and point to it from `AGENTS.md`.
+2. **The rule that keeps the list true.** Record, in the project's own guidance, that a change
+   which would break a recorded pattern or establish a new one stops and asks the owner first,
+   naming the existing pattern, the proposed one, and why the existing one does not fit. Deviating
+   is allowed; deviating silently is what produces two patterns.
+
+An existing project's patterns are discovered, never imposed. Where the code contradicts itself,
+record the contradiction as an open decision rather than picking a winner on the owner's behalf,
+and route it through `grilling` if it is consequential.
+
 Always make `CLAUDE.md` and `.gemini/rules/agents.md` relative symbolic links to `AGENTS.md`:
 
 - create `CLAUDE.md -> AGENTS.md` when absent;
