@@ -142,9 +142,15 @@ When a repository does not already define its own convention:
 * every issue has exactly one `type:` label
 * every issue has exactly one `priority:` label
 * an issue may have at most one `effort:` label
+* an issue may have at most one `evidence:` label, when it came out of an audit
+* an issue may have at most one `status:` label, as an exception rather than a workflow
 * an issue may have any number of `area:` labels
 
 An established repository convention always takes precedence over this default.
+
+Those prefixes are the required spine, not the whole permitted set. A label outside them is left
+untouched unless it duplicates a dimension. Migrating an existing repository onto the taxonomy is
+[`project-groom`](project-groom/)'s job, gated on the owner approving the full mapping first.
 
 
 

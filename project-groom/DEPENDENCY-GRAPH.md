@@ -29,14 +29,26 @@ N091[["#091<br/>Workspace passa a aceitar de um a quatro panes<br/><br/>type: fe
   digit is kept as it is (`#2952`).
 - A short description written by the agent in the language of the conversation, saying what the
   issue *does* rather than repeating its title.
-- Then, after the blank line, one line each for `type:`, `priority:`, `effort:` and `area:`,
-  in that order, carrying the issue's real label values. Several areas go on the one `area:`
-  line, comma separated.
+- Then, after the blank line, one line each for `type:`, `priority:`, `effort:`, `evidence:`,
+  `status:` and `area:`, in that order, carrying the issue's real label values. Several areas go
+  on the one `area:` line, comma separated.
 
 Drop a line entirely when the issue does not carry that label, rather than printing an empty or
 invented value. An issue with no `effort:` yet is an issue nobody has sized, and the graph
 should show that gap instead of papering over it. The taxonomy behind these values is the one
-`issue-capture` documents.
+[`issue-capture` documents](../issue-capture/LABELS.md).
+
+`evidence:` and `status:` are absent on most issues, so the common node stays four lines. They
+earn their place when they are there: an issue nobody has confirmed and an issue waiting on a
+human are both bad places to start, and the graph is where somebody decides where to start.
+
+```
+N073[["#073<br/>Import perde a ultima coluna quando o arquivo termina sem newline<br/><br/>type: bug<br/>priority: P1<br/>evidence: likely<br/>status: needs-decision<br/>area: import-export, formats"]]
+```
+
+Neither one gets a colour, a shape or a marker of its own. Colour is the dependent count and
+shape is whether anything blocks it; a third visual channel makes the graph unreadable, which is
+the reason most things here are text lines.
 
 ## Links
 
@@ -114,6 +126,8 @@ Two or three lines of prose after the block, in this order:
 1. what the shape means,
 2. the color scale with the exact dependent count of each step,
 3. where to start: the root that unblocks the most, and any cycle that has to be broken first.
+   Say so in that same line when that root carries `status:` or a non-`confirmed` `evidence:`,
+   because then the real first move is unblocking it or verifying it.
 
 Nothing longer. The findings are already in the report above it.
 
