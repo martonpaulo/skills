@@ -73,9 +73,10 @@ before the other. Their `role` is still declared in frontmatter and unchanged.
 
 ### Issue pipeline
 
-One issue travels six [spec-driven](https://github.com/github/spec-kit) phases, and each phase
-has an owner. There is no separate Review phase: `code-review` declares itself the `Validate`
-phase, because a pull request is verified against the issue that commissioned it.
+One issue travels six phases, each with an owner. `Specify`, `Clarify`, `Plan`, `Tasks` and
+`Implement` follow [spec-kit](https://github.com/github/spec-kit). `Validate` is this
+collection's own: spec-kit stops at implementation and treats verification as an on-demand
+analysis, while here a pull request is a gate that something has to pass.
 
 | Order | Phase | Lead role | Goal | Skill |
 | --- | --- | --- | --- | --- |
@@ -88,6 +89,26 @@ phase, because a pull request is verified against the issue that commissioned it
 
 `backlog-curator` sits across all six rather than inside one. It reads the whole backlog, finds
 the issues stuck without a phase, and hands them to the skill that owns it.
+
+<details>
+<summary>Why there is no Review phase between Implement and Validate</summary>
+
+A phase here is a gate: one owner, one artifact, one exit condition. Review would share
+`Validate`'s exit condition exactly, *this pull request can merge*, and two gates on one
+artifact is the kind of ceremony this collection refuses.
+
+`code-review` already made the harder half of that decision. Its Request Changes criteria
+explicitly exclude personal preference, optional refactors and anything tooling handles, so
+taste was deliberately taken out of the merge gate. What is left is verification against the
+issue, which is one job.
+
+Craft review still exists, just not as a phase. It lives in the **audit** skills:
+`architecture-review`, `bug-hunter` and `product-audit` rank findings instead of blocking on
+them, and the findings worth acting on re-enter through `capture-issue` as issues of their own.
+That is the loop a Review phase would have tried to be, and it works better outside the pipeline
+because a craft finding is a backlog item, not a merge blocker.
+
+</details>
 
 | Skill | Invocation | Writes | What it does | Upstream |
 | --- | --- | --- | --- | --- |
