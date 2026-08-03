@@ -11,15 +11,15 @@ Every upstream project is credited below. If a skill is useful, credit belongs t
 ## 🧭 Start here
 
 Two prefixes carry the work you do every day. `project-` acts on the whole project, `issue-` acts
-on one issue. Everything else stays directly invocable, and these eight reach for it on their own
-when a step needs it.
+on one issue. Everything else stays directly invocable, and the prefixed skills reach for it on
+their own when a step needs it.
 
 ```mermaid
 flowchart LR
   ps["project-setup"] --> ic["issue-capture"] --> ii["issue-implement"] --> ir["issue-review"]
   ir --> ic
   ir -.-> prl["project-release"]
-  pb["project-backlog"] -.-> ic
+  pb["project-groom"] -.-> ic
   pa["project-audit"] -.-> ic
 ```
 
@@ -28,7 +28,7 @@ flowchart LR
 | Skill | What it settles | When |
 | ----- | --------------- | ---- |
 | [`project-setup`](project-setup/)     | What the product is and never does, then identity, Git policy, versioning, licence, metadata | Once, first |
-| [`project-backlog`](project-backlog/) | Duplicates, obsolete issues, taxonomy drift, blocking order across the backlog | Periodically |
+| [`project-groom`](project-groom/) | Duplicates, obsolete issues, taxonomy drift, blocking order across the backlog | Periodically |
 | [`project-audit`](project-audit/)     | Every applicable audit, merged into one ranked list                        | Periodically |
 | [`project-release`](project-release/) | Version, changelog, tag, publication                                       | When a version is due |
 
@@ -53,6 +53,9 @@ because it downloads and executes third-party code and keeps its own refusal to 
 existing tree.
 
 ### Everything else
+
+Nothing below has to be invoked by hand to complete a delivery. Each is here because it is worth
+reaching for directly when you already know what you want.
 
 | I need to…                                       | Use                                                   |
 | ------------------------------------------------ | ----------------------------------------------------- |
@@ -114,7 +117,7 @@ Each phase has one owner, one primary goal, and one exit condition.
 
 ### Backlog-wide coordination
 
-[`project-backlog`](project-backlog/) operates across the entire workflow rather than owning one phase.
+[`project-groom`](project-groom/) operates across the entire workflow rather than owning one phase.
 
 It reviews the complete backlog for:
 
@@ -126,7 +129,7 @@ It reviews the complete backlog for:
 * dependency conflicts
 * incorrect blocking order
 
-When an issue has not completed a required phase, `project-backlog` delegates that work to the skill that owns it.
+When an issue has not completed a required phase, `project-groom` delegates that work to the skill that owns it.
 
 Its final output includes a dependency graph showing the order in which issues should be handled.
 
@@ -161,7 +164,7 @@ Two consequences are load-bearing:
   `POST /repos/{owner}/{repo}/pulls/{number}/reviews`. Writing "line 84 should change" into a
   summary body, when the API could have attached that text to line 84, counts as a defective
   review.
-* **Dependencies are read, not guessed.** `project-backlog` builds its blocking order from
+* **Dependencies are read, not guessed.** `project-groom` builds its blocking order from
   GitHub's own `blockedBy` and `blocking` issue dependencies, not from sentences in issue bodies.
 
 Every mutation is read back before it is reported. An issue, comment, review, or link exists when
@@ -232,7 +235,7 @@ When optional documentation paths are needed, it delegates that narrower configu
 
 ### Issue pipeline
 
-These skills move one issue from an initial request to a validated pull request.
+The four `issue-` skills move one issue from an initial request to a validated pull request, one SDD phase each. `project-groom` sits with them because it works on issues, but across the whole backlog rather than on one.
 
 | Skill                                 | Invocation    | Mutation | What it does                                                                                                                  | Upstream                                                                                                                                                                      |
 | ------------------------------------- | ------------- | -------- | ----------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -240,11 +243,11 @@ These skills move one issue from an initial request to a validated pull request.
 | [`issue-plan`](issue-plan/)           | User          | `write`  | Produce the implementation architecture, strategy, executable tasks, dependencies, and effort estimate for exactly one issue. | [obra/superpowers](https://github.com/obra/superpowers)                                                                                                                       |
 | [`issue-implement`](issue-implement/) | User          | `write`  | Implement exactly one prepared GitHub Issue, including code, tests, documentation, and validation evidence.                   | [openclaw/openclaw](https://github.com/openclaw/openclaw), [github/spec-kit](https://github.com/github/spec-kit) |
 | [`issue-review`](issue-review/)         | User          | `write`  | Validate exactly one pull request against its controlling issue and repository rules.                                         | [NousResearch/hermes-agent](https://github.com/NousResearch/hermes-agent), [SpillwaveSolutions/pr-reviewer-skill](https://github.com/SpillwaveSolutions/pr-reviewer-skill)    |
-| [`project-backlog`](project-backlog/) | User          | `write`  | Review the complete backlog for duplicates, obsolete issues, taxonomy drift, missing phases, and dependencies.                | [github/gh-aw](https://github.com/github/gh-aw), behavioral reference                                                                                                         |
+| [`project-groom`](project-groom/) | User          | `write`  | Review the complete backlog for duplicates, obsolete issues, taxonomy drift, missing phases, and dependencies.                | [github/gh-aw](https://github.com/github/gh-aw), behavioral reference                                                                                                         |
 
 Each issue-level skill owns a narrow part of the workflow.
 
-`project-backlog` does not replace them. It detects what is missing and routes the issue to the appropriate owner.
+`project-groom` does not replace them. It detects what is missing and routes the issue to the appropriate owner.
 
 ### Foundations
 
@@ -316,13 +319,10 @@ These skills produce durable documentation as their primary result.
 
 | Skill                                       | Invocation | Mutation | What it does                                                                                      | Upstream                                                                                                                            |
 | ------------------------------------------- | ---------- | -------- | ------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
-| [`project-setup`](project-setup/) | User     | `docs`   | Decide what the product is, who it serves, and the non-goals it will never take on.               | Written for this collection                                                                                                         |
 | [`handoff`](handoff/)                       | User       | `docs`   | Produce a compact continuation note for another agent or a later session.                         | [mattpocock/skills → handoff](https://github.com/mattpocock/skills/tree/main/skills/productivity/handoff)                           |
 | [`skill-authoring`](skill-authoring/)       | User       | `write`  | Create, review, or simplify Agent Skills.                                                         | [mattpocock/skills → writing-great-skills](https://github.com/mattpocock/skills/tree/main/skills/productivity/writing-great-skills) |
 
-Use `grilling` directly when only the conversation matters.
-
-`grilling` records nothing by itself. When an interview settles a canonical term or a hard-to-reverse decision, it routes to `domain-model`, which owns the glossary and the ADR.
+`grilling` is the interview and records nothing by itself. When one settles a canonical term or a hard-to-reverse decision, it routes to `domain-model`, which owns the glossary and the ADR.
 
 Use `handoff` when the work must continue in another session or with another agent.
 
@@ -516,9 +516,9 @@ flowchart LR
 
   issue-review -.investigation discipline.-> grilling
 
-  project-backlog --> issue-capture
-  project-backlog --> issue-plan
-  project-backlog -.unresolved consequential conflicts.-> grilling
+  project-groom --> issue-capture
+  project-groom --> issue-plan
+  project-groom -.unresolved consequential conflicts.-> grilling
 
   project-audit --> bug-hunter
   project-audit --> architecture-review
@@ -580,7 +580,7 @@ It may also use specialized architecture, research, reuse, or prototyping skills
 
 `issue-implement` may use specialized workflows such as `diagnose-bug`, `module-design`, `prototype`, or `resolve-conflicts`, but only when they directly support implementation of the single prepared issue.
 
-`project-backlog` delegates incomplete issue phases to `issue-capture` or `issue-plan`.
+`project-groom` delegates incomplete issue phases to `issue-capture` or `issue-plan`.
 
 </details>
 

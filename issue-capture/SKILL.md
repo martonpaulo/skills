@@ -11,7 +11,7 @@ metadata:
 
 Convert a newly reported or discovered problem, bug, or feature request into one canonical, implementation-ready GitHub Issue containing the SDD phases `Specify` and `Clarify`.
 
-Keep this skill model-invocable because `project-backlog` and `issue-plan` delegate to it through the agent's skill tool, and because a defect found mid-session should be capturable without the user retyping it. That reach is bounded by the description's non-triggers and by the `Must not` list below. Creating or updating exactly one issue is the maximum external mutation authorized; anything past it belongs to the skill that owns the later phase.
+Keep this skill model-invocable because `project-groom` and `issue-plan` delegate to it through the agent's skill tool, and because a defect found mid-session should be capturable without the user retyping it. That reach is bounded by the description's non-triggers and by the `Must not` list below. Creating or updating exactly one issue is the maximum external mutation authorized; anything past it belongs to the skill that owns the later phase.
 
 ## Workflow
 

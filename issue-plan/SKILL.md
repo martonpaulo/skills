@@ -1,6 +1,6 @@
 ---
 name: issue-plan
-description: Complete the Plan and Tasks SDD phases for exactly one GitHub Issue. Triggers when the user provides an issue number/URL to plan, or when delegated by project-backlog.
+description: Complete the Plan and Tasks SDD phases for exactly one GitHub Issue. Triggers when the user provides an issue number/URL to plan, or when delegated by project-groom.
 disable-model-invocation: true
 metadata:
   scope: project

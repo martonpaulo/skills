@@ -1,0 +1,6 @@
+interface:
+  display_name: "Groom Backlog"
+  short_description: "Audit and order the whole issue backlog"
+  default_prompt: "Use $project-groom to review this repository's issue backlog."
+policy:
+  allow_implicit_invocation: false

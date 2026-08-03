@@ -70,6 +70,14 @@ own arguments. Neither is duplicated into `metadata`; a second copy is a drift b
   commits, pushes, force-pushes, credentials, or production code. Tightening is welcome.
 - **One responsibility per skill.** If a skill is growing a second job, that is a new skill or a
   cross-reference, not a longer `SKILL.md`.
+- **A skill that only delegates is not a skill.** If the body restates what the skills it calls
+  already say, it is a named door, not a capability, and the collection has deleted two of them.
+  Before adding one, check whether the child skills already carry every instruction. Before
+  keeping one, read the children again: content can migrate into them and leave the parent hollow
+  without anyone noticing. When it does, absorb whatever is genuinely unique into the skill that
+  owns it and delete the parent, so the capability survives and the duplication does not.
+  Composing several skills is a real job only when the composition itself decides something,
+  as `project-audit` does by ranking findings across lenses.
 - **Cross-reference only real dependencies**, and only to skills that exist here. A reference to
   an uninstalled or renamed skill is a bug.
 - **Do not hardcode the shape of things.** Directory contents, the skill list, and counts all
@@ -81,18 +89,16 @@ own arguments. Neither is duplicated into `metadata`; a second copy is a drift b
 `SKILL.md` is the only required file, and its frontmatter `name` must match the directory name
 exactly. Everything else is optional and belongs inside the skill's own directory: reference
 documents loaded on demand, executable scripts, agent-specific metadata, and the licensing and
-attribution files required when upstream work is vendored.
+attribution files required when upstream work is adapted.
 
 ### The `project-` and `issue-` prefixes
 
-Eight skills carry two prefixes that describe **what they act on**, not how important they are.
+Two prefixes describe **what a skill acts on**, not how important it is.
 
-`project-` acts on the whole project: `project-setup`, `project-backlog`, `project-audit`,
-`project-release`.
-
-`issue-` acts on exactly one issue, and the four are the SDD phases in order: `issue-capture`
-(Specify, Clarify), `issue-plan` (Plan, Tasks), `issue-implement` (Implement), `issue-review`
-(Validate).
+`project-` acts on the whole project. `issue-` acts on exactly one issue, and those are the SDD
+phases in order: `issue-capture` (Specify, Clarify), `issue-plan` (Plan, Tasks),
+`issue-implement` (Implement), `issue-review` (Validate). The README lists the current members
+of both; do not restate them here, because that copy goes stale.
 
 The prefix is a scope claim, so it has to stay true. A skill joins `issue-` only if it refuses to
 operate on more than one issue, and joins `project-` only if its unit of work really is the whole
@@ -106,6 +112,11 @@ Skill directories stay **flat**, one level under the repository root. Do not gro
 `audits/`, `workflows/` or any other folder: the taxonomy is metadata, and nesting would only
 break paths, cross-references, and copying a single skill elsewhere.
 
+Everything at the root that is not a skill directory supports the collection rather than being
+part of it: the documentation, the licensing files, `sync-all` with its command-name symlinks,
+and `tests/`. A directory without a `SKILL.md` is not a skill and must not appear in the README
+catalog.
+
 Read a few existing skills before adding one. They are the current example of the shape, and
 they are authoritative in a way this file cannot be.
 
@@ -116,7 +127,7 @@ they are authoritative in a way this file cannot be.
 name: <matches the directory name>
 description: <what it does, when to use it, and when NOT to>
 disable-model-invocation: true   # user-invoked skills only
-license: MIT                     # when upstream code is vendored
+license: MIT                     # the upstream's licence, whenever work is adapted from one
 allowed-tools: "Bash(python3:*)" # when the skill ships executable scripts
 metadata:
   scope: project | personal | meta

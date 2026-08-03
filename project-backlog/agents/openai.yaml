@@ -1,6 +1,0 @@
-interface:
-  display_name: "Backlog Curator"
-  short_description: "Audit and order the whole issue backlog"
-  default_prompt: "Use $project-backlog to review this repository's issue backlog."
-policy:
-  allow_implicit_invocation: false

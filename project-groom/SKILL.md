@@ -1,5 +1,5 @@
 ---
-name: project-backlog
+name: project-groom
 description: Maintain the quality, consistency, and implementability of the repository's GitHub Issue backlog. Detects duplicates, obsolete issues, and delegates missing SDD phases to issue-capture or issue-plan. Closes with a Mermaid graph of the blocking order across open issues.
 disable-model-invocation: true
 metadata:
@@ -12,9 +12,9 @@ metadata:
   upstream-checked: 2026-08-03
 ---
 
-# Backlog Curator
+# Groom Backlog
 
-Maintain the quality, consistency, and implementability of the repository's GitHub Issue backlog. Operates across issues but delegates individual SDD phase work.
+Keep the whole backlog accurate and implementable. Operates across issues and delegates individual SDD phase work to the skill that owns the phase.
 
 ## Workflow
 

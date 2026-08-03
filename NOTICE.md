@@ -27,7 +27,7 @@ It does not, and cannot, relicense third-party work that this repository vendors
 | [SpillwaveSolutions/pr-reviewer-skill](https://github.com/SpillwaveSolutions/pr-reviewer-skill) | SpillwaveSolutions | **none published** | `issue-review` (adapted context collection) |
 | [openclaw/openclaw](https://github.com/openclaw/openclaw) | openclaw | **none published** | `issue-implement` (design input only) |
 | [github/spec-kit](https://github.com/github/spec-kit) | GitHub | MIT | `issue-implement` (design input only) |
-| [github/gh-aw](https://github.com/github/gh-aw) | GitHub | MIT | `project-backlog` (behavioral reference only) |
+| [github/gh-aw](https://github.com/github/gh-aw) | GitHub | MIT | `project-groom` (behavioral reference only) |
 | [product-on-purpose/pm-skills](https://github.com/product-on-purpose/pm-skills) | product-on-purpose | Apache-2.0 | `project-setup` (product-definition half only) |
 
 Every skill above keeps a `THIRD_PARTY_NOTICES.md` in its own directory recording the upstream
