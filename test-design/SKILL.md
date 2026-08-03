@@ -71,6 +71,18 @@ substitution boundary. Both use TypeScript for illustration; the criteria are la
   configuration value from the source and asserts the source equals it. Comparing a string to the
   same string proves only that the assignment compiled. If the value matters, assert the behavior
   that depends on it; if nothing depends on it, it does not need a test.
+
+  The distinction is **locating** versus **asserting**. Using the canonical constant to find the
+  thing under test is fine, and is better than a hardcoded copy that drifts. Using it as the
+  expected value is not, because the assertion then compares the source to itself. A test may find
+  a button by its canonical label and then assert what pressing it does; it may not find that
+  button and assert that its label is the label.
+- **Measured equality.** The test asserts that two computed measurements match within a tolerance,
+  a ratio near one, or paired bounding boxes, instead of asserting the single value both sides
+  derive from. It passes for the wrong reason whenever the tolerance is wide and fails for the
+  wrong reason whenever rendering shifts. Own the equality in one constant, token, or component,
+  verify the rendered result by looking at it, and automate only thresholds and direction changes
+  that carry real meaning.
 - **Wrapper-only.** The subject forwards to something else and adds no behavior of its own, so the
   test pins the delegation rather than a capability. Test the behavior at the layer that owns it.
   A wrapper worth testing is one that transforms, validates, or decides something.
@@ -95,6 +107,20 @@ owns disposable experiments and they are not required to carry tests.
 
 Refactoring is not part of the write-then-pass loop. It is a separate pass, and `review-changes`
 owns reviewing the result.
+
+## End-to-end tests
+
+The same criteria apply, and two failure modes are specific to driving a running product:
+
+- **Locate by what the user perceives.** Accessible roles, names, and labels are the seam. A
+  selector built from a class name, a DOM path, or a generated test id pins the implementation and
+  breaks on a refactor that changed nothing a user can see.
+- **Wait for a condition, never for a duration.** An arbitrary sleep makes the suite slow when it
+  is generous and flaky when it is not. Wait for the state the test is about to assert.
+
+Do not use pixel snapshots. They fail on every unrelated rendering change and pass on real defects
+that happen to look similar, so they cost maintenance without reporting correctness. Isolate
+storage and state per test so one test's leftovers cannot decide another's verdict.
 
 ## Regression tests
 

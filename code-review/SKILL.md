@@ -19,6 +19,21 @@ metadata:
 
 Perform the SDD phase `Validate` for exactly one pull request. Verification means ensuring the implementation satisfies the linked issue, follows repository instructions, preserves outside behavior, has sufficient tests/evidence, and introduces no blocking defects.
 
+## Sources of truth
+
+When these disagree, the higher one wins:
+
+1. the direct review request;
+2. the linked issue, its approved specification, and its acceptance criteria;
+3. the most specific applicable repository instructions;
+4. the root `AGENTS.md`;
+5. relevant ADRs and architecture, design, domain, API, security, testing, and process documentation;
+6. existing code behavior, tests, history, and established patterns.
+
+Expose contradictions between them. Do not silently resolve a conflict by picking whichever source makes the PR look correct, and do not treat older documentation as authoritative over an accepted issue that deliberately replaces it.
+
+Distinguish verified facts, reasonable inferences, and unknowns in everything published. Never claim that evidence was inspected, a command ran, or a check passed when it did not.
+
 ## Workflow
 
 1. Resolve the exact repository and PR. Record the current head SHA before reviewing.
@@ -46,9 +61,28 @@ Read [github-api.md](references/github-api.md) for the exact commands: reading t
 Two rules bind every comment:
 
 - **Anchor it.** A finding about a line is attached to that line through the API. Writing "line 84 should change" in a summary body, when the API could have attached that text to line 84, is a defect in the review.
-- **Earn it.** Each comment states the failure, the evidence, the violated rule or requirement, and the minimum correction. Do not publish a comment that restates what the code does, praises it, expresses a preference, or asks something the repository already answers. Silence on a hunk means it was read and found sound.
+- **Earn it.** Each comment states the failure, the evidence, the violated rule or requirement, and the minimum correction. Silence on a hunk means it was read and found sound.
 
 When a finding concerns code the PR did not touch, the API will reject the anchor. Put it in the review body naming the file and line, rather than forcing an anchor.
+
+### Do not publish
+
+- a personal preference, an optional refactor, or unrelated cleanup;
+- a speculative future problem with no concrete failure path;
+- a stylistic difference, a formatting nit, or anything the project's tooling already enforces;
+- a dependency upgrade or a missing feature the PR was never asked to deliver;
+- praise, a generic summary, a restatement of what the code or the PR does;
+- a question the repository, the linked issue, or the PR already answers.
+
+Never invent a finding to produce output. A review that meets no threshold publishes no defect comment, and approving with an empty body is the correct result.
+
+### Say what fails
+
+A finding a reader cannot act on is not a finding. These are not review comments:
+
+> This may cause problems. Consider improving this. This could be cleaner. You might want to add tests.
+
+Each names a feeling, not a failure. State what breaks, under which input or condition, and why that matters. If you cannot name the condition, you have a suspicion, not a finding: verify it or drop it.
 
 ## Approval criteria
 
