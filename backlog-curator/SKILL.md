@@ -1,6 +1,6 @@
 ---
 name: backlog-curator
-description: Maintain the quality, consistency, and implementability of the repository's GitHub Issue backlog. Detects duplicates, obsolete issues, and delegates missing SDD phases to capture-issue or plan-issue.
+description: Maintain the quality, consistency, and implementability of the repository's GitHub Issue backlog. Detects duplicates, obsolete issues, and delegates missing SDD phases to capture-issue or plan-issue. Closes with a Mermaid graph of the blocking order across open issues.
 disable-model-invocation: true
 metadata:
   scope: project
@@ -23,6 +23,7 @@ Maintain the quality, consistency, and implementability of the repository's GitH
 7. Use `grilling` for consequential conflicts that evidence cannot resolve.
 8. Delegate missing `Specify` or `Clarify` to `capture-issue`. Delegate missing `Plan` or `Tasks` to `plan-issue`.
 9. Keep comments sparse. Prefer updating the canonical issue body. Use comments for provenance, explicit supersession, duplicate resolution, cross-issue coordination, and unresolved human decisions.
+10. Close every pass with the dependency graph described in [DEPENDENCY-GRAPH.md](DEPENDENCY-GRAPH.md), covering the open issues the pass considered and reflecting the links applied during it.
 
 ## Duplicate handling
 
@@ -52,4 +53,4 @@ Close an issue as obsolete only when supported by concrete evidence (e.g. merged
 
 ## Fallback
 
-When GitHub access is unavailable, accept a supplied issue export or issue list, produce an ordered mutation plan, and do not claim any labels, comments, edits, closures, or links were applied.
+When GitHub access is unavailable, accept a supplied issue export or issue list, produce an ordered mutation plan, and do not claim any labels, comments, edits, closures, or links were applied. Still emit the dependency graph, omitting the `click` lines when issue URLs are unknown.

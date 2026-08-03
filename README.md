@@ -84,7 +84,7 @@ Reusable capabilities. Invocable directly, but their real job is being delegated
 
 | Skill | Invocation | Writes | What it does | Upstream |
 | --- | --- | --- | --- | --- |
-| [`backlog-curator`](backlog-curator/) | User | `write` | **Review the GitHub Issue backlog**: detect duplicates, obsolete issues, and delegate missing SDD phases. | [github/gh-aw](https://github.com/github/gh-aw) (behavioral ref) |
+| [`backlog-curator`](backlog-curator/) | User | `write` | **Review the GitHub Issue backlog**: detect duplicates, obsolete issues, and delegate missing SDD phases. Ends on a Mermaid graph of the blocking order. | [github/gh-aw](https://github.com/github/gh-aw) (behavioral ref) |
 | [`debug`](debug/) | Model or user | `write` | **Diagnose a hard bug**: reproduce, hypothesize, find the root cause, minimal fix, verify. | [mattpocock/skills → diagnosing-bugs](https://github.com/mattpocock/skills/tree/main/skills/engineering/diagnosing-bugs) |
 | [`dont-reinvent-the-wheel`](dont-reinvent-the-wheel/) | Model or user | `none` | **Build or reuse?** Decide whether one capability should use an existing feature, a native capability, a dependency, a service, or custom code. | [felinto-dev/felinto-skills → dont-reinvent-the-wheel](https://github.com/felinto-dev/felinto-skills/tree/main/.agents/skills/dont-reinvent-the-wheel) |
 | [`grill`](grill/) | User | `none` | **Pressure-test a plan** through a focused interview. Writes nothing. | [mattpocock/skills → grill-me](https://github.com/mattpocock/skills/tree/main/skills/productivity/grill-me) |
