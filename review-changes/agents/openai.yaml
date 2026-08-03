@@ -1,3 +1,6 @@
 interface:
-  display_name: "Code Review"
-  short_description: "Review a diff on standards and spec"
+  display_name: "Review Changes"
+  short_description: "Review a local diff on standards and intent"
+  default_prompt: "Use $review-changes to review my working diff since the fixed point I give you."
+policy:
+  allow_implicit_invocation: false

@@ -1,36 +1,115 @@
 ---
-name: tdd
-description: Test-driven development. Use when the user wants to build features or fix bugs test-first, mentions "red-green-refactor", or wants integration tests.
+name: test-design
+description: Decide what to test, where the test seam belongs, and whether an existing or proposed test is worth keeping. Use when writing tests for new behavior, when a suite breaks on refactors that changed no behavior, when tests pass but defects still ship, or when a test's value is disputed. Do not use for running an existing suite, fixing an unrelated build failure, diagnosing a product bug, or choosing a test framework.
+license: MIT
+metadata:
+  scope: project
+  role: foundation
+  mutation: write
+  upstream: https://github.com/mattpocock/skills
+  upstream-author: Matt Pocock
+  upstream-path: skills/engineering/tdd
+  upstream-revision: 2ab958093e83e0ec752e6c1c5932da465bf23e0c
+  upstream-checked: 2026-08-03
+  version: mattpocock-personal.1
 ---
 
-# Test-Driven Development
+# Test Design
 
-TDD is the red → green loop. This skill is the reference that makes that loop produce tests worth keeping: what a good test is, where tests go, the anti-patterns, and the rules of the loop. Every section applies on every cycle — consult them before and during the loop, not after.
+Decide which behavior deserves a test, at which seam, and whether the resulting test earns its
+maintenance cost. A suite that breaks on every refactor and still misses defects is worse than a
+smaller suite that holds.
 
-When exploring the codebase, read `CONTEXT.md` (if it exists) so test names and interface vocabulary match the project's domain language, and respect ADRs in the area you're touching.
+Use the project's own framework, runner, and conventions. This skill decides what a test asserts
+and where it attaches, never which library to adopt.
 
-## What a good test is
+## Seams
 
-Tests verify behavior through public interfaces, not implementation details. Code can change entirely; tests shouldn't. A good test reads like a specification — "user can checkout with valid cart" tells you exactly what capability exists — and survives refactors because it doesn't care about internal structure.
+A seam is the public boundary where behavior is observable without reaching inside. Tests attach
+to seams.
 
-See [tests.md](tests.md) for examples and [mocking.md](mocking.md) for mocking guidelines.
+Name the seams under test before writing anything and check them against the caller's view: if no
+caller depends on it, it is not a seam. `module-design` owns the boundary itself; this skill
+decides where the test attaches to it. When the right seam is genuinely contested and the answer
+changes what ships, resolve it through `grilling` rather than testing both.
 
-## Seams — where tests go
+Coverage is not the goal. Agreeing the seams is how effort lands on critical paths and complex
+logic instead of on every reachable branch.
 
-A **seam** is the public boundary you test at: the interface where you observe behavior without reaching inside. Tests live at seams, never against internals.
+## A weak test is worse than no test
 
-**Test only at pre-agreed seams.** Before writing any test, write down the seams under test and confirm them with the user. No test is written at an unconfirmed seam. You can't test everything — agreeing the seams up front is how testing effort lands on the critical paths and complex logic instead of every edge case.
+A test that cannot fail for a real reason still costs a run on every commit, still breaks on
+refactors, and still reports green when the behavior is broken. It buys confidence it has not
+earned. When the only test available for a piece of behavior would be one of the anti-patterns
+below, write no test and say which behavior is therefore unprotected. Do not fill the gap with a
+weak one.
 
-Ask: "What's the public interface, and which seams should we test?"
+This applies to writing new tests and to judging existing ones. A weak test found during review is
+reported, not preserved for its coverage number.
+
+## What a good test asserts
+
+A good test reads as a specification of a capability, survives refactors that preserve behavior,
+and fails for exactly one reason. Prefer real interfaces over substitutes for anything the project
+controls.
+
+Take vocabulary from the project's domain language so test names match the terms the code and
+documentation already use. Route to `domain-model` when the terms themselves are contradictory.
+
+See [tests.md](tests.md) for worked good and bad examples, and [mocking.md](mocking.md) for the
+substitution boundary. Both use TypeScript for illustration; the criteria are language-neutral.
 
 ## Anti-patterns
 
-- **Implementation-coupled** — mocks internal collaborators, tests private methods, or verifies through a side channel (querying the database instead of using the interface). The tell: the test breaks when you refactor but behavior hasn't changed.
-- **Tautological** — the assertion recomputes the expected value the way the code does (`expect(add(a, b)).toBe(a + b)`, a snapshot derived by hand the same way, a constant asserted equal to itself), so it passes by construction and can never disagree with the code. Expected values must come from an independent source of truth — a known-good literal, a worked example, the spec.
-- **Horizontal slicing** — writing all tests first, then all implementation. Bulk tests verify _imagined_ behavior: you test the _shape_ of things rather than user-facing behavior, the tests go insensitive to real changes, and you commit to test structure before understanding the implementation. Work in **vertical slices** instead — one test → one implementation → repeat, each test a **tracer bullet** that responds to what the last cycle taught you.
+- **Implementation-coupled.** Substitutes internal collaborators, asserts on private state, or
+  verifies through a side channel such as querying the database instead of reading back through
+  the interface. The tell: the test breaks under refactoring while behavior is unchanged.
+- **Tautological.** The expected value is recomputed the way the code computes it, so the test
+  passes by construction and can never disagree with the implementation. Expected values must come
+  from an independent source: a known-good literal, a worked example, or the specification.
+- **Duplicated constant.** The test imports or restates a constant, string, label, enum case, or
+  configuration value from the source and asserts the source equals it. Comparing a string to the
+  same string proves only that the assignment compiled. If the value matters, assert the behavior
+  that depends on it; if nothing depends on it, it does not need a test.
+- **Wrapper-only.** The subject forwards to something else and adds no behavior of its own, so the
+  test pins the delegation rather than a capability. Test the behavior at the layer that owns it.
+  A wrapper worth testing is one that transforms, validates, or decides something.
+- **Duplicate coverage.** The behavior is already pinned by an existing test at the same seam.
+  A second test that fails whenever the first does adds maintenance and no signal. Search the
+  suite before adding, and extend the existing test instead when the case is a variation.
+- **Horizontal slicing.** Writing every test first, then every implementation. Bulk tests verify
+  imagined behavior and commit to a test structure before the implementation is understood. Work
+  in vertical slices: one seam, one test, one implementation, then reassess.
+- **Assertion-free.** The test executes code and asserts nothing meaningful, or asserts only that
+  no exception was thrown. It reports coverage without reporting correctness.
 
-## Rules of the loop
+## Writing order
 
-- **Red before green.** Write the failing test first, then only enough code to pass it. Don't anticipate future tests or add speculative features.
-- **One slice at a time.** One seam, one test, one minimal implementation per cycle.
-- **Refactoring is not part of the loop.** It belongs to the review stage (see the `code-review` skill), not the red → green implementation cycle.
+Write the failing test first by default, because a test never observed failing has not been shown
+to test anything. Watch it fail for the expected reason, then write only enough code to pass it.
+
+Deviate when the cost is real, and say so: exploratory spikes, generated code, and behavior whose
+shape is unknown until something runs. A test written afterwards is still valid once it has been
+observed failing against the unfixed code. Do not force the order onto prototypes; `prototype`
+owns disposable experiments and they are not required to carry tests.
+
+Refactoring is not part of the write-then-pass loop. It is a separate pass, and `review-changes`
+owns reviewing the result.
+
+## Regression tests
+
+A regression test for a fixed defect attaches to the same seam as the behavior it protects, and
+must be observed failing against the unfixed code. `debug` owns diagnosis and the fix, and
+delegates the test's placement here when the seam is unclear.
+
+## Safety and completion
+
+Do not weaken, skip, or delete an existing test to make a suite pass. A test that is wrong is
+rewritten with its reason stated, never silenced. Do not add substitutes for components the
+project controls merely to make a test easier to write; that is a boundary problem for
+`module-design`.
+
+The work is complete when every new test names its seam, was observed failing before passing,
+asserts behavior rather than structure, takes its expected values from an independent source, and
+pins behavior no existing test already pins. Report the seams covered, the behavior deliberately
+left untested, and any test not written because only a weak one was available.

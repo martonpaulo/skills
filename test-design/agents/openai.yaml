@@ -1,3 +1,4 @@
 interface:
-  display_name: "TDD"
-  short_description: "Test-driven red-green-refactor"
+  display_name: "Test Design"
+  short_description: "Decide what to test and at which seam"
+  default_prompt: "Use $test-design to decide the seams and the tests worth keeping for this change."
