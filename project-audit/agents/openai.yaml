@@ -1,0 +1,6 @@
+interface:
+  display_name: "Project Audit"
+  short_description: "Every applicable audit, one ranked list"
+  default_prompt: "Use $project-audit to audit this project and tell me what to fix first."
+policy:
+  allow_implicit_invocation: false
