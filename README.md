@@ -137,7 +137,7 @@ Its final output includes a dependency graph showing the order in which issues s
 
 ### Issue labels
 
-[`issue-capture`](issue-capture/) owns the default label taxonomy documented in [`capture-issue/LABELS.md`](issue-capture/LABELS.md).
+[`issue-capture`](issue-capture/) owns the default label taxonomy documented in [`issue-capture/LABELS.md`](issue-capture/LABELS.md).
 
 When a repository does not already define its own convention:
 
@@ -153,6 +153,14 @@ An established repository convention always takes precedence over this default.
 Those prefixes are the required spine, not the whole permitted set. A label outside them is left
 untouched unless it duplicates a dimension. Migrating an existing repository onto the taxonomy is
 [`project-groom`](project-groom/)'s job, gated on the owner approving the full mapping first.
+
+There is no `phase:` label. The SDD phases live in the issue body, so a label mirroring them is a
+copy that drifts, and the skills read the body regardless. Every state worth filtering on is already
+readable from a field with one owner, and the filter for work that is not ready yet is the absence
+of `effort:`, because the skill that writes the plan is the skill that sets the estimate.
+
+Colour is an accelerant and never information: the family says which dimension a label belongs to,
+the lightness says where in it, and nothing is encoded in colour alone.
 
 
 
