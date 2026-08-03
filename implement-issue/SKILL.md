@@ -6,6 +6,10 @@ metadata:
   scope: project
   role: workflow
   mutation: write
+  upstream: https://github.com/github/spec-kit
+  upstream-author: GitHub
+  upstream-revision: 5e2f9bcd9ba92702b0bff34ecdaa71283e1d1e42
+  upstream-checked: 2026-08-03
 ---
 
 # Implement Issue
@@ -28,6 +32,22 @@ Perform the SDD phase `Implement` for exactly one prepared issue.
 12. Commit according to repository policy using focused Conventional Commits. Push normally when authorized.
 13. When using a PR workflow, open a PR that targets the correct base branch, links the issue, and explains the problem, implementation, impact, tests, docs, and risk. Open as ready when validation passes, or draft if a real blocker remains.
 14. If publication is unavailable, finish local work and provide branch, commit, validation results, remaining blockers, and a ready-to-use PR handoff.
+
+## GitHub is the only platform
+
+This skill targets GitHub Issues and pull requests and nothing else. Do not add support for, degrade towards, or produce output shaped for another forge or tracker. The official GitHub API is the interface; reach it through the available native GitHub integration or `gh api`, and drop from a higher-level `gh` command to the API whenever that command does not cover the operation exactly, in particular when linking the PR to its issue or editing an issue body precisely.
+
+Read back every remote mutation before reporting it. A PR is open, an issue is updated, and a task is checked off only when the API says so.
+
+```bash
+gh issue view <number> --json number,title,body,comments,labels,blockedBy,url
+gh pr create --base <base> --head <branch> --title "<title>" --body-file -
+gh pr view <number> --json number,url,isDraft,closingIssuesReferences
+```
+
+The link between a PR and its issue is made by a closing keyword in the PR body (`Closes #<number>`), not by mentioning the number in the title. Verify it landed: `closingIssuesReferences` must contain the issue. An empty array means the PR is not linked and merging it will not close the issue.
+
+The PR body states the problem, the implementation, the impact, the tests run with their results, the documentation touched, and the residual risk. A PR body that only repeats the issue title is not a description.
 
 ## Git and Branch Policy
 

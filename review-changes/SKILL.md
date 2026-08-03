@@ -55,8 +55,9 @@ scope and report findings about unchanged code.
 
 Find what the change was supposed to do, in this order:
 
-1. an issue referenced by the commit messages or the branch name, fetched through the available
-   GitHub integration, `gh`, or the API;
+1. an issue referenced by the commit messages or the branch name, fetched from the GitHub API
+   through the available native GitHub integration or `gh api`. GitHub is the only tracker this
+   collection targets; do not degrade towards another one;
 2. a path the user supplied;
 3. a specification, plan, or issue body already present in the repository;
 4. the user's own description of the change.

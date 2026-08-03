@@ -6,6 +6,10 @@ metadata:
   scope: project
   role: workflow
   mutation: write
+  upstream: https://github.com/github/gh-aw
+  upstream-author: GitHub
+  upstream-revision: 5adcdb6d4ec153409feab88c1688a9929fa07008
+  upstream-checked: 2026-08-03
 ---
 
 # Backlog Curator
@@ -50,6 +54,19 @@ Close an issue as obsolete only when supported by concrete evidence (e.g. merged
 - silently resolve contradictory requirements
 - overwrite recent human edits
 - create labels without authorization
+
+## GitHub is the only platform
+
+This skill targets GitHub Issues and nothing else. Do not add support for, degrade towards, or produce output shaped for another tracker.
+
+Read [github-api.md](references/github-api.md) for the exact commands. Two of them change the quality of a pass:
+
+- `blockedBy` and `blocking` on `gh issue view --json` are GitHub's own issue dependencies and are the source of truth for the blocking order. Read them before believing any sentence in a body that claims one.
+- `closedByPullRequestsReferences` is real evidence that an issue is already implemented, which is one of the few valid grounds for closing it as obsolete.
+
+Every mutation is verified by reading it back. A label, link, edit, or closure counts as applied only when the API reports it, never because a command exited zero.
+
+A pass that changes nothing posts nothing. Do not comment to announce that the backlog was reviewed.
 
 ## Fallback
 

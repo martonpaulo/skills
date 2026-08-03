@@ -6,8 +6,11 @@ metadata:
   scope: project
   role: authoring
   mutation: write
-  upstream: https://github.com/obra/superpowers/tree/main/skills/writing-plans
+  upstream: https://github.com/obra/superpowers
   upstream-author: obra
+  upstream-path: skills/writing-plans
+  upstream-revision: 44c9b2d6e889982ac18c27d05a19fefe335194e1
+  upstream-checked: 2026-08-03
   version: superpowers-personal.1
 ---
 
@@ -69,4 +72,22 @@ Do not use placeholders such as `TBD`, `handle edge cases`, or `add tests`.
 
 ## GitHub and Fallback Behavior
 
-Use available native GitHub integration, authenticated `gh`, or the GitHub API. When remote access is unavailable, continue locally when safe, produce a ready-to-publish artifact, state which remote actions were not performed, and never claim an issue or comment was published.
+This skill targets GitHub Issues and nothing else. Do not add support for, degrade towards, or produce output shaped for another tracker. The official GitHub API is the interface; reach it through the available native GitHub integration or `gh api`, and drop from a higher-level `gh` command to the API whenever that command does not cover the operation exactly.
+
+Read the whole issue, including its relationships, before planning anything:
+
+```bash
+gh issue view <number> --json number,title,body,state,labels,comments,blockedBy,blocking,parent,subIssues,url
+```
+
+`blockedBy` is GitHub's own dependency data. An issue blocked by unfinished work cannot be planned as if it were independent.
+
+Write `Plan` and `Tasks` into the canonical body, then read it back:
+
+```bash
+gh issue edit <number> --body-file -            # replaces the whole body
+gh issue edit <number> --add-label "effort:M"
+gh issue view <number> --json body,labels
+```
+
+`--body-file -` replaces the entire body, so refetch immediately before writing and merge the new sections into the existing content by hand. Never claim an issue or comment was published on the strength of the command alone. When remote access is unavailable, continue locally when safe, produce a ready-to-publish artifact, and state which remote actions were not performed.

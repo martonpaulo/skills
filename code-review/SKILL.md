@@ -7,8 +7,11 @@ metadata:
   scope: project
   role: audit
   mutation: write
-  upstream: https://github.com/NousResearch/hermes-agent/tree/main/skills/github/github-code-review
+  upstream: https://github.com/NousResearch/hermes-agent
   upstream-author: Hermes Agent
+  upstream-path: skills/github/github-code-review
+  upstream-revision: cc4cab2f592e60a197e796506de9168f74baf3ea
+  upstream-checked: 2026-08-03
   version: hermes-personal.1
 ---
 
@@ -26,9 +29,26 @@ Perform the SDD phase `Validate` for exactly one pull request. Verification mean
 6. Run relevant local validation when practical. Inspect failed remote checks to determine if they are introduced by the PR, pre-existing, flaky, environmental, or unrelated.
 7. Apply the `grilling` investigation discipline before asking anything.
 8. Comment only when there is a demonstrated defect, regression, security vulnerability, missing behavior, explicit rule violation, material ambiguity, or to respond to an existing review thread.
-9. Every blocking finding must include affected file/line, concrete failure/risk, evidence, violated requirement/rule, and minimum required correction.
+9. Every blocking finding must include affected file/line, concrete failure/risk, evidence, violated requirement/rule, and minimum required correction. Anchor it to the exact line in the diff, not to a prose description of where it is.
 10. Recheck the head SHA before submitting the review. If changed materially, inspect new changes.
 11. Submit exactly one formal final verdict: `APPROVE` or `REQUEST_CHANGES`. Do not use `COMMENT` as the final verdict.
+
+## GitHub is the only platform
+
+This skill targets GitHub and nothing else. Do not add support for, degrade towards, or produce output shaped for GitLab, Bitbucket, Gitea, or any other forge. If the repository is not on GitHub, say so and stop.
+
+## Publishing the review through the API
+
+Findings are published as one formal review through the official GitHub API, pinned to the reviewed SHA, carrying its inline comments and its verdict in the same request. Not as loose issue comments, and not as a chat summary that claims to be a review.
+
+Read [github-api.md](references/github-api.md) for the exact commands: reading the PR and its unresolved review threads, posting the review with anchored inline comments, replying inside an existing thread, and reading the verdict back.
+
+Two rules bind every comment:
+
+- **Anchor it.** A finding about a line is attached to that line through the API. Writing "line 84 should change" in a summary body, when the API could have attached that text to line 84, is a defect in the review.
+- **Earn it.** Each comment states the failure, the evidence, the violated rule or requirement, and the minimum correction. Do not publish a comment that restates what the code does, praises it, expresses a preference, or asks something the repository already answers. Silence on a hunk means it was read and found sound.
+
+When a finding concerns code the PR did not touch, the API will reject the anchor. Put it in the review body naming the file and line, rather than forcing an anchor.
 
 ## Approval criteria
 
@@ -54,4 +74,6 @@ Merge immediately or enable auto-merge only when:
 
 Never merge after `REQUEST_CHANGES`, approve one SHA and merge another, bypass checks, dismiss valid reviews merely to merge, change production code, commit fixes, or claim a formal approval when GitHub rejected it.
 
-If GitHub prevents self-approval, report the verdict, state what separate reviewer action is required, and do not claim approval was submitted. When remote access is unavailable, review locally and report findings without claiming published comments/approvals.
+If GitHub prevents self-approval, report the verdict, state what separate reviewer action is required, and do not claim approval was submitted. When remote access is unavailable, review locally and report findings without claiming published comments/approvals. Read the submitted review back before reporting success; a verdict is published only when the API says it is.
+
+For a diff that is not yet a pull request, use `review-changes` instead. This skill needs a PR to review and a place to publish the verdict.
