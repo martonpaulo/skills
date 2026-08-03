@@ -1,0 +1,6 @@
+interface:
+  display_name: "Define Product"
+  short_description: "Decide what the product is and is not"
+  default_prompt: "Use $flow-define-product to decide what this product is, who it serves, and what it will never do."
+policy:
+  allow_implicit_invocation: false
