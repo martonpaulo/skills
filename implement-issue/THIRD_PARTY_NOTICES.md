@@ -4,7 +4,9 @@ This skill adapts high-level workflows and SDD concepts from the following open-
 
 ## openclaw (gh-issues)
 - **Repository**: https://github.com/openclaw/openclaw
-- **Revision**: main (July 2026)
+- **Imported revision**: `db4ad84d7f0b22664f65a2e98a73a8cdd599f7b7`
+- **Imported on**: 2026-07-30
+- **Last checked against upstream**: 2026-08-03
 - **Author**: openclaw
 - **License**: None published in the repository.
 
@@ -14,7 +16,9 @@ This skill adapts high-level workflows and SDD concepts from the following open-
 
 ## spec-kit (implement)
 - **Repository**: https://github.com/github/spec-kit
-- **Revision**: main (July 2026)
+- **Imported revision**: `5e2f9bcd9ba92702b0bff34ecdaa71283e1d1e42`
+- **Imported on**: 2026-07-30
+- **Last checked against upstream**: 2026-08-03
 - **Author**: GitHub
 - **License**: MIT
 
@@ -24,7 +28,9 @@ This skill adapts high-level workflows and SDD concepts from the following open-
 
 ## tabelo (implement-issue)
 - **Repository**: https://github.com/martonpaulo/tabelo
-- **Revision**: main (July 2026)
+- **Imported revision**: `196bab5a1fe63616a429ac7ad3147554b9b19995`
+- **Imported on**: 2026-07-30
+- **Last checked against upstream**: 2026-08-03
 - **Author**: Marton Paulo
 - **License**: MIT
 

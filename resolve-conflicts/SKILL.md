@@ -5,6 +5,12 @@ metadata:
   scope: project
   role: workflow
   mutation: write
+  upstream: https://github.com/mattpocock/skills
+  upstream-author: Matt Pocock
+  upstream-path: skills/engineering/resolving-merge-conflicts
+  upstream-revision: ed37663cc5fbef691ddfecd080dff42f7e7e350d
+  upstream-checked: 2026-08-03
+  version: mattpocock-personal.1
 ---
 
 # Resolve Conflicts

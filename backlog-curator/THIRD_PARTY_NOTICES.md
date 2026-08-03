@@ -5,7 +5,9 @@ This skill adapts behavioral workflows and concepts from the following open-sour
 ## gh-aw (ai-issue-triage)
 
 - **Repository**: https://github.com/github/gh-aw
-- **Revision**: main (July 2026)
+- **Imported revision**: `5adcdb6d4ec153409feab88c1688a9929fa07008`
+- **Imported on**: 2026-07-30
+- **Last checked against upstream**: 2026-08-03
 - **Author**: GitHub
 - **License**: MIT
 

@@ -5,6 +5,12 @@ metadata:
   scope: project
   role: foundation
   mutation: docs
+  upstream: https://github.com/mattpocock/skills
+  upstream-author: Matt Pocock
+  upstream-path: skills/engineering/domain-modeling
+  upstream-revision: ed37663cc5fbef691ddfecd080dff42f7e7e350d
+  upstream-checked: 2026-08-03
+  version: mattpocock-personal.1
 ---
 
 # Domain Model

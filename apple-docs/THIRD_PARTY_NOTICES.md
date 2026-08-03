@@ -4,6 +4,8 @@
 
 - Repository: https://github.com/Ahrentlov/apple-docs-skill
 - Imported commit: `c45f520e5c9ab8e4aabbeaa532b061ada06883ce`
+- Imported on: 2026-07-22
+- Last checked against upstream: 2026-08-03
 - Upstream version: `1.5.0`
 - License: MIT; see [LICENSE](LICENSE).
 
@@ -13,6 +15,7 @@ Architectural ideas for local Xcode documentation discovery were also reviewed f
 
 - Repository: https://github.com/Ahrentlov/appledeepdoc-mcp
 - Reviewed commit: `5087bd04fb0cf6cb5dda422dcda798506a678df4`
+- Last checked against upstream: 2026-08-03
 - License: MIT
 
 No FastMCP runtime or MCP server code is required by this skill.

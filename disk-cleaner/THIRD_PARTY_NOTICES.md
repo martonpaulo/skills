@@ -5,6 +5,7 @@
 - **Upstream repository:** https://github.com/gccszs/disk-cleaner
 - **Imported revision:** `b8e02ce23c3c05c9aea3f70810e83418794a49f6`
 - **Imported on:** 2026-07-25
+- **Last checked against upstream:** 2026-08-03
 - **Original authors:** Disk Cleaner Contributors
 - **License:** MIT, full text in `LICENSE`, preserved unchanged.
 

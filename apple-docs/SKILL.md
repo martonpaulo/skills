@@ -7,7 +7,10 @@ metadata:
   scope: project
   role: foundation
   mutation: none
-  author: Patrick Ahrentløv
+  upstream: https://github.com/Ahrentlov/apple-docs-skill
+  upstream-author: Patrick Ahrentløv
+  upstream-revision: c45f520e5c9ab8e4aabbeaa532b061ada06883ce
+  upstream-checked: 2026-08-03
   version: 1.5.0-personal.1
 ---
 

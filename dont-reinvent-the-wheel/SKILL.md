@@ -5,6 +5,11 @@ metadata:
   scope: project
   role: workflow
   mutation: none
+  upstream: https://github.com/felinto-dev/felinto-skills
+  upstream-author: felinto-dev
+  upstream-path: .agents/skills/dont-reinvent-the-wheel
+  upstream-revision: 8fde9cd3424e7fd612879e4d44c0680c834b68e9
+  upstream-checked: 2026-08-03
 ---
 
 # Don't Reinvent the Wheel

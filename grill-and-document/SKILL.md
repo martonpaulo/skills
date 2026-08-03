@@ -6,6 +6,12 @@ metadata:
   scope: project
   role: authoring
   mutation: docs
+  upstream: https://github.com/mattpocock/skills
+  upstream-author: Matt Pocock
+  upstream-path: skills/engineering/grill-with-docs
+  upstream-revision: ed37663cc5fbef691ddfecd080dff42f7e7e350d
+  upstream-checked: 2026-08-03
+  version: mattpocock-personal.1
 ---
 
 # Grill and Document

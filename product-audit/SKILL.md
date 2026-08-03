@@ -7,6 +7,10 @@ metadata:
   scope: project
   role: audit
   mutation: none
+  upstream: https://github.com/jakubkrehel/skills
+  upstream-author: Jakub Krehel
+  upstream-revision: 79a09456be60419e652e63fc9e057b5587d051ea
+  upstream-checked: 2026-08-03
 ---
 
 # Product Audit

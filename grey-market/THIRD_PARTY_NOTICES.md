@@ -6,6 +6,7 @@
 - **Upstream path:** `.agents/skills/grey-market`
 - **Imported revision:** `8fde9cd3424e7fd612879e4d44c0680c834b68e9`
 - **Imported on:** 2026-07-25
+- **Last checked against upstream:** 2026-08-03
 - **Original author:** felinto-dev
 - **License:** the upstream repository publishes no license file. This copy is kept for
   personal use with attribution to the original author. Do not redistribute it as an original

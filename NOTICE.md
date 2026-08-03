@@ -12,7 +12,7 @@ It does not, and cannot, relicense third-party work that this repository vendors
 
 | Upstream | Author | Upstream license | Applies to |
 | --- | --- | --- | --- |
-| [mattpocock/skills](https://github.com/mattpocock/skills) | Matt Pocock | MIT | `architecture-review`, `debug`, `domain-model`, `grill`, `grill-and-document`, `grilling`, `handoff`, `module-design`, `prototype`, `research`, `resolve-conflicts`, `setup-agent-docs`, `skill-authoring` |
+| [mattpocock/skills](https://github.com/mattpocock/skills) | Matt Pocock | MIT | `architecture-review`, `debug`, `domain-model`, `grill-and-document`, `grilling`, `handoff`, `module-design`, `prototype`, `research`, `resolve-conflicts`, `review-changes`, `setup-agent-docs`, `skill-authoring`, `test-design` |
 | [Ahrentlov/apple-docs-skill](https://github.com/Ahrentlov/apple-docs-skill) | Patrick Ahrentløv | MIT | `apple-docs` (vendored), `deep-docs` (adapted architecture) |
 | [Ahrentlov/appledeepdoc-mcp](https://github.com/Ahrentlov/appledeepdoc-mcp) | Patrick Ahrentløv | MIT | `deep-docs` (architecture reference only) |
 | [gccszs/disk-cleaner](https://github.com/gccszs/disk-cleaner) | Disk Cleaner Contributors | MIT | `disk-cleaner` (vendored) |
@@ -30,13 +30,24 @@ It does not, and cannot, relicense third-party work that this repository vendors
 | [github/spec-kit](https://github.com/github/spec-kit) | GitHub | MIT | `implement-issue` (design input only) |
 | [github/gh-aw](https://github.com/github/gh-aw) | GitHub | MIT | `backlog-curator` (behavioral reference only) |
 
-Where upstream code is vendored, that skill's directory keeps the upstream `LICENSE` file
-unchanged, alongside a `THIRD_PARTY_NOTICES.md` recording the imported revision and exactly what
-was changed.
+Every skill above keeps a `THIRD_PARTY_NOTICES.md` in its own directory recording the upstream
+repository, the pinned commit, the import date, the date of the last comparison against upstream,
+the author, the license, and exactly what was adapted, changed, and deliberately not carried. The
+same pin is mirrored in the skill's frontmatter as `upstream-revision` and `upstream-checked`.
+Where upstream code is vendored, that directory also keeps the upstream `LICENSE` file unchanged.
+
+A branch name is never recorded as a revision. See [Upstream provenance](README.md#upstream-provenance).
 
 ## Unlicensed upstream
 
-`dont-reinvent-the-wheel`, `grey-market`, `plan-issue`, `code-review`, and `implement-issue` derive partly from repositories that publish no license.
-The MIT grant in `LICENSE` **does not extend to the upstream material in those
-directories**. That permission is not mine to give. They are kept here for personal use, with
-attribution to the original author. Contact the original authors before reusing them.
+`code-review`, `dont-reinvent-the-wheel`, `grey-market`, `implement-issue`, and `plan-issue` derive
+partly from repositories that publish no license.
+
+The MIT grant in `LICENSE` **does not extend to the upstream material in those directories**. That
+permission is not mine to give. They are kept here for personal use, with attribution to the
+original author. Contact the original authors before reusing them.
+
+An absent license is not an obstacle to adapting the work, and several of these are by people I
+know. It only means the permission to relicense is theirs, so each of those skills states the
+situation plainly in its own `THIRD_PARTY_NOTICES.md` rather than being quietly folded into the
+MIT grant.

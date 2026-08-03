@@ -10,6 +10,8 @@ metadata:
   mutation: temporary
   upstream: https://github.com/codexstar69/bug-hunter
   upstream-author: codexstar69
+  upstream-revision: 8dedbbb10e93a3465e4549778587a4c40d0e673f
+  upstream-checked: 2026-08-03
   version: 3.1.0-personal.1
 ---
 

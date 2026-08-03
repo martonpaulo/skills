@@ -7,8 +7,11 @@ metadata:
   scope: project
   role: foundation
   mutation: none
-  upstream: https://github.com/upstash/context7/tree/master/skills/context7-cli
+  upstream: https://github.com/upstash/context7
   upstream-author: Upstash, Inc.
+  upstream-path: skills/context7-cli
+  upstream-revision: b250c2515694eee4b6df4db82fa056df9ed3e306
+  upstream-checked: 2026-08-03
   version: 0.5.6-personal.1
 ---
 

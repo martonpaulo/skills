@@ -6,6 +6,7 @@
 - **Upstream path:** `skills/engineering/tdd`
 - **Imported revision:** `2ab958093e83e0ec752e6c1c5932da465bf23e0c`
 - **Imported on:** 2026-08-03
+- **Last checked against upstream:** 2026-08-03
 - **Original author:** Matt Pocock
 - **License:** MIT, full text in [LICENSE](LICENSE), preserved unchanged.
 

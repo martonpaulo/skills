@@ -5,6 +5,7 @@
 - **Upstream repository:** https://github.com/codexstar69/bug-hunter
 - **Reviewed revision:** `8dedbbb10e93a3465e4549778587a4c40d0e673f`
 - **Upstream version:** `3.1.0`
+- **Last checked against upstream:** 2026-08-03
 - **Original author:** codexstar69
 - **License:** MIT, full text in `LICENSE`, preserved unchanged.
 

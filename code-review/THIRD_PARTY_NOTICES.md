@@ -5,7 +5,10 @@ This skill adapts workflows and concepts from the following open-source projects
 ## hermes-agent (github-code-review)
 
 - **Repository**: https://github.com/NousResearch/hermes-agent
-- **Revision**: main (July 2026)
+- **Upstream path**: `skills/github/github-code-review`
+- **Imported revision**: `cc4cab2f592e60a197e796506de9168f74baf3ea`
+- **Imported on**: 2026-07-30
+- **Last checked against upstream**: 2026-08-03
 - **Author**: Hermes Agent
 - **License**: MIT
 
@@ -16,7 +19,9 @@ This skill adapts workflows and concepts from the following open-source projects
 ## pr-reviewer-skill
 
 - **Repository**: https://github.com/SpillwaveSolutions/pr-reviewer-skill
-- **Revision**: main (July 2026)
+- **Imported revision**: `4aa1d9b3f6c1acc3b5876c8d8faa24b93af4c8c2`
+- **Imported on**: 2026-07-30
+- **Last checked against upstream**: 2026-08-03
 - **Author**: Claude Code / SpillwaveSolutions
 - **License**: None published in the repository.
 

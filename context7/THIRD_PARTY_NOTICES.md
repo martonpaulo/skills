@@ -7,6 +7,7 @@
 - **Reviewed revision:** `b250c2515694`
 - **Reviewed on:** 2026-07-26
 - **CLI version exercised:** `ctx7` 0.5.6
+- **Last checked against upstream:** 2026-08-03
 - **Original author:** Upstash, Inc.
 - **License:** MIT, copyright (c) 2021 Upstash, Inc. The upstream `LICENSE` is kept in this
   directory unchanged.

@@ -5,7 +5,10 @@ This skill adapts workflows and concepts from the following open-source project:
 ## superpowers (writing-plans)
 
 - **Repository**: https://github.com/obra/superpowers
-- **Revision**: main (July 2026)
+- **Upstream path**: `skills/writing-plans`
+- **Imported revision**: `44c9b2d6e889982ac18c27d05a19fefe335194e1`
+- **Imported on**: 2026-07-30
+- **Last checked against upstream**: 2026-08-03
 - **Author**: obra
 - **License**: None published in the specific directory, adapted for personal use.
 

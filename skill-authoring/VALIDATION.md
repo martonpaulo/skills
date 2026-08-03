@@ -19,6 +19,18 @@
 - Supporting files are relevant and reachable from a precise context pointer.
 - Examples clarify a real ambiguity.
 
+## Provenance
+
+Skip this section only for a skill written entirely from scratch.
+
+- `THIRD_PARTY_NOTICES.md` exists and names the repository, revision, author, and license.
+- The five `upstream-*` fields are present, with a full 40-character SHA and an ISO date.
+- `upstream` is a repository URL, not a `/tree/<branch>/` deep link. No branch name stands in for a revision anywhere.
+- `upstream-revision` is the SHA in the upstream repository, not the local baseline commit.
+- The notice says what was adapted, what changed, and what was deliberately not carried, and every claim in it matches the files actually present.
+- The upstream `LICENSE` is kept when code is vendored, and an unlicensed upstream is stated as such rather than covered by this repository's grant.
+- `NOTICE.md` and the README list this skill consistently.
+
 ## References and safety
 
 - Every relative link resolves.

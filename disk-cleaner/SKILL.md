@@ -9,6 +9,9 @@ metadata:
   mutation: approval-gated
   upstream: https://github.com/gccszs/disk-cleaner
   upstream-author: Disk Cleaner Contributors
+  upstream-path: skills/disk-cleaner
+  upstream-revision: b8e02ce23c3c05c9aea3f70810e83418794a49f6
+  upstream-checked: 2026-08-03
   version: 2.2.0-personal.1
 ---
 
