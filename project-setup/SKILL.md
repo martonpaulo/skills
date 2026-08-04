@@ -1,6 +1,6 @@
 ---
 name: project-setup
-description: Settle what a project is and then make its repository match: the product definition and its non-goals, followed by identity, Git and release policy, root AGENTS.md rules, CLAUDE.md alias, public documentation, licensing, ignore rules, GitHub metadata, and applicable CI or release foundations. Use only when the user explicitly asks to start a new personal project or adopt this complete baseline in an existing repository; do not use for ordinary implementation, a single documentation edit, specifying one feature, or artifact-path configuration alone.
+description: "Settle what a project is and then make its repository match: the product definition and its non-goals, followed by identity, Git and release policy, root AGENTS.md rules, CLAUDE.md alias, public documentation, licensing, ignore rules, GitHub metadata, and applicable CI or release foundations. Use only when the user explicitly asks to start a new personal project or adopt this complete baseline in an existing repository; do not use for ordinary implementation, a single documentation edit, specifying one feature, or artifact-path configuration alone."
 disable-model-invocation: true
 license: Apache-2.0
 metadata:

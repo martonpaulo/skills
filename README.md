@@ -77,6 +77,7 @@ reaching for directly when you already know what you want.
 | Quickly look up a library API                    | [`context7`](context7/)                               |
 | Pressure-test a plan through questions           | [`grilling`](grilling/)                               |
 | Clarify contradictory domain language            | [`domain-model`](domain-model/)                       |
+| Check the signature and branch naming rules      | [`github-conventions`](github-conventions/)           |
 | Answer a question by running a small experiment  | [`prototype`](prototype/)                             |
 | Create a continuation note for another session   | [`handoff`](handoff/)                                 |
 | Create, review, or simplify an Agent Skill       | [`skill-authoring`](skill-authoring/)                 |
@@ -183,8 +184,18 @@ Two consequences are load-bearing:
 * **Dependencies are read, not guessed.** `project-groom` builds its blocking order from
   GitHub's own `blockedBy` and `blocking` issue dependencies, not from sentences in issue bodies.
 
+* **The verdict is always published.** GitHub refuses a formal `APPROVE` on a pull request the
+  same account authored. That refuses the review *event*, not the review: `issue-review` posts the
+  same findings as a comment opening with `Approved ✅` or `Requested Changes 🔄`, and reports the
+  formal event as refused. A review that publishes nothing because the API said no is a failed
+  review.
+
 Every mutation is read back before it is reported. An issue, comment, review, or link exists when
 the API says it does, never because a command exited zero.
+
+Everything an agent publishes there is signed with the agent, model and reasoning level that wrote
+it, and every branch is named for the agent doing the work rather than for its worktree.
+[`github-conventions`](github-conventions/) owns both rules, and neither is a repository's to waive.
 
 
 <br />
@@ -276,6 +287,7 @@ They may be invoked directly, but their primary purpose is to support other skil
 | [`apple-docs`](apple-docs/)     | Model or user | `none`      | Research version-specific Apple platform behavior using Apple documentation, Swift Evolution, Xcode context, local Xcode documentation, HIG, WWDC, release notes, signing, and distribution sources. | [Ahrentlov/apple-docs-skill](https://github.com/Ahrentlov/apple-docs-skill)                                                                                                                    |
 | [`context7`](context7/)         | Model or user | `none`      | Quickly query library documentation through the Context7 index by resolving a library ID and querying one focused topic.                                                                             | [upstash/context7 → context7-cli](https://github.com/upstash/context7/tree/master/skills/context7-cli)                                                                                         |
 | [`deep-docs`](deep-docs/)       | Model or user | `none`      | Research version-specific documentation for non-Apple frameworks, SDKs, APIs, CLIs, and platforms using source-linked evidence.                                                                      | Written for this collection. Architecture adapted from [apple-docs-skill](https://github.com/Ahrentlov/apple-docs-skill) and [appledeepdoc-mcp](https://github.com/Ahrentlov/appledeepdoc-mcp) |
+| [`github-conventions`](github-conventions/) | Model or user | `none`      | Hold the rules every publishing skill follows: the agent signature that closes each published text, the branch naming scheme, and publishing a verdict the API refused as a formal review.            | Written for this collection                                                                                                                                                                   |
 | [`domain-model`](domain-model/) | Model or user | `docs`      | Resolve contradictory domain terminology, states, rules, and relationships.                                                                                                                          | [mattpocock/skills → domain-modeling](https://github.com/mattpocock/skills/tree/main/skills/engineering/domain-modeling)                                                                       |
 | [`grilling`](grilling/)         | Model or user | `none`      | Provide the shared interview discipline used by other skills: one decision at a time, always with a recommendation.                                                                                  | [mattpocock/skills → grilling](https://github.com/mattpocock/skills/tree/main/skills/productivity/grilling)                                                                                    |
 | [`prototype`](prototype/)       | Model or user | `temporary` | Run a disposable experiment when executing code provides stronger evidence than discussing possibilities.                                                                                            | [mattpocock/skills → prototype](https://github.com/mattpocock/skills/tree/main/skills/engineering/prototype)                                                                                   |
@@ -554,6 +566,12 @@ flowchart LR
 
   issue-review -.investigation discipline.-> grilling
 
+  issue-capture --> github-conventions
+  issue-plan --> github-conventions
+  issue-implement --> github-conventions
+  issue-review --> github-conventions
+  project-groom --> github-conventions
+
   project-groom --> issue-capture
   project-groom --> issue-plan
   project-groom -.unresolved consequential conflicts.-> grilling
@@ -623,6 +641,8 @@ A confirmed bug is handed to `diagnose-bug` only after the user selects it for i
 
 * `context7` is the fast path when an indexed snippet is sufficient
 * `deep-docs` takes over when an authoritative source is required or the library is not indexed
+
+`github-conventions` is unconditional for every skill that publishes on GitHub. It settles how a published text is signed, how a branch is named, and what happens when the API refuses a formal review event, so those three answers cannot drift apart across five skills.
 
 `issue-capture` uses `domain-model` or `research` only when ambiguity or missing evidence prevents the issue from being captured correctly.
 
