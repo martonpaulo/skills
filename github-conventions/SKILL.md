@@ -1,6 +1,6 @@
 ---
 name: github-conventions
-description: "Carries the conventions every skill must follow when it writes on GitHub: the agent signature that closes each published text, the branch naming scheme, and the rule that a review verdict is always published even when the API refuses the formal event. Invoked by issue-capture, issue-plan, issue-implement, issue-review and project-groom before they publish or branch, or directly when the owner asks what the signature or branch format is. Not for deciding what to write, reviewing code, or any GitHub read operation."
+description: "Carries the conventions every skill must follow when it writes on GitHub: the agent signature that closes each published text, the branch naming scheme, the rule that a review verdict is always published even when the API refuses the formal event, and where a temporary draft, diff or patch may live and when it is deleted. Invoked by issue-capture, issue-plan, issue-implement, issue-review and project-groom before they publish, branch, or write a scratch file, or directly when the owner asks what the signature or branch format is. Not for deciding what to write, reviewing code, or any GitHub read operation."
 metadata:
   scope: project
   role: foundation
@@ -92,3 +92,33 @@ a plain comment cannot anchor to the diff. The signature closes it as normal.
 Then report accurately: the findings were published as a comment, the formal review event was
 refused and why, and which separate reviewer action is still required. Never claim a formal
 approval GitHub rejected, and never let the refusal end with nothing published at all.
+
+## 4. Leave no temporary file behind
+
+Most of this needs no file at all. A body goes in through stdin, and a diff is read from the
+command that produced it:
+
+```bash
+gh issue create --title "<title>" --body-file - <<'MD'
+...
+MD
+
+gh pr diff <number> | less
+```
+
+Write a file only when the work genuinely needs one on disk: a large diff or patch to search
+repeatedly, a draft under revision before publication, or an intermediate the next command reads.
+When that happens:
+
+- it goes in a uniquely named system temporary directory, never in the repository, never in
+  `.scratch/`, and never beside the code;
+- it is deleted before the run reports completion, including on the paths where the run failed,
+  the user cancelled, or the publication was refused;
+- the completion report names what was created and confirms it is gone.
+
+`git status` is clean of agent scratch at the end of a run. A leftover `pr.diff`, `body.md`,
+`review.json` or `/tmp/patch-2` is a defect, not housekeeping someone else does later. Never
+answer a leftover by adding it to `.gitignore`: the file should not exist.
+
+The one exception is a durable artifact the owner asked for, such as a draft produced because
+GitHub was unreachable. That is the output of the run, so say where it is and leave it.
