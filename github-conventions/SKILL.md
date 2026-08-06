@@ -1,6 +1,6 @@
 ---
 name: github-conventions
-description: "Carries the conventions every skill must follow when it writes on GitHub: the agent signature that closes each published text, the branch naming scheme, the rule that a review verdict is always published even when the API refuses the formal event, and where a temporary draft, diff or patch may live and when it is deleted. Invoked by issue-capture, issue-plan, issue-implement, issue-review and project-groom before they publish, branch, or write a scratch file, or directly when the owner asks what the signature or branch format is. Not for deciding what to write, reviewing code, or any GitHub read operation."
+description: "Carries the conventions every skill must follow when it writes on GitHub: the agent signature that closes each published text, the branch naming scheme, the issue number carried at the end of a commit subject, merging without squashing, the rule that a review verdict is always published even when the API refuses the formal event, and where a temporary draft, diff or patch may live and when it is deleted. Invoked by issue-capture, issue-plan, issue-implement, issue-review and project-groom before they publish, branch, commit, merge, or write a scratch file, or directly when the owner asks what the signature, branch, commit or merge format is. Not for deciding what to write, reviewing code, or any GitHub read operation."
 metadata:
   scope: project
   role: foundation
@@ -9,10 +9,13 @@ metadata:
 
 # GitHub Conventions
 
-Three conventions bind every skill in this collection that publishes text on GitHub or creates a
-branch. They are the owner's rules, not a project's, so they apply to every repository and are not
-overridable by a repository that says nothing about them. A repository that states its own branch
-scheme wins on branch naming only; the signature is never optional.
+These conventions bind every skill in this collection that publishes text on GitHub, creates a
+branch, writes a commit, or merges one. They are the owner's rules, not a project's, so they apply
+to every repository and are not overridable by a repository that says nothing about them.
+
+The signature is never optional. Branch naming, the commit subject and the merge method describe
+artifacts the project owns, so a repository that documents its own scheme for one of them wins on
+that one alone. Silence is not a scheme, and neither is what a tool happened to do last time.
 
 ## 1. Sign every published text
 
@@ -71,7 +74,45 @@ them a reason to deviate. If a branch already exists under a generated name, ren
 (`git branch -m`) before pushing, or create the correctly named branch and push that one. "It is
 what the worktree is called" is not an exemption.
 
-## 3. Publish the verdict, even when the API refuses it
+## 3. End the commit subject with its issue number
+
+A commit made for an issue carries that issue's number at the end of its subject line, in
+parentheses:
+
+```
+feat: add the export button (#54)
+fix: stop the session expiring during upload (#107)
+```
+
+- The number is the **issue** number, not the pull request's. When a commit belongs to no issue, it
+  carries no suffix; do not invent one and do not substitute the PR number.
+- One suffix per subject. When a single commit genuinely closes two issues, use the one it is
+  primarily for and name the rest in the body.
+- The suffix is part of the subject, so the Conventional Commit type and the length budget still
+  apply: `<type>: <what changed> (#<issue>)`.
+- Commit messages are never signed, per the rule above. The suffix is not a signature; it is how a
+  commit stays traceable to its issue once the branch is gone.
+
+Closing keywords (`Closes #54`) belong in the pull request body, which is what actually closes the
+issue. The suffix does not replace them.
+
+## 4. Merge without squashing
+
+A branch merges into the default branch with all of its commits intact:
+
+```bash
+gh pr merge <number> --merge --delete-branch
+```
+
+Never `--squash`. The commits were written one per concern precisely so that history stays
+readable, and squashing discards that work along with every issue suffix except one. `--rebase` is
+acceptable when the repository states it, since it also preserves each commit; squashing is not,
+whatever the repository's GitHub settings still allow.
+
+When a repository's settings permit only squashing, that is a setting to fix, not a reason to
+squash. Report it instead of merging, unless the owner decides otherwise for that repository.
+
+## 5. Publish the verdict, even when the API refuses it
 
 GitHub rejects a formal `APPROVE` on a pull request the same account authored, and can reject a
 formal review event for other reasons. That is a rejection of the review *event*, never a reason
@@ -93,7 +134,7 @@ Then report accurately: the findings were published as a comment, the formal rev
 refused and why, and which separate reviewer action is still required. Never claim a formal
 approval GitHub rejected, and never let the refusal end with nothing published at all.
 
-## 4. Leave no temporary file behind
+## 6. Leave no temporary file behind
 
 Most of this needs no file at all. A body goes in through stdin, and a diff is read from the
 command that produced it:

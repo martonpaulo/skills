@@ -16,6 +16,8 @@
 - Commit policy: {{COMMIT_POLICY}}
 - Push policy: {{PUSH_POLICY}}
 - Product versioning: {{PRODUCT_VERSIONING_POLICY}}
+- Merge policy: merge commits only, every commit of the branch preserved. Never squash.
+- Commit subject: a commit made for an issue ends with `(#<issue number>)`.
 - Delete branches after merge: {{DELETE_BRANCH_ON_MERGE}}
 - Release, signing, and secret-storage policy: {{RELEASE_POLICY_OR_NOT_APPLICABLE}}
 
@@ -31,6 +33,20 @@ Treat these values as stable project decisions. Change an established identifier
 - Be direct and evidence-based. State assumptions, uncertainty, risks, tradeoffs, and blockers.
 - Ask only when a material decision cannot be discovered safely. Prefer explicit, reversible assumptions when enough context exists.
 - Give concise progress updates during long-running work.
+
+## Skills
+
+Skills this repository owns. Keep one line each: what it owns, when it applies, what it defers to.
+Remove an entry when its skill is gone; add one when a new skill is written.
+
+- `{{PROJECT_SKILL_NAME}}` — {{WHAT_IT_OWNS_AND_WHEN}}. Defers to: {{WHAT_IT_DEFERS_TO}}.
+
+Precedence: when a project skill and a general one both cover a task, the project skill owns the
+project-specific procedure and the general skill keeps the process around it. A task no project
+skill claims follows normal skill triggering. Two skills claiming the same job is a defect to
+resolve, not a preference to exercise per task.
+
+Delete this section when the repository owns no skills.
 
 ## Before editing
 
@@ -118,6 +134,8 @@ Treat these values as stable project decisions. Change an established identifier
 - Follow the recorded branch, commit, push, and version policies.
 - Check status and branch before editing and before the final report. Work only on task files and leave unrelated changes untouched.
 - Use Conventional Commits in English. Make one commit per concern: a small task usually has one; a large task may have several independent concerns. Do not split mechanically or combine unrelated changes.
+- End a commit subject with its issue number when the commit belongs to one: `feat: add the export button (#54)`. Use the issue number, never the pull request's, and leave the suffix off when there is no issue.
+- Merge a branch with all of its commits: `gh pr merge <number> --merge --delete-branch`. Never squash. Squashing discards the one-commit-per-concern history and every issue reference but one.
 - Inspect the diff before committing. Never commit secrets, caches, generated logs, temporary artifacts, or unrelated formatting churn.
 - Never force-push. If commit or push fails, report the exact failure without claiming success.
 - For a release, update the version and changelog, tag the published version, build from clean validated state, sign and verify applicable artifacts, validate install and update paths, then publish and verify download surfaces.

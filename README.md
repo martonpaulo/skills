@@ -27,7 +27,7 @@ flowchart LR
 
 | Skill | What it settles | When |
 | ----- | --------------- | ---- |
-| [`project-setup`](project-setup/)     | What the product is and never does, then identity, Git policy, versioning, licence, metadata | Once, first |
+| [`project-setup`](project-setup/)     | What the product is and never does, then identity, Git policy, versioning, licence, metadata, and which skill owns what | Install, adapt, or update |
 | [`project-groom`](project-groom/) | Duplicates, obsolete issues, taxonomy drift, blocking order across the backlog | Periodically |
 | [`project-audit`](project-audit/)     | Every applicable audit, merged into one ranked list                        | Periodically |
 | [`project-release`](project-release/) | Version, changelog, tag, publication                                       | When a version is due |
@@ -51,6 +51,12 @@ description and topics it needs are outputs of knowing what the product is. It i
 [`scaffold`](scaffold/) for a brand-new project with no source yet, which stays a separate skill
 because it downloads and executes third-party code and keeps its own refusal to run over an
 existing tree.
+
+It runs in one of three modes, detected from the repository rather than from the request: **install**
+a project from nothing, **adapt** one that already has its own conventions, or **update** one that
+already carries this baseline and wants only what changed since. Adapting includes the skills the
+repository already owns: setup inventories them, decides which one owns each task, and records that
+precedence instead of running a generic workflow past a project skill that already knew the answer.
 
 ### Everything else
 
@@ -77,7 +83,7 @@ reaching for directly when you already know what you want.
 | Quickly look up a library API                    | [`context7`](context7/)                               |
 | Pressure-test a plan through questions           | [`grilling`](grilling/)                               |
 | Clarify contradictory domain language            | [`domain-model`](domain-model/)                       |
-| Check the rules for signing, branching, cleanup  | [`github-conventions`](github-conventions/)           |
+| Check the rules for signing, branching, commits, merges, cleanup | [`github-conventions`](github-conventions/)  |
 | Answer a question by running a small experiment  | [`prototype`](prototype/)                             |
 | Create a continuation note for another session   | [`handoff`](handoff/)                                 |
 | Create, review, or simplify an Agent Skill       | [`skill-authoring`](skill-authoring/)                 |
@@ -194,10 +200,12 @@ Every mutation is read back before it is reported. An issue, comment, review, or
 the API says it does, never because a command exited zero.
 
 Everything an agent publishes there is signed with the agent, model and reasoning level that wrote
-it, every branch is named for the agent doing the work rather than for its worktree, and every
-draft, diff or patch written to disk along the way is deleted before the run reports completion.
-[`github-conventions`](github-conventions/) owns those rules, and none of them is a repository's to
-waive.
+it, every branch is named for the agent doing the work rather than for its worktree, every commit
+made for an issue ends its subject with `(#54)`, every branch merges with all of its commits instead
+of being squashed into one, and every draft, diff or patch written to disk along the way is deleted
+before the run reports completion. [`github-conventions`](github-conventions/) owns those rules. The
+signature is never a repository's to waive; the branch, commit and merge shapes yield only to a
+repository that documents its own.
 
 
 <br />
@@ -253,12 +261,12 @@ Setup skills establish repository-level conventions and operating rules.
 | Skill                                   | Invocation    | Mutation | What it does                                                                                                                  | Upstream                                                                                                                                   |
 | --------------------------------------- | ------------- | -------- | ----------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
 | [`scaffold`](scaffold/)       | User          | `write`  | Generate a brand-new project's initial source tree from a maintained scaffolder, then hand over to setup.                     | Written for this collection                                                                                                                |
-| [`project-setup`](project-setup/)       | User          | `write`  | Settle what the product is and never does, then align the repository's identity, rules, Git policy, metadata and foundations. | [product-on-purpose/pm-skills](https://github.com/product-on-purpose/pm-skills) (product-definition half only)                              |
+| [`project-setup`](project-setup/)       | User          | `write`  | Settle what the product is and never does, then align the repository's identity, rules, Git policy, metadata, foundations and skill ownership, whether installing, adapting or updating. | [product-on-purpose/pm-skills](https://github.com/product-on-purpose/pm-skills) (product-definition half only)                              |
 | [`setup-agent-docs`](setup-agent-docs/) | Model or user | `docs`   | Configure optional per-repository paths for glossaries, ADRs, research, handoffs, and prototypes.                             | [mattpocock/skills → setup-matt-pocock-skills](https://github.com/mattpocock/skills/tree/main/skills/engineering/setup-matt-pocock-skills) |
 
 `scaffold` runs first and only for a new project with no source yet. It generates code and nothing else; `project-setup` refuses to scaffold precisely so that running setup against a real codebase can never inject source into it.
 
-`project-setup` owns the repository's general operating model.
+`project-setup` owns the repository's general operating model, including which skill owns which task when the repository has skills of its own. It records that precedence and reports a skill the project needs and lacks; writing one is `skill-authoring`'s job, and no skill from this collection is ever copied into the target repository.
 
 When optional documentation paths are needed, it delegates that narrower configuration to `setup-agent-docs`.
 
@@ -289,7 +297,7 @@ They may be invoked directly, but their primary purpose is to support other skil
 | [`apple-docs`](apple-docs/)     | Model or user | `none`      | Research version-specific Apple platform behavior using Apple documentation, Swift Evolution, Xcode context, local Xcode documentation, HIG, WWDC, release notes, signing, and distribution sources. | [Ahrentlov/apple-docs-skill](https://github.com/Ahrentlov/apple-docs-skill)                                                                                                                    |
 | [`context7`](context7/)         | Model or user | `none`      | Quickly query library documentation through the Context7 index by resolving a library ID and querying one focused topic.                                                                             | [upstash/context7 → context7-cli](https://github.com/upstash/context7/tree/master/skills/context7-cli)                                                                                         |
 | [`deep-docs`](deep-docs/)       | Model or user | `none`      | Research version-specific documentation for non-Apple frameworks, SDKs, APIs, CLIs, and platforms using source-linked evidence.                                                                      | Written for this collection. Architecture adapted from [apple-docs-skill](https://github.com/Ahrentlov/apple-docs-skill) and [appledeepdoc-mcp](https://github.com/Ahrentlov/appledeepdoc-mcp) |
-| [`github-conventions`](github-conventions/) | Model or user | `none`      | Hold the rules every publishing skill follows: the agent signature closing each published text, the branch naming scheme, publishing a verdict the API refused as a formal review, and deleting every temporary draft, diff or patch.            | Written for this collection                                                                                                                                                                   |
+| [`github-conventions`](github-conventions/) | Model or user | `none`      | Hold the rules every publishing skill follows: the agent signature closing each published text, the branch naming scheme, the issue number ending a commit subject, merging without squashing, publishing a verdict the API refused as a formal review, and deleting every temporary draft, diff or patch.            | Written for this collection                                                                                                                                                                   |
 | [`domain-model`](domain-model/) | Model or user | `docs`      | Resolve contradictory domain terminology, states, rules, and relationships.                                                                                                                          | [mattpocock/skills → domain-modeling](https://github.com/mattpocock/skills/tree/main/skills/engineering/domain-modeling)                                                                       |
 | [`grilling`](grilling/)         | Model or user | `none`      | Provide the shared interview discipline used by other skills: one decision at a time, always with a recommendation.                                                                                  | [mattpocock/skills → grilling](https://github.com/mattpocock/skills/tree/main/skills/productivity/grilling)                                                                                    |
 | [`prototype`](prototype/)       | Model or user | `temporary` | Run a disposable experiment when executing code provides stronger evidence than discussing possibilities.                                                                                            | [mattpocock/skills → prototype](https://github.com/mattpocock/skills/tree/main/skills/engineering/prototype)                                                                                   |
@@ -506,6 +514,7 @@ flowchart LR
   project-setup -.current external evidence.-> research
   project-setup -.version-specific Apple setup.-> apple-docs
   project-setup -.version-specific non-Apple setup.-> deep-docs
+  project-setup -.a skill the project needs and lacks.-> skill-authoring
 
   grilling -.canonical term or hard-to-reverse decision.-> domain-model
 
@@ -568,6 +577,7 @@ flowchart LR
 
   issue-review -.investigation discipline.-> grilling
 
+  project-setup --> github-conventions
   issue-capture --> github-conventions
   issue-plan --> github-conventions
   issue-implement --> github-conventions
@@ -644,7 +654,7 @@ A confirmed bug is handed to `diagnose-bug` only after the user selects it for i
 * `context7` is the fast path when an indexed snippet is sufficient
 * `deep-docs` takes over when an authoritative source is required or the library is not indexed
 
-`github-conventions` is unconditional for every skill that publishes on GitHub. It settles how a published text is signed, how a branch is named, what happens when the API refuses a formal review event, and where a temporary draft or diff may live and when it is deleted, so those answers cannot drift apart across five skills.
+`github-conventions` is unconditional for every skill that publishes on GitHub. It settles how a published text is signed, how a branch is named, how a commit subject carries its issue number, that a branch merges with all of its commits rather than squashed, what happens when the API refuses a formal review event, and where a temporary draft or diff may live and when it is deleted, so those answers cannot drift apart across five skills.
 
 `issue-capture` uses `domain-model` or `research` only when ambiguity or missing evidence prevents the issue from being captured correctly.
 

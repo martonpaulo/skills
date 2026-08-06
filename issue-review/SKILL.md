@@ -116,6 +116,14 @@ Merge immediately or enable auto-merge only when:
 - no administrator bypass is required
 - the user did not request `--no-merge`
 
+Merge with all commits preserved, per [`github-conventions`](../github-conventions/SKILL.md):
+
+```bash
+gh pr merge <number> --merge --delete-branch
+```
+
+Never `--squash`. If the repository's settings permit no method that preserves the commits, stop before merging and report the setting rather than squashing to get the PR closed.
+
 Never merge after `REQUEST_CHANGES`, approve one SHA and merge another, bypass checks, dismiss valid reviews merely to merge, change production code, commit fixes, or claim a formal approval when GitHub rejected it.
 
 If GitHub prevents self-approval, publish the verdict as the comment described above, state what separate reviewer action is required, and do not claim the formal approval was submitted. When remote access is unavailable entirely, review locally and report findings without claiming published comments or approvals. Read the submitted review back before reporting success; a verdict is published only when the API says it is.
