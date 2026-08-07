@@ -1,6 +1,6 @@
 ---
 name: issue-review
-description: Perform the Validate SDD phase for exactly one pull request. Triggers when the user provides a PR number/URL to review.
+description: Perform the Validate SDD phase for exactly one issue's open pull request. Triggers when the user provides an issue number/URL to review.
 disable-model-invocation: true
 license: MIT
 metadata:
@@ -36,7 +36,7 @@ Distinguish verified facts, reasonable inferences, and unknowns in everything pu
 
 ## Workflow
 
-1. Resolve the exact repository and PR. Record the current head SHA before reviewing.
+1. Resolve the exact repository and issue. Find the one open pull request whose `closingIssuesReferences` includes it; stop and report if none or more than one match, per [github-api.md](references/github-api.md). Record the current head SHA before reviewing.
 2. Read the PR title, body, base/head branches, full commit list, complete diff, changed files in context, all issue comments, reviews, inline comments, review threads, and unresolved conversations.
 3. Read every explicitly linked issue and all of its comments. Reconstruct the controlling `Specify`, `Clarify`, `Plan`, and `Tasks`.
 4. Read root and applicable nested `AGENTS.md` files, relevant architecture, design, API, domain, security, test, and process documentation.
@@ -128,4 +128,4 @@ Never merge after `REQUEST_CHANGES`, approve one SHA and merge another, bypass c
 
 If GitHub prevents self-approval, publish the verdict as the comment described above, state what separate reviewer action is required, and do not claim the formal approval was submitted. When remote access is unavailable entirely, review locally and report findings without claiming published comments or approvals. Read the submitted review back before reporting success; a verdict is published only when the API says it is.
 
-For a diff that is not yet a pull request, use `review-changes` instead. This skill needs a PR to review and a place to publish the verdict.
+For a diff that is not yet a pull request, use `review-changes` instead. This skill needs an issue with exactly one open pull request that closes it, and a place to publish the verdict.

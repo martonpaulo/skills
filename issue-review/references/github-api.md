@@ -3,6 +3,23 @@
 Every command below was verified against `gh` and the GitHub API. Reach the API through the
 available native GitHub integration or `gh api`; they are transports for the same endpoints.
 
+## Resolve the pull request from the issue number
+
+The skill is invoked with an issue number, not a PR number. Find the open pull request that
+closes it:
+
+```bash
+gh pr list --state open --json number,title,closingIssuesReferences \
+  --jq '.[] | select(.closingIssuesReferences[]?.number == <issue-number>)'
+```
+
+Exactly one result is the expected case; use its `number` as `<number>` in every command below.
+
+- **Zero results** means no open PR currently closes this issue. Stop and report that
+  `issue-implement` has not opened one yet, rather than guessing at a draft or closed PR.
+- **More than one result** means multiple open PRs claim to close the same issue. Stop and report
+  the conflict; do not pick one without the user's direction.
+
 ## Read the pull request
 
 ```bash
