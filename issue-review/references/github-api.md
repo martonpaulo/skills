@@ -3,21 +3,28 @@
 Every command below was verified against `gh` and the GitHub API. Reach the API through the
 available native GitHub integration or `gh api`; they are transports for the same endpoints.
 
-## Resolve the pull request from the issue number
+## Resolve the pull request
 
-The skill is invoked with an issue number, not a PR number. Find the open pull request that
-closes it:
+When invoked with a PR number or URL, read that exact PR. When invoked with one or more issue
+numbers or URLs, find the unique open pull request that closes every supplied issue. For one issue:
 
 ```bash
 gh pr list --state open --json number,title,closingIssuesReferences \
   --jq '.[] | select(.closingIssuesReferences[]?.number == <issue-number>)'
 ```
 
-Exactly one result is the expected case; use its `number` as `<number>` in every command below.
+For several issues, require every number in the same result rather than resolving them
+independently and accidentally reviewing only one PR. Exactly one result is the expected case;
+use its `number` as `<number>` in every command below.
 
-- **Zero results** means no open PR currently closes this issue. Stop and report that
-  `issue-implement` has not opened one yet, rather than guessing at a draft or closed PR.
-- **More than one result** means multiple open PRs claim to close the same issue. Stop and report
+```bash
+gh pr list --state open --json number,title,closingIssuesReferences \
+  --jq '.[] | select(([.closingIssuesReferences[].number] | contains([3,53])))'
+```
+
+- **Zero results** means no one open PR closes the complete supplied issue set. Stop and report
+  the missing linkage rather than guessing at a draft, body mention, or closed PR.
+- **More than one result** means multiple open PRs claim the supplied issue set. Stop and report
   the conflict; do not pick one without the user's direction.
 
 ## Read the pull request
@@ -27,7 +34,10 @@ gh pr view <number> --json number,title,body,isDraft,baseRefName,headRefName,hea
 ```
 
 `headRefOid` is the head SHA. Record it before reviewing and compare it again before submitting.
-`closingIssuesReferences` gives the issues this PR closes, which is the controlling contract.
+`closingIssuesReferences` gives every issue this PR closes, which is the controlling contract.
+The set must be non-empty, contain every issue supplied by the user, and match the leading
+`Closes #N` lines in the body. GitHub interprets those keywords only when `baseRefName` is the
+repository's default branch.
 `mergeStateStatus` and `reviewDecision` decide whether merging is even possible.
 
 ```bash
@@ -127,6 +137,24 @@ gh pr view <number> --json reviewDecision,latestReviews,headRefOid
 
 A verdict is published only when the API reports it. If the head SHA moved between reviewing and
 submitting, the review is pinned to the wrong state: inspect the new commits and redo the verdict.
+
+After merging, verify the PR and every issue recorded before merge:
+
+```bash
+gh pr view <number> --json state,mergedAt,baseRefName,closingIssuesReferences
+gh issue view <issue-number> --json number,state,stateReason,url
+```
+
+GitHub normally auto-closes linked issues after merge to the default branch. If a recorded issue
+is still open, close it only after `mergedAt` is non-null, then read it back:
+
+```bash
+gh issue close <issue-number> --reason completed
+gh issue view <issue-number> --json number,state,stateReason,url
+```
+
+The merge workflow is complete only when every recorded issue reports `CLOSED`. If a close fails,
+report that the PR merged but name the exact issue whose closure remains incomplete.
 
 ## What makes a comment worth publishing
 

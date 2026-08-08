@@ -1,6 +1,6 @@
 ---
 name: project-groom
-description: Maintain the quality, consistency, and implementability of the repository's GitHub Issue backlog. Detects duplicates, obsolete issues, and delegates missing SDD phases to issue-capture or issue-plan. Closes with a Mermaid graph of the blocking order across open issues.
+description: Maintain the quality, consistency, and implementability of a repository's complete GitHub Issue backlog. Use when the user asks to groom the whole backlog for duplicates, obsolete issues, missing SDD phases, dependencies, or same-PR delivery groups. Closes with one Mermaid graph containing every considered open issue, including independent issues. Not for implementing code, reviewing pull requests, or handling only one issue.
 disable-model-invocation: true
 metadata:
   scope: project
@@ -19,7 +19,7 @@ Keep the whole backlog accurate and implementable. Operates across issues and de
 ## Workflow
 
 1. Read repository instructions, issue templates, existing labels, milestones, open issues, relevant recent closed issues, linked PRs, project documentation, and current code when necessary to verify obsolescence or dependencies.
-2. Build a backlog map containing type, area, priority, effort, SDD phase completeness, dependencies, blockers, overlap, conflicts, linked implementation, and possible obsolescence.
+2. Build a backlog map containing type, area, priority, effort, SDD phase completeness, dependencies, blockers, overlap, conflicts, same-PR candidates, linked implementation, and possible obsolescence.
 3. Use the repository's existing metadata taxonomy. Do not create a new label system without explicit authorization. When the repository has no convention of its own, audit against [LABELS.md](../issue-capture/LABELS.md): closed value sets for `type:`, `priority:`, `effort:`, `evidence:` and `status:`, an open set for `area:`.
 4. Detect strong duplicates, partial duplicates, overlapping scope, missing dependencies, conflicting requirements, stale decisions, issues already implemented, obsolete issues, and issues with missing Specify, Clarify, Plan, or Tasks.
 5. Refetch each issue before mutation to preserve concurrent edits and provenance.
@@ -27,7 +27,7 @@ Keep the whole backlog accurate and implementable. Operates across issues and de
 7. Use `grilling` for consequential conflicts that evidence cannot resolve.
 8. Delegate missing `Specify` or `Clarify` to `issue-capture`. Delegate missing `Plan` or `Tasks` to `issue-plan`.
 9. Keep comments sparse. Prefer updating the canonical issue body. Use comments for provenance, explicit supersession, duplicate resolution, cross-issue coordination, and unresolved human decisions.
-10. Close every pass with the dependency graph described in [DEPENDENCY-GRAPH.md](DEPENDENCY-GRAPH.md), covering the open issues the pass considered and reflecting the links applied during it.
+10. Close every pass with the dependency graph described in [DEPENDENCY-GRAPH.md](DEPENDENCY-GRAPH.md), including every open issue the pass considered, preserving independent issues as nodes, boxing coherent same-PR candidates, and reflecting the dependency links applied during it.
 
 ## Label migration
 
@@ -67,6 +67,7 @@ Close an issue as obsolete only when supported by concrete evidence (e.g. merged
 - close issues merely because they are old
 - invent product decisions
 - create generic Plan and Tasks for every issue in one pass
+- group issues into one pull request merely because they share an area, priority, or milestone
 - silently resolve contradictory requirements
 - overwrite recent human edits
 - create labels without authorization

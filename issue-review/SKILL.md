@@ -1,6 +1,6 @@
 ---
 name: issue-review
-description: Perform the Validate SDD phase for exactly one issue's open pull request. Triggers when the user provides an issue number/URL to review.
+description: Perform the Validate SDD phase for one open GitHub pull request against every issue it closes. Triggers when the user provides a pull request or one or more issue numbers or URLs whose implementation PR should be reviewed. Not for loose diffs, partial review, or reviewing issues that resolve to different pull requests.
 disable-model-invocation: true
 license: MIT
 metadata:
@@ -17,7 +17,9 @@ metadata:
 
 # Code Review
 
-Perform the SDD phase `Validate` for exactly one pull request. Verification means ensuring the implementation satisfies the linked issue, follows repository instructions, preserves outside behavior, has sufficient tests/evidence, and introduces no blocking defects.
+Perform the SDD phase `Validate` for exactly one pull request. Verification means ensuring the
+implementation satisfies every issue the PR closes, follows repository instructions, preserves
+outside behavior, has sufficient tests and evidence, and introduces no blocking defects.
 
 ## Sources of truth
 
@@ -36,9 +38,9 @@ Distinguish verified facts, reasonable inferences, and unknowns in everything pu
 
 ## Workflow
 
-1. Resolve the exact repository and issue. Find the one open pull request whose `closingIssuesReferences` includes it; stop and report if none or more than one match, per [github-api.md](references/github-api.md). Record the current head SHA before reviewing.
-2. Read the PR title, body, base/head branches, full commit list, complete diff, changed files in context, all issue comments, reviews, inline comments, review threads, and unresolved conversations.
-3. Read every explicitly linked issue and all of its comments. Reconstruct the controlling `Specify`, `Clarify`, `Plan`, and `Tasks`.
+1. Resolve the exact repository and one open pull request. Accept a PR directly, or find the unique open PR whose `closingIssuesReferences` contains every supplied issue; stop and report if none or more than one match, per [github-api.md](references/github-api.md). Record the current head SHA before reviewing.
+2. Read the PR title, body, base/head branches, full commit list, complete diff, changed files in context, all issue comments, reviews, inline comments, review threads, and unresolved conversations. Verify that the body starts with one `Closes #N` line per closing issue and that the PR targets the default branch.
+3. Read every issue in `closingIssuesReferences` and all of its comments. Reconstruct each controlling `Specify`, `Clarify`, `Plan`, and `Tasks`. An empty closing set or a supplied issue missing from it is a blocking contract defect.
 4. Read root and applicable nested `AGENTS.md` files, relevant architecture, design, API, domain, security, test, and process documentation.
 5. Inspect callers, tests, types, configuration, history, blame, and established patterns needed to evaluate the change.
 6. Run relevant local validation when practical. Inspect failed remote checks to determine if they are introduced by the PR, pre-existing, flaky, environmental, or unrelated.
@@ -96,7 +98,10 @@ Each names a feeling, not a failure. State what breaks, under which input or con
 
 ## Approval criteria
 
-Approve only when the PR satisfies the controlling issue, required acceptance criteria are met, no demonstrated blocking defect remains, repository rules are followed, validation is sufficient, and unresolved threads do not represent blocking work. Do not withhold approval for optional improvements.
+Approve only when the PR satisfies every issue in `closingIssuesReferences`, all required
+acceptance criteria are met, no demonstrated blocking defect remains, repository rules are
+followed, validation is sufficient, and unresolved threads do not represent blocking work. Do not
+withhold approval for optional improvements.
 
 ## Request Changes criteria
 
@@ -108,6 +113,7 @@ After submitting `APPROVE`, refetch the PR.
 Merge immediately or enable auto-merge only when:
 - the current head SHA is exactly the reviewed SHA
 - the PR is not a draft
+- the PR targets the default branch and `closingIssuesReferences` contains every intended issue
 - all required checks passed, or auto-merge can safely wait for them
 - no blocking review threads remain
 - no required reviewer is missing
@@ -124,8 +130,15 @@ gh pr merge <number> --merge --delete-branch
 
 Never `--squash`. If the repository's settings permit no method that preserves the commits, stop before merging and report the setting rather than squashing to get the PR closed.
 
-Never merge after `REQUEST_CHANGES`, approve one SHA and merge another, bypass checks, dismiss valid reviews merely to merge, change production code, commit fixes, or claim a formal approval when GitHub rejected it.
+Immediately after a successful merge, read every recorded closing issue back. If GitHub did not
+auto-close one, close it as `completed` and verify it is closed. This fallback is allowed only
+after the PR reports a successful merge and only for an issue the reviewed PR fully satisfied.
+Report a merge as incomplete when any intended issue remains open or its closure cannot be
+verified.
+
+Never merge after `REQUEST_CHANGES`, approve one SHA and merge another, bypass checks, dismiss valid reviews merely to merge, change production code, commit fixes, close an issue before merge, or claim a formal approval when GitHub rejected it.
 
 If GitHub prevents self-approval, publish the verdict as the comment described above, state what separate reviewer action is required, and do not claim the formal approval was submitted. When remote access is unavailable entirely, review locally and report findings without claiming published comments or approvals. Read the submitted review back before reporting success; a verdict is published only when the API says it is.
 
-For a diff that is not yet a pull request, use `review-changes` instead. This skill needs an issue with exactly one open pull request that closes it, and a place to publish the verdict.
+For a diff that is not yet a pull request, use `review-changes` instead. This skill needs exactly
+one open pull request, at least one issue it closes, and a place to publish the verdict.

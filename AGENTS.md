@@ -95,16 +95,18 @@ attribution files required when upstream work is adapted.
 
 Two prefixes describe **what a skill acts on**, not how important it is.
 
-`project-` acts on the whole project. `issue-` acts on exactly one issue, and those are the SDD
-phases in order: `issue-capture` (Specify, Clarify), `issue-plan` (Plan, Tasks),
-`issue-implement` (Implement), `issue-review` (Validate). The README lists the current members
-of both; do not restate them here, because that copy goes stale.
+`project-` acts on the whole project. `issue-` owns the issue-to-pull-request SDD flow:
+`issue-capture` and `issue-plan` each act on exactly one issue, `issue-implement` accepts any number
+of explicitly selected prepared issues and partitions them into coherent pull requests, and
+`issue-review` validates one pull request against every issue it closes. The README lists the
+current members of both prefixes; do not restate that list here, because a second catalog goes
+stale.
 
-The prefix is a scope claim, so it has to stay true. A skill joins `issue-` only if it refuses to
-operate on more than one issue, and joins `project-` only if its unit of work really is the whole
-project. Do not prefix a skill because it feels central, and do not prefix one that a prefixed
-skill can already reach by delegation: `scaffold` is invoked by `project-setup` and stays
-unprefixed, as does everything in the audit and foundation sets.
+The prefix is a scope claim, so it has to stay true. A skill joins `issue-` only when its unit of
+work is an explicit issue set and its delivery pull requests, and joins `project-` only if its unit
+of work really is the whole project. Do not prefix a skill because it feels central, and do not
+prefix one that a prefixed skill can already reach by delegation: `scaffold` is invoked by
+`project-setup` and stays unprefixed, as does everything in the audit and foundation sets.
 
 ### Directory layout
 

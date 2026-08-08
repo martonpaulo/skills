@@ -1,6 +1,6 @@
 interface:
   display_name: "Implement Issue"
-  short_description: "Implement one prepared issue end to end"
-  default_prompt: "Use $issue-implement to implement this prepared issue."
+  short_description: "Implement prepared issues in coherent PRs"
+  default_prompt: "Use $issue-implement to implement these prepared issues in the smallest coherent pull request set."
 policy:
   allow_implicit_invocation: false

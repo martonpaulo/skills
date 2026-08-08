@@ -1,6 +1,6 @@
 ---
 name: github-conventions
-description: "Carries the conventions every skill must follow when it writes on GitHub: the agent signature that closes each published text, the branch naming scheme, the issue number carried at the end of a commit subject, merging without squashing, the rule that a review verdict is always published even when the API refuses the formal event, and where a temporary draft, diff or patch may live and when it is deleted. Invoked by issue-capture, issue-plan, issue-implement, issue-review and project-groom before they publish, branch, commit, merge, or write a scratch file, or directly when the owner asks what the signature, branch, commit or merge format is. Not for deciding what to write, reviewing code, or any GitHub read operation."
+description: "Carries the conventions every skill must follow when it writes on GitHub: the agent signature, branch and commit naming, the leading Closes lines in every pull request body, verified issue closure after merge, merging without squashing, review-event fallback, and temporary-file cleanup. Invoked by issue-capture, issue-plan, issue-implement, issue-review and project-groom before they publish, branch, commit, merge, or write a scratch file, or directly when the owner asks what the signature, branch, commit, pull request, or merge format is. Not for deciding product scope, reviewing code, or any GitHub read operation."
 metadata:
   scope: project
   role: foundation
@@ -93,10 +93,35 @@ fix: stop the session expiring during upload (#107)
 - Commit messages are never signed, per the rule above. The suffix is not a signature; it is how a
   commit stays traceable to its issue once the branch is gone.
 
-Closing keywords (`Closes #54`) belong in the pull request body, which is what actually closes the
-issue. The suffix does not replace them.
+The suffix does not replace the pull request closing block below.
 
-## 4. Merge without squashing
+## 4. Start every pull request body with its closing block
+
+The first line of every pull request body is `Closes #<number>`. Use one separate line for every
+issue the pull request fully resolves, with no bullet, heading, or prose before it:
+
+```markdown
+Closes #3
+Closes #53
+
+## Problem
+...
+```
+
+One resolved issue means one line. Multiple resolved issues mean multiple consecutive lines.
+Never compress them into a comma-separated sentence, and never add a `Closes` line for an issue
+whose acceptance criteria the pull request does not satisfy. For an issue in another repository,
+use the full `Closes owner/repository#N` syntax on its own line.
+
+The pull request must target the repository's default branch for GitHub to interpret these
+keywords, create the links, and auto-close the issues on merge, as documented in
+[Linking a pull request to an issue](https://docs.github.com/en/issues/tracking-your-work-with-issues/using-issues/linking-a-pull-request-to-an-issue).
+After creating or editing the pull request, read `closingIssuesReferences`: it must contain every
+intended issue and no unintended issue. Fix the body before review when the set differs. The
+explanatory sections follow the closing block, and the agent signature remains the final line of
+the body.
+
+## 5. Merge without squashing and verify closure
 
 A branch merges into the default branch with all of its commits intact:
 
@@ -112,7 +137,15 @@ whatever the repository's GitHub settings still allow.
 When a repository's settings permit only squashing, that is a setting to fix, not a reason to
 squash. Report it instead of merging, unless the owner decides otherwise for that repository.
 
-## 5. Publish the verdict, even when the API refuses it
+Before merging, record the complete `closingIssuesReferences` set and verify that the PR targets
+the default branch. After a successful merge, read every recorded issue back. GitHub normally
+auto-closes linked issues, but a repository can disable that setting under
+[Managing the automatic closing of issues](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/managing-repository-settings/managing-auto-closing-issues).
+If any intended issue is still open after the merge, close it as `completed` and verify the
+resulting state. Never close an issue before the merge succeeds, and never report the merge
+workflow complete while an intended issue remains open without an explicit closure error.
+
+## 6. Publish the verdict, even when the API refuses it
 
 GitHub rejects a formal `APPROVE` on a pull request the same account authored, and can reject a
 formal review event for other reasons. That is a rejection of the review *event*, never a reason
@@ -134,7 +167,7 @@ Then report accurately: the findings were published as a comment, the formal rev
 refused and why, and which separate reviewer action is still required. Never claim a formal
 approval GitHub rejected, and never let the refusal end with nothing published at all.
 
-## 6. Leave no temporary file behind
+## 7. Leave no temporary file behind
 
 Most of this needs no file at all. A body goes in through stdin, and a diff is read from the
 command that produced it:

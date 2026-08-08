@@ -10,9 +10,10 @@ Every upstream project is credited below. If a skill is useful, credit belongs t
 
 ## 🧭 Start here
 
-Two prefixes carry the work you do every day. `project-` acts on the whole project, `issue-` acts
-on one issue. Everything else stays directly invocable, and the prefixed skills reach for it on
-their own when a step needs it.
+Two prefixes carry the work you do every day. `project-` acts on the whole project; `issue-` acts
+on explicit issues and carries compatible prepared issues into coherent pull requests for
+implementation and validation. Everything else stays directly invocable, and the prefixed skills
+reach for it on their own when a step needs it.
 
 ```mermaid
 flowchart LR
@@ -32,7 +33,7 @@ flowchart LR
 | [`project-audit`](project-audit/)     | Every applicable audit, merged into one ranked list                        | Periodically |
 | [`project-release`](project-release/) | Version, changelog, tag, publication                                       | When a version is due |
 
-### `issue-` acts on one issue
+### `issue-` carries issues into pull requests
 
 The four SDD phases, in order.
 
@@ -40,8 +41,8 @@ The four SDD phases, in order.
 | ----- | ----- | --------------- |
 | [`issue-capture`](issue-capture/)     | Specify + Clarify | One request becomes one canonical issue |
 | [`issue-plan`](issue-plan/)           | Plan + Tasks      | The approach, the tasks, the effort |
-| [`issue-implement`](issue-implement/) | Implement         | The code, tests, docs, and the pull request |
-| [`issue-review`](issue-review/)       | Validate          | The formal verdict on that pull request |
+| [`issue-implement`](issue-implement/) | Implement         | Any number of prepared issues become the smallest coherent pull request set |
+| [`issue-review`](issue-review/)       | Validate          | The formal verdict against every issue that pull request closes |
 
 Ordinary delivery is three calls, not four: `issue-implement` writes the plan itself through
 `issue-plan` when the issue is small and stops for your read when it is not.
@@ -140,7 +141,8 @@ It reviews the complete backlog for:
 
 When an issue has not completed a required phase, `project-groom` delegates that work to the skill that owns it.
 
-Its final output includes a dependency graph showing the order in which issues should be handled.
+Its final output includes every considered issue in one dependency graph, including independent
+issues, and boxes together issues that can be closed by the same pull request.
 
 ### Issue labels
 
@@ -190,6 +192,10 @@ Two consequences are load-bearing:
 * **Dependencies are read, not guessed.** `project-groom` builds its blocking order from
   GitHub's own `blockedBy` and `blocking` issue dependencies, not from sentences in issue bodies.
 
+* **Pull requests close their full issue set.** Every pull request body starts with one
+  `Closes #N` line per issue it resolves. Before merge, the API must report every intended issue
+  in `closingIssuesReferences`; after merge, every one is read back as closed.
+
 * **The verdict is always published.** GitHub refuses a formal `APPROVE` on a pull request the
   same account authored. That refuses the review *event*, not the review: `issue-review` posts the
   same findings as a comment opening with `Approved ✅` or `Requested Changes 🔄`, and reports the
@@ -201,11 +207,12 @@ the API says it does, never because a command exited zero.
 
 Everything an agent publishes there is signed with the agent, model and reasoning level that wrote
 it, every branch is named for the agent doing the work rather than for its worktree, every commit
-made for an issue ends its subject with `(#54)`, every branch merges with all of its commits instead
-of being squashed into one, and every draft, diff or patch written to disk along the way is deleted
-before the run reports completion. [`github-conventions`](github-conventions/) owns those rules. The
-signature is never a repository's to waive; the branch, commit and merge shapes yield only to a
-repository that documents its own.
+made for an issue ends its subject with `(#54)`, every pull request starts with its complete block
+of `Closes` lines, every branch merges with all of its commits instead of being squashed into one,
+and every draft, diff or patch written to disk along the way is deleted before the run reports
+completion. [`github-conventions`](github-conventions/) owns those rules. The signature is never a
+repository's to waive; the branch, commit and merge shapes yield only to a repository that
+documents its own.
 
 
 <br />
@@ -272,15 +279,18 @@ When optional documentation paths are needed, it delegates that narrower configu
 
 ### Issue pipeline
 
-The four `issue-` skills move one issue from an initial request to a validated pull request, one SDD phase each. `project-groom` sits with them because it works on issues, but across the whole backlog rather than on one.
+The four `issue-` skills move requests from canonical issues to validated pull requests, one SDD
+phase each. Capture and planning stay one issue at a time; implementation accepts any number of
+prepared issues and partitions them into the smallest coherent PR set, and validation covers every
+issue each PR closes. `project-groom` sits with them because it works across the whole backlog.
 
 | Skill                                 | Invocation    | Mutation | What it does                                                                                                                  | Upstream                                                                                                                                                                      |
 | ------------------------------------- | ------------- | -------- | ----------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | [`issue-capture`](issue-capture/)     | Model or user | `write`  | Convert one problem or request into one canonical GitHub Issue. Owns Specify, Clarify, and the default label taxonomy.        | Written for this collection                                                                                                                                                   |
 | [`issue-plan`](issue-plan/)           | User          | `write`  | Produce the implementation architecture, strategy, executable tasks, dependencies, and effort estimate for exactly one issue. | [obra/superpowers](https://github.com/obra/superpowers)                                                                                                                       |
-| [`issue-implement`](issue-implement/) | User          | `write`  | Implement exactly one prepared GitHub Issue, including code, tests, documentation, and validation evidence.                   | [openclaw/openclaw](https://github.com/openclaw/openclaw), [github/spec-kit](https://github.com/github/spec-kit) |
-| [`issue-review`](issue-review/)         | User          | `write`  | Validate exactly one pull request against its controlling issue and repository rules.                                         | [NousResearch/hermes-agent](https://github.com/NousResearch/hermes-agent), [SpillwaveSolutions/pr-reviewer-skill](https://github.com/SpillwaveSolutions/pr-reviewer-skill)    |
-| [`project-groom`](project-groom/) | User          | `write`  | Review the complete backlog for duplicates, obsolete issues, taxonomy drift, missing phases, and dependencies.                | [github/gh-aw](https://github.com/github/gh-aw), behavioral reference                                                                                                         |
+| [`issue-implement`](issue-implement/) | User          | `write`  | Implement any number of prepared GitHub Issues, combining only compatible issues into each coherent pull request.               | [openclaw/openclaw](https://github.com/openclaw/openclaw), [github/spec-kit](https://github.com/github/spec-kit) |
+| [`issue-review`](issue-review/)         | User          | `write`  | Validate one pull request against every issue it closes and the repository rules.                                              | [NousResearch/hermes-agent](https://github.com/NousResearch/hermes-agent), [SpillwaveSolutions/pr-reviewer-skill](https://github.com/SpillwaveSolutions/pr-reviewer-skill)    |
+| [`project-groom`](project-groom/) | User          | `write`  | Review the complete backlog and graph every issue, dependency, and coherent same-PR delivery group.                           | [github/gh-aw](https://github.com/github/gh-aw), behavioral reference                                                                                                         |
 
 Each issue-level skill owns a narrow part of the workflow.
 
@@ -297,7 +307,7 @@ They may be invoked directly, but their primary purpose is to support other skil
 | [`apple-docs`](apple-docs/)     | Model or user | `none`      | Research version-specific Apple platform behavior using Apple documentation, Swift Evolution, Xcode context, local Xcode documentation, HIG, WWDC, release notes, signing, and distribution sources. | [Ahrentlov/apple-docs-skill](https://github.com/Ahrentlov/apple-docs-skill)                                                                                                                    |
 | [`context7`](context7/)         | Model or user | `none`      | Quickly query library documentation through the Context7 index by resolving a library ID and querying one focused topic.                                                                             | [upstash/context7 → context7-cli](https://github.com/upstash/context7/tree/master/skills/context7-cli)                                                                                         |
 | [`deep-docs`](deep-docs/)       | Model or user | `none`      | Research version-specific documentation for non-Apple frameworks, SDKs, APIs, CLIs, and platforms using source-linked evidence.                                                                      | Written for this collection. Architecture adapted from [apple-docs-skill](https://github.com/Ahrentlov/apple-docs-skill) and [appledeepdoc-mcp](https://github.com/Ahrentlov/appledeepdoc-mcp) |
-| [`github-conventions`](github-conventions/) | Model or user | `none`      | Hold the rules every publishing skill follows: the agent signature closing each published text, the branch naming scheme, the issue number ending a commit subject, merging without squashing, publishing a verdict the API refused as a formal review, and deleting every temporary draft, diff or patch.            | Written for this collection                                                                                                                                                                   |
+| [`github-conventions`](github-conventions/) | Model or user | `none`      | Hold the rules every publishing skill follows: signatures, branches, commit issue numbers, leading PR closing lines, verified issue closure after merge, merge method, review fallback, and temporary files. | Written for this collection |
 | [`domain-model`](domain-model/) | Model or user | `docs`      | Resolve contradictory domain terminology, states, rules, and relationships.                                                                                                                          | [mattpocock/skills → domain-modeling](https://github.com/mattpocock/skills/tree/main/skills/engineering/domain-modeling)                                                                       |
 | [`grilling`](grilling/)         | Model or user | `none`      | Provide the shared interview discipline used by other skills: one decision at a time, always with a recommendation.                                                                                  | [mattpocock/skills → grilling](https://github.com/mattpocock/skills/tree/main/skills/productivity/grilling)                                                                                    |
 | [`prototype`](prototype/)       | Model or user | `temporary` | Run a disposable experiment when executing code provides stronger evidence than discussing possibilities.                                                                                            | [mattpocock/skills → prototype](https://github.com/mattpocock/skills/tree/main/skills/engineering/prototype)                                                                                   |
@@ -654,7 +664,11 @@ A confirmed bug is handed to `diagnose-bug` only after the user selects it for i
 * `context7` is the fast path when an indexed snippet is sufficient
 * `deep-docs` takes over when an authoritative source is required or the library is not indexed
 
-`github-conventions` is unconditional for every skill that publishes on GitHub. It settles how a published text is signed, how a branch is named, how a commit subject carries its issue number, that a branch merges with all of its commits rather than squashed, what happens when the API refuses a formal review event, and where a temporary draft or diff may live and when it is deleted, so those answers cannot drift apart across five skills.
+`github-conventions` is unconditional for every skill that publishes on GitHub. It settles how a
+published text is signed, how a branch is named, how a commit subject carries its issue number,
+how a PR body starts with the issues it closes, how closure is verified after merge, that commits
+are not squashed, what happens when the API refuses a formal review event, and where temporary
+files may live, so those answers cannot drift apart across five skills.
 
 `issue-capture` uses `domain-model` or `research` only when ambiguity or missing evidence prevents the issue from being captured correctly.
 
@@ -662,7 +676,9 @@ A confirmed bug is handed to `diagnose-bug` only after the user selects it for i
 
 It may also use specialized architecture, research, reuse, or prototyping skills when those capabilities are directly relevant to the implementation plan.
 
-`issue-implement` may use specialized workflows such as `diagnose-bug`, `module-design`, `prototype`, or `resolve-conflicts`, but only when they directly support implementation of the single prepared issue.
+`issue-implement` may use specialized workflows such as `diagnose-bug`, `module-design`,
+`prototype`, or `resolve-conflicts`, but only when they directly support the selected prepared
+issues and their coherent pull request groups.
 
 `project-groom` delegates incomplete issue phases to `issue-capture` or `issue-plan`.
 

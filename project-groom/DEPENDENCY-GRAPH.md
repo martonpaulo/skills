@@ -1,7 +1,8 @@
 # Dependency Graph
 
-The closing output of every curation pass: one Mermaid block, a short legend, then the table of
-issues that have no blocking relationship. The block encodes blocking order and nothing else.
+The closing output of every curation pass: one Mermaid block and a short legend. The block contains
+every open issue considered, including issues with no blocking relationship. Edges encode blocking
+order; rectangular group boxes encode sets that can be closed by the same pull request.
 
 ## Block structure
 
@@ -14,7 +15,7 @@ flowchart TD
 - No `%%` comments anywhere in the block. The `%%{init}%%` line above is a configuration
   directive, not a comment, and stays.
 - Strip accents and diacritics from every label. They break the import in some renderers.
-- Node id is `N<zero-padded number>`.
+- Node id is `N<number>`, using the issue number exactly as GitHub displays it.
 
 ## Node label
 
@@ -22,11 +23,10 @@ An identity block, a blank line, then the labels. Lines break on `<br/>` and the
 `<br/><br/>`; `\n` does nothing inside a Mermaid label.
 
 ```
-N091["#091<br/>Workspace passa a aceitar de um a quatro panes<br/><br/>type: feature<br/>priority: P1<br/>effort: L"]
+N91["#91<br/>Workspace passa a aceitar de um a quatro panes<br/><br/>type: feature<br/>priority: P1<br/>effort: L"]
 ```
 
-- The number, zero-padded to three digits (`#003`, `#021`, `#245`). Past three digits, every
-  digit is kept as it is (`#2952`).
+- The number with no leading zeros (`#3`, `#21`, `#245`, `#2952`).
 - A short description written by the agent in the language of the conversation, saying what the
   issue *does* rather than repeating its title.
 - Then, after the blank line, one line each for `type:`, `priority:`, `effort:`, `evidence:` and
@@ -46,7 +46,7 @@ earn their place when they are there: an issue nobody has confirmed and an issue
 human are both bad places to start, and the graph is where somebody decides where to start.
 
 ```
-N073(["#073<br/>Import perde a ultima coluna quando o arquivo termina sem newline<br/><br/>type: bug<br/>priority: P1<br/>evidence: likely<br/>status: needs-decision"])
+N73(["#73<br/>Import perde a ultima coluna quando o arquivo termina sem newline<br/><br/>type: bug<br/>priority: P1<br/>evidence: likely<br/>status: needs-decision"])
 ```
 
 Neither one gets a colour or a marker of its own, and `evidence:` gets no shape either. Colour is
@@ -63,7 +63,7 @@ backlog open anyway.
 
 - Solid `-->` only for real blocking order: the source must land before the target.
 - Dashed `-.->` with an inline label only for cycles that must be broken before anyone starts:
-  `N073 -.->|"cycle, #070 lists Move pane but #073 says it comes after #070"| N070`.
+  `N73 -.->|"cycle, #70 lists Move pane but #73 says it comes after #70"| N70`.
 - Nothing else becomes an edge. Coordination, overlap, supersession, duplicates, conflicts and
   umbrella issues belong in the written report; as edges they make the graph unreadable.
 - Never add an edge to make the graph connected.
@@ -129,59 +129,56 @@ Collapse the unused steps and always land the darkest class on the highest count
 present, so the top of the scale is the root of the backlog rather than a fixed number. The
 legend states the exact count behind each step it used.
 
-## Grouping
+## Coverage and pull request groups
 
-**Only issues with at least one edge go in the block.** An issue with no blocking relationship in
-either direction is not part of a dependency graph; it is a row in the table below it.
+Every open issue considered by the pass appears exactly once as a node in the Mermaid block.
+Never omit an issue because it has no incoming or outgoing dependency edge. An independent issue
+stays as a loose node unless it belongs to a real same-PR group.
 
-This is what keeps the graph readable as the backlog grows. `flowchart TD` puts every node that
-waits for nobody on the same top rank, so a few dozen unconnected issues line up beside the real
-roots and push the connected pairs metres apart, and the edges then run the whole width of the
-canvas to reach each other. The connected structure is small and roughly constant; the
-unconnected set grows with the backlog. Leaving them in means the thing worth reading is always
-the thing hardest to see.
+Put two or more issues inside a rectangular Mermaid `subgraph` when they can be implemented,
+validated, and closed by one coherent pull request:
 
-Fencing them in a subgraph does not fix it. Forty loose boxes inside a box are still forty loose
-boxes, and the rule against subgraphs exists because every earlier attempt at grouping made the
-graph worse.
+```mermaid
+subgraph PR1["Same PR: preserve workspace layout"]
+  direction LR
+  N3["#3<br/>Persist pane sizes<br/><br/>type: feature<br/>priority: P1<br/>effort: S"]
+  N53["#53<br/>Restore pane sizes<br/><br/>type: bug<br/>priority: P1<br/>effort: S"]
+end
+style PR1 fill:#f6f8fa,stroke:#6e7781,stroke-width:1px,stroke-dasharray:4 3
+```
 
-So, still no subgraphs at all: not by area, not by epic, not by milestone, and not for the
-unconnected issues either. Every node in the block sits loose on the canvas, and every node in
-the block has an edge.
+The box means **same pull request candidate**, never dependency. Draw every real dependency as an
+edge even when both nodes share a box, and never add an edge merely to keep grouped nodes beside
+each other. Name the box for the shared outcome in the language of the conversation, not `Group
+1`, and use `direction LR` so its issues sit side by side when the renderer permits it.
 
-The unconnected issues are never dropped, only moved. They go into a table immediately after the
-legend, ordered by `priority:` and then by `effort:`, one row each:
+Group only when one implementation boundary, owner, and validation story can satisfy every
+issue's acceptance criteria without making the pull request harder to review. Shared area,
+priority, milestone, or timing is not enough. A group is a delivery recommendation, not a promise:
+the implementation skill may split it when the code proves the boundary false.
 
-| Issue | Does | type | priority | effort | Ready |
-| --- | --- | --- | --- | --- | --- |
-| `#030` | Stops pane zoom from stealing the browser zoom keys | bug | P1 | M | yes |
-| `#044` | Lifts notices out of the layout into an overlay | improvement | P1 | | not planned |
-
-`Ready` follows the same rule as the shape: `yes` for an issue with an `effort:` and no `status:`,
-otherwise the reason, `not planned` or the `status:` value. Sorted this way the table answers
-"what can I start right now" better than a scatter of boxes ever did, which is the question those
-nodes were on the canvas to answer.
-
-Say the count in one line above the table. A backlog where that table is much longer than the
-graph is telling you something true about the backlog, not about the graph.
+An issue belongs to at most one same-PR group. Leave it loose when membership is ambiguous. Do not
+create subgraphs for area, epic, milestone, dependency component, or all independent issues;
+those boxes would imply a same-PR relationship that does not exist. Do not nest group boxes.
 
 ## Legend
 
-Two or three lines of prose after the block, in this order:
+Three or four lines of prose after the block, in this order:
 
 1. what the shapes mean: rectangle ready, stadium not ready,
 2. the color scale with the exact dependent count of each step,
-3. where to start: the root that unblocks the most, and any cycle that has to be broken first.
+3. what each rectangular group box means: its issues can close through one coherent pull request,
+4. where to start: the root that unblocks the most, and any cycle that has to be broken first.
    Say so in that same line when that root carries `status:` or a non-`confirmed` `evidence:`,
    because then the real first move is unblocking it or verifying it.
 
-Nothing longer. The findings are already in the report above it. The table of unconnected issues
-comes after this, with its one line of count.
+Nothing longer. The findings are already in the report above it.
 
 ## When the graph gets too big
 
-Simplify the single graph instead of splitting it: remove everything that is not a blocking
-dependency and shorten the labels. Never emit a high-level graph plus per-component graphs.
+Simplify the single graph instead of splitting it: shorten labels and remove nonessential prose
+around it. Never remove independent issues, invent dependencies, or group unrelated issues to
+reduce the node count. Never emit a high-level graph plus per-component graphs.
 
 If it is still too big after that, the graph is not the problem. A backlog whose blocking
 structure genuinely does not fit on a canvas has too many declared dependencies, and saying that

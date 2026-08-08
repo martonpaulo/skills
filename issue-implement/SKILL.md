@@ -1,6 +1,6 @@
 ---
 name: issue-implement
-description: Perform the Implement SDD phase for exactly one prepared issue. Triggers when the user provides an issue number/URL to implement.
+description: Perform the Implement SDD phase for any number of prepared GitHub Issues, combining only issues that form one coherent change into the same pull request. Triggers when the user provides one or more issue numbers or URLs to implement. Not for unprepared issues, unrelated work disguised as one pull request, or validating and merging the resulting pull requests.
 disable-model-invocation: true
 metadata:
   scope: project
@@ -14,24 +14,27 @@ metadata:
 
 # Implement Issue
 
-Perform the SDD phase `Implement` for exactly one prepared issue.
+Perform the SDD phase `Implement` for any non-empty set of prepared issues. Partition the selected
+issues into the smallest coherent pull request set: combine issues that share one implementation
+and validation boundary, and keep unrelated work separate.
 
 ## Workflow
 
-1. Resolve the current repository and exact issue.
-2. Read the issue body, all comments, linked issues/PRs, applicable repository instructions, current code, tests, documentation, and relevant Git history.
-3. Confirm the issue contains implementation-safe `Specify`, `Clarify`, `Plan`, and proportional `Tasks`. Do not silently invent a missing product decision.
-4. When preparation is insufficient, identify the exact missing phase or decision and resolve it through [Missing preparation](#missing-preparation) before writing any code.
-5. Check Git status, current branch, base branch, remotes, repository policy, existing issue branches, and existing PRs.
-6. Route specialized work only when applicable: `diagnose-bug`, `domain-model`, `module-design`, `research`, `prototype`, `build-or-reuse`, `resolve-conflicts`. Keep issue ownership and scope inside `issue-implement`.
-7. Implement the smallest coherent solution satisfying the issue. Preserve behavior outside scope.
-8. Update focused tests and canonical documentation with the change.
-9. Run the narrowest relevant validation first, expanding validation according to risk and repository guidance.
-10. Update completed Tasks only after evidence exists. Refetch the issue before editing its body or comments.
-11. Inspect the final diff to ensure no unrelated changes, temporary artifacts, secrets, generated logs, or accidental formatting churn are included.
-12. Commit according to repository policy using focused Conventional Commits, each subject ending with the issue number as `(#<number>)` per [`github-conventions`](../github-conventions/SKILL.md). Push normally when authorized.
-13. When using a PR workflow, open a PR that targets the correct base branch, links the issue, and explains the problem, implementation, impact, tests, docs, and risk. Open as ready when validation passes, or draft if a real blocker remains.
-14. If publication is unavailable, finish local work and provide branch, commit, validation results, remaining blockers, and a ready-to-use PR handoff.
+1. Resolve the current repository and every explicitly requested issue. Deduplicate the set while preserving the user's order; the first issue in each delivery group is its primary issue for branch naming.
+2. Read every selected issue body, all comments, linked issues/PRs, applicable repository instructions, current code, tests, documentation, and relevant Git history.
+3. Confirm each issue contains implementation-safe `Specify`, `Clarify`, `Plan`, and proportional `Tasks`. Do not silently invent a missing product decision.
+4. When preparation is insufficient, identify the exact missing phase or decision per issue and resolve it through [Missing preparation](#missing-preparation) before writing code for that issue.
+5. Partition the selected issues into delivery groups. Preserve a same-PR group proposed by `project-groom` only when code inspection confirms one implementation boundary, owner, and validation story can satisfy every acceptance criterion. Split the group when that evidence fails. Never combine issues merely because they share an area, priority, milestone, or release.
+6. For each delivery group, check Git status, current branch, base branch, remotes, repository policy, existing issue branches, and existing PRs. Reuse the one existing branch or PR that already represents the exact group; never create a duplicate.
+7. Route specialized work only when applicable: `diagnose-bug`, `domain-model`, `module-design`, `research`, `prototype`, `build-or-reuse`, `resolve-conflicts`. Keep issue ownership and selected scope inside `issue-implement`.
+8. Implement the smallest coherent solution satisfying every issue in the current delivery group. Preserve behavior outside the selected scope.
+9. Update focused tests and canonical documentation with the change.
+10. Run the narrowest relevant validation first, expanding validation according to risk and repository guidance.
+11. Update completed Tasks only after evidence exists. Refetch every affected issue before editing its body or comments.
+12. Inspect each final diff to ensure no unrelated changes, temporary artifacts, secrets, generated logs, or accidental formatting churn are included.
+13. Commit according to repository policy using focused Conventional Commits. End each subject with the issue number that commit primarily implements as `(#<number>)`; name any other issues it materially serves in the commit body, per [`github-conventions`](../github-conventions/SKILL.md). Push normally when authorized.
+14. When using a PR workflow, open or update one PR per delivery group. Target the default branch, begin the body with one `Closes #<number>` line for every issue the PR fully resolves, then explain the problem, implementation, impact, tests, docs, and risk. Open as ready when every issue in the group is complete and validation passes, or draft if a real blocker remains.
+15. If publication is unavailable, finish local work and provide every branch, commit, issue set, validation result, remaining blocker, and ready-to-use PR handoff.
 
 ## Missing preparation
 
@@ -72,8 +75,9 @@ boundary moved, duplication collapsed. Three rules apply to that part specifical
   derived definitions, guarded branches, dynamic resolution, tests, fixtures, examples, and
   documentation first. Removing something an audit merely listed as a candidate is not evidence.
 
-If the restructuring turns out to be larger than the issue, stop and say so. Widening the scope of
-one issue is how a reviewable change becomes an unreviewable one.
+If the restructuring turns out to be larger than the selected delivery group, stop and say so.
+Widening a coherent group after implementation starts is how a reviewable change becomes an
+unreviewable one.
 
 ## GitHub is the only platform
 
@@ -87,7 +91,17 @@ gh pr create --base <base> --head <branch> --title "<title>" --body-file -
 gh pr view <number> --json number,url,isDraft,closingIssuesReferences
 ```
 
-The link between a PR and its issue is made by a closing keyword in the PR body (`Closes #<number>`), not by mentioning the number in the title. Verify it landed: `closingIssuesReferences` must contain the issue. An empty array means the PR is not linked and merging it will not close the issue.
+The PR body begins with one closing keyword per fully resolved issue, before any heading or prose:
+
+```markdown
+Closes #3
+Closes #53
+```
+
+Mentioning an issue in the title does not link it. After creating or updating the PR, verify that
+`closingIssuesReferences` contains every issue in the delivery group and no unintended issue. An
+empty or incomplete array means the PR is not ready: merging it will not close the missing issues.
+Do not add a closing line for a grouped issue whose implementation or validation is unfinished.
 
 The PR body states the problem, the implementation, the impact, the tests run with their results, the documentation touched, and the residual risk. A PR body that only repeats the issue title is not a description.
 
@@ -107,7 +121,7 @@ If `AGENTS.md` requires implementation directly on `main` or another named integ
 - do not open a PR unless explicitly asked by the user
 
 **Working through branches:**
-If the repository requires or permits issue branches, follow its naming policy. When it states none, the scheme in [`github-conventions`](../github-conventions/SKILL.md) applies and is not optional:
+If the repository requires or permits issue branches, follow its naming policy. When it states none, the scheme in [`github-conventions`](../github-conventions/SKILL.md) applies and uses the delivery group's primary issue:
 
 `<type>/<agent>/issue-<NNN>/<short-description>`, for example `feature/claude/issue-024/add-button`.
 
@@ -124,7 +138,8 @@ The name the worktree, the harness, or a previous session gave the branch is not
 - review, approve, request changes on, or merge its own PR
 - manually close the issue before merge
 - invent missing Specify or Clarify decisions
-- implement multiple unrelated issues
+- combine unrelated issues in one branch or pull request
+- add `Closes` for an issue the pull request does not fully resolve
 - create duplicate branches or PRs
 - force-push or bypass branch protection
 - carry another repository's specific rules into this one
