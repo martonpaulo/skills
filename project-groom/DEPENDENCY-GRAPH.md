@@ -93,10 +93,29 @@ with an incoming edge, and it reads correctly: prepared, waiting its turn.
 
 ## Color
 
-Color encodes **how many issues depend on it**, never how many it waits for. It has to read as
-an ordered scale at a glance, so it walks one continuous path, green to teal to blue to indigo
-to purple, getting darker at every step, with the border thickening along with it. Two channels
-in the same direction, which survives a grayscale print and a dark theme:
+Color encodes **how many unique issues depend on it directly or indirectly**, never how many it
+waits for. This transitive dependent count answers which issue has the greatest total downstream
+unlock reach, not only which issue has the most immediate children.
+
+For each issue, follow the real dependency relation from that issue to every issue it blocks,
+then continue through everything those issues block. Count the unique reachable issues and exclude
+the starting issue itself:
+
+```
+transitiveDependents(issue) = union of every reachable downstream issue
+dependentCount(issue) = size(transitiveDependents(issue) - {issue})
+```
+
+For `#3 --> #2 --> #1`, the counts are `#3 = 2`, `#2 = 1`, `#1 = 0`. In a diamond where
+`#4` reaches `#1` through both `#2` and `#3`, the count for `#4` is `3`, not `4`: count `#1`
+once because path count is not issue count.
+Compute from GitHub's complete `blockedBy` and `blocking` relation before choosing solid or dashed
+edge styles. In a cycle, use the unique reachable set and still exclude the starting issue, so a
+node is never counted as its own dependent.
+
+The ordered scale has to read at a glance, so it walks one continuous path, green to teal to blue
+to indigo to purple, getting darker at every step, with the border thickening along with it. Two
+channels move in the same direction, which survives a grayscale print and a dark theme:
 
 ```
 classDef d0 fill:#cdeac0,stroke:#7cb342,stroke-width:1px,color:#1b5e20
@@ -121,13 +140,13 @@ they are wrong twice over: they claim urgency the count does not carry, and they
 
 **The label colour palette does not apply here.** The colours in
 [LABELS.md](../issue-capture/LABELS.md) dress GitHub label chips, where family means dimension.
-This block colours by dependent count, which is not a label dimension at all. Colouring nodes by
-`type:` or `priority:` would spend the graph's only ordered channel on something already written
-inside every node, and lose the one fact the graph exists to show.
+This block colours by transitive dependent count, which is not a label dimension at all. Colouring
+nodes by `type:` or `priority:` would spend the graph's only ordered channel on something already
+written inside every node, and lose the one fact the graph exists to show.
 
-Collapse the unused steps and always land the darkest class on the highest count actually
-present, so the top of the scale is the root of the backlog rather than a fixed number. The
-legend states the exact count behind each step it used.
+Collapse the unused steps and always land the darkest class on the highest transitive count
+actually present, so the top of the scale is the root with the greatest total downstream reach
+rather than a fixed number. The legend states the exact transitive count behind each step it used.
 
 ## Coverage and pull request groups
 
@@ -166,7 +185,7 @@ those boxes would imply a same-PR relationship that does not exist. Do not nest 
 Three or four lines of prose after the block, in this order:
 
 1. what the shapes mean: rectangle ready, stadium not ready,
-2. the color scale with the exact dependent count of each step,
+2. the color scale with the exact direct-plus-indirect dependent count of each step,
 3. what each rectangular group box means: its issues can close through one coherent pull request,
 4. where to start: the root that unblocks the most, and any cycle that has to be broken first.
    Say so in that same line when that root carries `status:` or a non-`confirmed` `evidence:`,
