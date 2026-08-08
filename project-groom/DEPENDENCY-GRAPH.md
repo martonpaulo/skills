@@ -29,30 +29,28 @@ N91["#91<br/>Workspace passa a aceitar de um a quatro panes<br/><br/>type: featu
 - The number with no leading zeros (`#3`, `#21`, `#245`, `#2952`).
 - A short description written by the agent in the language of the conversation, saying what the
   issue *does* rather than repeating its title.
-- Then, after the blank line, one line each for `type:`, `priority:`, `effort:`, `evidence:` and
-  `status:`, in that order, carrying the issue's real label values.
+- Then, after the blank line, one line each for `type:`, `priority:`, `effort:` and `status:`, in
+  that order, carrying the issue's real label values.
 
 Drop a line entirely when the issue does not carry that label, rather than printing an empty or
 invented value. An issue with no `effort:` yet is an issue nobody has planned, and the graph
 should show that gap instead of papering over it. The taxonomy behind these values is the one
 [`issue-capture` documents](../issue-capture/LABELS.md).
 
-**`area:` never appears.** Every issue carries several, they are the longest lines in the node,
-and they are the one dimension nobody reads off a blocking graph. Filter by area in the issue
-list, where the filter exists.
+**`area:` and `evidence:` never appear.** Area labels are long and already filterable in the issue
+list. Evidence remains part of backlog analysis and written findings, but do not render its label
+or value in the Mermaid block or legend.
 
-`evidence:` and `status:` are absent on most issues, so the common node stays three lines. They
-earn their place when they are there: an issue nobody has confirmed and an issue waiting on a
-human are both bad places to start, and the graph is where somebody decides where to start.
+`status:` is absent on most issues, so the common node stays three lines. It earns its place when
+present because an issue waiting on a human is a bad place to start.
 
 ```
-N73(["#73<br/>Import perde a ultima coluna quando o arquivo termina sem newline<br/><br/>type: bug<br/>priority: P1<br/>evidence: likely<br/>status: needs-decision"])
+N73(["#73<br/>Import perde a ultima coluna quando o arquivo termina sem newline<br/><br/>type: bug<br/>priority: P1<br/>status: needs-decision"])
 ```
 
-Neither one gets a colour or a marker of its own, and `evidence:` gets no shape either. Colour is
-the dependent count and shape is readiness; a third visual channel makes the graph unreadable,
-which is the reason most things here are text lines. `status:` reaches the shape only because it
-is one of the two things that make an issue unstartable, not as a channel of its own.
+`status:` gets no colour or marker of its own. Colour is the dependent count and shape is
+readiness. `status:` reaches the shape only because it is one of the two things that make an issue
+unstartable, not as a channel of its own.
 
 ## No links
 
@@ -187,9 +185,9 @@ Three or four lines of prose after the block, in this order:
 1. what the shapes mean: rectangle ready, stadium not ready,
 2. the color scale with the exact direct-plus-indirect dependent count of each step,
 3. what each rectangular group box means: its issues can close through one coherent pull request,
-4. where to start: the root that unblocks the most, and any cycle that has to be broken first.
-   Say so in that same line when that root carries `status:` or a non-`confirmed` `evidence:`,
-   because then the real first move is unblocking it or verifying it.
+4. where to start: the root that unblocks the most, and any cycle that has to be broken first. Say
+   so in that same line when that root carries `status:`, because then the real first move is
+   unblocking it.
 
 Nothing longer. The findings are already in the report above it.
 

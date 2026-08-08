@@ -27,7 +27,7 @@ Keep the whole backlog accurate and implementable. Operates across issues and de
 7. Use `grilling` for consequential conflicts that evidence cannot resolve.
 8. Delegate missing `Specify` or `Clarify` to `issue-capture`. Delegate missing `Plan` or `Tasks` to `issue-plan`.
 9. Keep comments sparse. Prefer updating the canonical issue body. Use comments for provenance, explicit supersession, duplicate resolution, cross-issue coordination, and unresolved human decisions.
-10. Close every pass with the dependency graph described in [DEPENDENCY-GRAPH.md](DEPENDENCY-GRAPH.md), including every open issue the pass considered, preserving independent issues as nodes, boxing coherent same-PR candidates, and reflecting the dependency links applied during it.
+10. Close every pass with the dependency graph described in [DEPENDENCY-GRAPH.md](DEPENDENCY-GRAPH.md), including every open issue the pass considered, preserving independent issues as nodes, boxing coherent same-PR candidates, reflecting the dependency links applied during it, and never rendering `evidence:` in a node or legend.
 
 ## Label migration
 
