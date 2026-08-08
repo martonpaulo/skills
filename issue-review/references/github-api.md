@@ -10,15 +10,25 @@ Parse the command before calling GitHub:
 | Invocation | Meaning | Lookup |
 | --- | --- | --- |
 | `/issue-review 123` | Issue `#123` | Find the unique open PR that closes it |
+| `/issue-review https://github.com/acme/app/issues/123` | Exact issue and repository | Find its unique open closing PR |
 | `/issue-review pr 456` | Pull request `#456` | Read PR `#456` directly |
+| `/issue-review https://github.com/acme/app/pull/456` | Exact PR and repository | Read that PR directly |
+| `/issue-review pr https://github.com/acme/app/pull/456` | Exact PR and repository | Read that PR directly |
 
 A bare number is always an issue number. Never query a same-numbered PR as a fallback when issue
-resolution returns zero results.
+resolution returns zero results. A URL is self-describing: `/issues/N` selects an issue and
+`/pull/N` selects a PR. Treat its host, owner, repository, and number as authoritative. Reject an
+issue URL after `pr` and any URL with neither route.
 
-For `/issue-review <issue-number>`, find the open pull request that closes the issue:
+After resolution, retain `<repository>` as `[HOST/]OWNER/REPO` and use it in every high-level
+`gh` command below. A direct URL must never degrade into a same-number lookup in the current
+repository. API calls use the corresponding `<owner>` and `<repo>` explicitly.
+
+For an issue number or URL, resolve `<repository>` from the current repository or the URL, then
+find the open pull request that closes `<issue-number>`:
 
 ```bash
-gh pr list --state open --json number,title,closingIssuesReferences \
+gh pr list -R <repository> --state open --json number,title,closingIssuesReferences \
   --jq '.[] | select(.closingIssuesReferences[]?.number == <issue-number>)'
 ```
 
@@ -29,19 +39,20 @@ Exactly one result is the expected case; use its `number` as `<number>` in every
 - **More than one result** means multiple open PRs claim the supplied issue. Stop and report
   the conflict; do not pick one without the user's direction.
 
-For `/issue-review pr <pull-request-number>`, read that exact PR and require it to be open:
+For `pr <pull-request-number-or-url>` or a direct pull request URL, read that exact PR and require
+it to be open:
 
 ```bash
-gh pr view <pull-request-number> --json number,state
+gh pr view <pull-request-number-or-url> --json number,state
 ```
 
-Stop when it does not exist or its state is not `OPEN`. Do not reinterpret the PR number as an
-issue number.
+Stop when it does not exist or its state is not `OPEN`. Do not reinterpret a PR number as an issue
+number, and do not replace a PR URL's repository with the current repository.
 
 ## Read the pull request
 
 ```bash
-gh pr view <number> --json number,title,body,isDraft,baseRefName,headRefName,headRefOid,mergeable,mergeStateStatus,reviewDecision,latestReviews,commits,files,labels,closingIssuesReferences,comments
+gh pr view <number> -R <repository> --json number,title,body,isDraft,baseRefName,headRefName,headRefOid,mergeable,mergeStateStatus,reviewDecision,latestReviews,commits,files,labels,closingIssuesReferences,comments
 ```
 
 `headRefOid` is the head SHA. Record it before reviewing and compare it again before submitting.
@@ -52,9 +63,9 @@ invocation, it must contain the supplied issue. GitHub interprets those keywords
 `mergeStateStatus` and `reviewDecision` decide whether merging is even possible.
 
 ```bash
-gh pr diff <number>                 # the diff under review
-gh pr diff <number> --name-only     # changed paths, for scoping
-gh pr checks <number>               # check runs, to tell introduced failures from pre-existing
+gh pr diff <number> -R <repository>                 # the diff under review
+gh pr diff <number> -R <repository> --name-only     # changed paths, for scoping
+gh pr checks <number> -R <repository>               # check runs, to tell introduced failures from pre-existing
 ```
 
 ## Read existing review threads
@@ -125,7 +136,7 @@ carries no inline comments, because they cannot anchor any.
 as a PR comment whose first line is the verdict:
 
 ```bash
-gh pr comment <number> --body-file - <<'MD'
+gh pr comment <number> -R <repository> --body-file - <<'MD'
 Approved ✅
 
 What was verified, and why this verdict follows.
@@ -143,7 +154,7 @@ refused; never report it as submitted.
 ## Verify, then report
 
 ```bash
-gh pr view <number> --json reviewDecision,latestReviews,headRefOid
+gh pr view <number> -R <repository> --json reviewDecision,latestReviews,headRefOid
 ```
 
 A verdict is published only when the API reports it. If the head SHA moved between reviewing and
@@ -152,18 +163,19 @@ submitting, the review is pinned to the wrong state: inspect the new commits and
 After merging, verify the PR and every issue recorded before merge:
 
 ```bash
-gh pr view <number> --json state,mergedAt,baseRefName,closingIssuesReferences
-gh issue view <issue-number> --json number,state,stateReason,url
+gh pr view <number> -R <repository> --json state,mergedAt,baseRefName,closingIssuesReferences
+gh issue view <issue-url> --json number,state,stateReason,url
 ```
 
 GitHub normally auto-closes linked issues after merge to the default branch. If a recorded issue
 is still open, close it only after `mergedAt` is non-null, then read it back:
 
 ```bash
-gh issue close <issue-number> --reason completed
-gh issue view <issue-number> --json number,state,stateReason,url
+gh issue close <issue-url> --reason completed
+gh issue view <issue-url> --json number,state,stateReason,url
 ```
 
+Use each closing reference's canonical issue URL so a cross-repository closing line stays exact.
 The merge workflow is complete only when every recorded issue reports `CLOSED`. If a close fails,
 report that the PR merged but name the exact issue whose closure remains incomplete.
 

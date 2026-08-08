@@ -1,7 +1,7 @@
 ---
 name: issue-review
-description: Perform the Validate SDD phase for one open GitHub pull request against every issue it closes. Invoke as `/issue-review <issue-number>` to resolve the PR from an issue, or `/issue-review pr <pull-request-number>` to review that exact PR. A bare number always means an issue; the `pr` prefix is required for a PR number. Not for loose diffs, partial review, or reviewing several pull requests at once.
-argument-hint: "<issue-number> | pr <pull-request-number>"
+description: Perform the Validate SDD phase for one open GitHub pull request against every issue it closes. Invoke `/issue-review` with an issue number or direct issue URL to resolve its PR, a direct PR URL, or `pr <pull-request-number-or-url>` for an explicit PR target. A bare number always means an issue; the `pr` prefix is required only for a PR number. Not for loose diffs, partial review, or reviewing several pull requests at once.
+argument-hint: "<issue-number-or-url> | pr <pr-number-or-url> | <pr-url>"
 disable-model-invocation: true
 license: MIT
 metadata:
@@ -24,16 +24,21 @@ outside behavior, has sufficient tests and evidence, and introduces no blocking 
 
 ## Invocation
 
-Accept exactly these numeric forms:
+Accept these issue and pull request forms:
 
 ```text
 /issue-review 123
+/issue-review https://github.com/acme/app/issues/123
 /issue-review pr 456
+/issue-review https://github.com/acme/app/pull/456
+/issue-review pr https://github.com/acme/app/pull/456
 ```
 
 - Treat `123` as issue `#123`, then resolve the unique open PR that closes it.
-- Treat `pr 456` as pull request `#456` and read that PR directly.
+- Treat an `/issues/123` URL as that exact issue, including its repository.
+- Treat `pr 456`, a `/pull/456` URL, or `pr <pull-url>` as that exact pull request.
 - Never probe both namespaces or reinterpret a bare number as a PR when issue resolution fails.
+- Reject an issue URL after `pr`, malformed URLs, and URLs whose path is neither `/issues/N` nor `/pull/N`.
 
 ## Sources of truth
 
@@ -52,7 +57,7 @@ Distinguish verified facts, reasonable inferences, and unknowns in everything pu
 
 ## Workflow
 
-1. Resolve the exact repository and parse the invocation before any lookup. For `/issue-review <issue-number>`, find the unique open PR whose `closingIssuesReferences` contains that issue. For `/issue-review pr <pull-request-number>`, read that exact PR. Stop on a missing, closed, or ambiguous target per [github-api.md](references/github-api.md). Record the current head SHA before reviewing.
+1. Parse the invocation before any lookup. Resolve a bare number or `/issues/` URL as an issue and find its unique open closing PR. Resolve `pr <number-or-pull-url>` or a direct `/pull/` URL as that exact PR. Treat a URL's repository as authoritative. Stop on a malformed, missing, closed, or ambiguous target per [github-api.md](references/github-api.md). Record the current head SHA before reviewing.
 2. Read the PR title, body, base/head branches, full commit list, complete diff, changed files in context, all issue comments, reviews, inline comments, review threads, and unresolved conversations. Verify that the body starts with one `Closes #N` line per closing issue and that the PR targets the default branch.
 3. Read every issue in `closingIssuesReferences` and all of its comments. Reconstruct each controlling `Specify`, `Clarify`, `Plan`, and `Tasks`. An empty closing set is a blocking contract defect. For issue-form invocation, the supplied issue missing from that set is also blocking.
 4. Read root and applicable nested `AGENTS.md` files, relevant architecture, design, API, domain, security, test, and process documentation.
@@ -139,7 +144,7 @@ Merge immediately or enable auto-merge only when:
 Merge with all commits preserved, per [`github-conventions`](../github-conventions/SKILL.md):
 
 ```bash
-gh pr merge <number> --merge --delete-branch
+gh pr merge <number> -R <repository> --merge --delete-branch
 ```
 
 Never `--squash`. If the repository's settings permit no method that preserves the commits, stop before merging and report the setting rather than squashing to get the PR closed.

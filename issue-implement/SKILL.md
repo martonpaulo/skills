@@ -1,6 +1,7 @@
 ---
 name: issue-implement
-description: Perform the Implement SDD phase for any number of prepared GitHub Issues, combining only issues that form one coherent change into the same pull request. Triggers when the user provides one or more issue numbers or URLs to implement. Not for unprepared issues, unrelated work disguised as one pull request, or validating and merging the resulting pull requests.
+description: Perform the Implement SDD phase for any number of prepared GitHub Issues, combining only issues that form one coherent change into the same pull request. Invoke `/issue-implement` with one or more issue numbers or direct GitHub issue URLs. Not for unprepared issues, cross-repository issue sets, unrelated work disguised as one pull request, or validating and merging the resulting pull requests.
+argument-hint: "<issue-number-or-url>..."
 disable-model-invocation: true
 metadata:
   scope: project
@@ -18,9 +19,24 @@ Perform the SDD phase `Implement` for any non-empty set of prepared issues. Part
 issues into the smallest coherent pull request set: combine issues that share one implementation
 and validation boundary, and keep unrelated work separate.
 
+## Invocation
+
+Accept one or more issue numbers, direct GitHub issue URLs, or a mixture of both:
+
+```text
+/issue-implement 12 34
+/issue-implement https://github.com/acme/app/issues/12
+/issue-implement 12 https://github.com/acme/app/issues/34
+```
+
+Every target must resolve to the same repository. Treat each URL's host, owner, repository, and
+issue number as authoritative. Reject pull request URLs and mixed-repository sets rather than
+silently applying a URL's issue number to the current repository. Verify that the implementation
+checkout matches that repository and stop on a mismatch.
+
 ## Workflow
 
-1. Resolve the current repository and every explicitly requested issue. Deduplicate the set while preserving the user's order; the first issue in each delivery group is its primary issue for branch naming.
+1. Resolve every explicitly requested issue number or URL. Require one repository, deduplicate the set while preserving the user's order, and use the first issue in each delivery group as its primary issue for branch naming.
 2. Read every selected issue body, all comments, linked issues/PRs, applicable repository instructions, current code, tests, documentation, and relevant Git history.
 3. Confirm each issue contains implementation-safe `Specify`, `Clarify`, `Plan`, and proportional `Tasks`. Do not silently invent a missing product decision.
 4. When preparation is insufficient, identify the exact missing phase or decision per issue and resolve it through [Missing preparation](#missing-preparation) before writing code for that issue.
@@ -86,7 +102,7 @@ This skill targets GitHub Issues and pull requests and nothing else. Do not add 
 Read back every remote mutation before reporting it. A PR is open, an issue is updated, and a task is checked off only when the API says so.
 
 ```bash
-gh issue view <number> --json number,title,body,comments,labels,blockedBy,url
+gh issue view <number-or-url> --json number,title,body,comments,labels,blockedBy,url
 gh pr create --base <base> --head <branch> --title "<title>" --body-file -
 gh pr view <number> --json number,url,isDraft,closingIssuesReferences
 ```
