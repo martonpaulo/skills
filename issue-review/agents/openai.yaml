@@ -1,6 +1,6 @@
 interface:
   display_name: "Review Pull Request"
   short_description: "Validate one PR against all closing issues"
-  default_prompt: "Use $issue-review to validate this pull request against every issue it closes."
+  default_prompt: "Use $issue-review with 123 for an issue, or pr 456 for a pull request."
 policy:
   allow_implicit_invocation: false

@@ -5,27 +5,38 @@ available native GitHub integration or `gh api`; they are transports for the sam
 
 ## Resolve the pull request
 
-When invoked with a PR number or URL, read that exact PR. When invoked with one or more issue
-numbers or URLs, find the unique open pull request that closes every supplied issue. For one issue:
+Parse the command before calling GitHub:
+
+| Invocation | Meaning | Lookup |
+| --- | --- | --- |
+| `/issue-review 123` | Issue `#123` | Find the unique open PR that closes it |
+| `/issue-review pr 456` | Pull request `#456` | Read PR `#456` directly |
+
+A bare number is always an issue number. Never query a same-numbered PR as a fallback when issue
+resolution returns zero results.
+
+For `/issue-review <issue-number>`, find the open pull request that closes the issue:
 
 ```bash
 gh pr list --state open --json number,title,closingIssuesReferences \
   --jq '.[] | select(.closingIssuesReferences[]?.number == <issue-number>)'
 ```
 
-For several issues, require every number in the same result rather than resolving them
-independently and accidentally reviewing only one PR. Exactly one result is the expected case;
-use its `number` as `<number>` in every command below.
+Exactly one result is the expected case; use its `number` as `<number>` in every command below.
+
+- **Zero results** means no open PR closes the supplied issue. Stop and report the missing linkage
+  rather than guessing at a draft, body mention, closed PR, or same-numbered PR.
+- **More than one result** means multiple open PRs claim the supplied issue. Stop and report
+  the conflict; do not pick one without the user's direction.
+
+For `/issue-review pr <pull-request-number>`, read that exact PR and require it to be open:
 
 ```bash
-gh pr list --state open --json number,title,closingIssuesReferences \
-  --jq '.[] | select(([.closingIssuesReferences[].number] | contains([3,53])))'
+gh pr view <pull-request-number> --json number,state
 ```
 
-- **Zero results** means no one open PR closes the complete supplied issue set. Stop and report
-  the missing linkage rather than guessing at a draft, body mention, or closed PR.
-- **More than one result** means multiple open PRs claim the supplied issue set. Stop and report
-  the conflict; do not pick one without the user's direction.
+Stop when it does not exist or its state is not `OPEN`. Do not reinterpret the PR number as an
+issue number.
 
 ## Read the pull request
 
@@ -35,9 +46,9 @@ gh pr view <number> --json number,title,body,isDraft,baseRefName,headRefName,hea
 
 `headRefOid` is the head SHA. Record it before reviewing and compare it again before submitting.
 `closingIssuesReferences` gives every issue this PR closes, which is the controlling contract.
-The set must be non-empty, contain every issue supplied by the user, and match the leading
-`Closes #N` lines in the body. GitHub interprets those keywords only when `baseRefName` is the
-repository's default branch.
+The set must be non-empty and match the leading `Closes #N` lines in the body. For issue-form
+invocation, it must contain the supplied issue. GitHub interprets those keywords only when
+`baseRefName` is the repository's default branch.
 `mergeStateStatus` and `reviewDecision` decide whether merging is even possible.
 
 ```bash

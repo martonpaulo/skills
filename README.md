@@ -294,6 +294,9 @@ issue each PR closes. `project-groom` sits with them because it works across the
 
 Each issue-level skill owns a narrow part of the workflow.
 
+Invoke review as `/issue-review 123` when `123` is an issue number, or `/issue-review pr 456`
+when `456` is the pull request number. A bare number always means an issue.
+
 `project-groom` does not replace them. It detects what is missing and routes the issue to the appropriate owner.
 
 ### Foundations

@@ -1,6 +1,7 @@
 ---
 name: issue-review
-description: Perform the Validate SDD phase for one open GitHub pull request against every issue it closes. Triggers when the user provides a pull request or one or more issue numbers or URLs whose implementation PR should be reviewed. Not for loose diffs, partial review, or reviewing issues that resolve to different pull requests.
+description: Perform the Validate SDD phase for one open GitHub pull request against every issue it closes. Invoke as `/issue-review <issue-number>` to resolve the PR from an issue, or `/issue-review pr <pull-request-number>` to review that exact PR. A bare number always means an issue; the `pr` prefix is required for a PR number. Not for loose diffs, partial review, or reviewing several pull requests at once.
+argument-hint: "<issue-number> | pr <pull-request-number>"
 disable-model-invocation: true
 license: MIT
 metadata:
@@ -21,6 +22,19 @@ Perform the SDD phase `Validate` for exactly one pull request. Verification mean
 implementation satisfies every issue the PR closes, follows repository instructions, preserves
 outside behavior, has sufficient tests and evidence, and introduces no blocking defects.
 
+## Invocation
+
+Accept exactly these numeric forms:
+
+```text
+/issue-review 123
+/issue-review pr 456
+```
+
+- Treat `123` as issue `#123`, then resolve the unique open PR that closes it.
+- Treat `pr 456` as pull request `#456` and read that PR directly.
+- Never probe both namespaces or reinterpret a bare number as a PR when issue resolution fails.
+
 ## Sources of truth
 
 When these disagree, the higher one wins:
@@ -38,9 +52,9 @@ Distinguish verified facts, reasonable inferences, and unknowns in everything pu
 
 ## Workflow
 
-1. Resolve the exact repository and one open pull request. Accept a PR directly, or find the unique open PR whose `closingIssuesReferences` contains every supplied issue; stop and report if none or more than one match, per [github-api.md](references/github-api.md). Record the current head SHA before reviewing.
+1. Resolve the exact repository and parse the invocation before any lookup. For `/issue-review <issue-number>`, find the unique open PR whose `closingIssuesReferences` contains that issue. For `/issue-review pr <pull-request-number>`, read that exact PR. Stop on a missing, closed, or ambiguous target per [github-api.md](references/github-api.md). Record the current head SHA before reviewing.
 2. Read the PR title, body, base/head branches, full commit list, complete diff, changed files in context, all issue comments, reviews, inline comments, review threads, and unresolved conversations. Verify that the body starts with one `Closes #N` line per closing issue and that the PR targets the default branch.
-3. Read every issue in `closingIssuesReferences` and all of its comments. Reconstruct each controlling `Specify`, `Clarify`, `Plan`, and `Tasks`. An empty closing set or a supplied issue missing from it is a blocking contract defect.
+3. Read every issue in `closingIssuesReferences` and all of its comments. Reconstruct each controlling `Specify`, `Clarify`, `Plan`, and `Tasks`. An empty closing set is a blocking contract defect. For issue-form invocation, the supplied issue missing from that set is also blocking.
 4. Read root and applicable nested `AGENTS.md` files, relevant architecture, design, API, domain, security, test, and process documentation.
 5. Inspect callers, tests, types, configuration, history, blame, and established patterns needed to evaluate the change.
 6. Run relevant local validation when practical. Inspect failed remote checks to determine if they are introduced by the PR, pre-existing, flaky, environmental, or unrelated.
