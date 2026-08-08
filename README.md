@@ -125,6 +125,9 @@ Each phase has one owner, one primary goal, and one exit condition.
 
 `Validate` is specific to this collection. Spec-kit stops at implementation and treats verification as an optional analysis. Here, implementation is not complete until the pull request passes an explicit merge gate.
 
+`issue-implement` executes tests and records validation evidence. `issue-review` inspects that
+evidence, test code, checks, logs, and artifacts, but never runs tests or reruns CI.
+
 ### Backlog-wide coordination
 
 [`project-groom`](project-groom/) operates across the entire workflow rather than owning one phase.

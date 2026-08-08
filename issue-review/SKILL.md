@@ -1,6 +1,6 @@
 ---
 name: issue-review
-description: Perform the Validate SDD phase for one open GitHub pull request against every issue it closes. Invoke `/issue-review` with an issue number or direct issue URL to resolve its PR, a direct PR URL, or `pr <pull-request-number-or-url>` for an explicit PR target. A bare number always means an issue; the `pr` prefix is required only for a PR number. Not for loose diffs, partial review, or reviewing several pull requests at once.
+description: Perform the Validate SDD phase for one open GitHub pull request against every issue it closes. Invoke `/issue-review` with an issue number or direct issue URL to resolve its PR, a direct PR URL, or `pr <pull-request-number-or-url>` for an explicit PR target. A bare number always means an issue; the `pr` prefix is required only for a PR number. Inspect existing test and CI evidence, but never execute tests or rerun CI. Not for loose diffs, partial review, or reviewing several pull requests at once.
 argument-hint: "<issue-number-or-url> | pr <pr-number-or-url> | <pr-url>"
 disable-model-invocation: true
 license: MIT
@@ -62,12 +62,25 @@ Distinguish verified facts, reasonable inferences, and unknowns in everything pu
 3. Read every issue in `closingIssuesReferences` and all of its comments. Reconstruct each controlling `Specify`, `Clarify`, `Plan`, and `Tasks`. An empty closing set is a blocking contract defect. For issue-form invocation, the supplied issue missing from that set is also blocking.
 4. Read root and applicable nested `AGENTS.md` files, relevant architecture, design, API, domain, security, test, and process documentation.
 5. Inspect callers, tests, types, configuration, history, blame, and established patterns needed to evaluate the change.
-6. Run relevant local validation when practical. Inspect failed remote checks to determine if they are introduced by the PR, pre-existing, flaky, environmental, or unrelated.
+6. Inspect the implementation's recorded validation, changed tests, remote checks, logs, and artifacts. Determine whether failures are introduced by the PR, pre-existing, flaky, environmental, or unrelated. Do not execute tests or trigger CI.
 7. Apply the `grilling` investigation discipline before asking anything.
 8. Comment only when there is a demonstrated defect, regression, security vulnerability, missing behavior, explicit rule violation, material ambiguity, or to respond to an existing review thread.
 9. Every blocking finding must include affected file/line, concrete failure/risk, evidence, violated requirement/rule, and minimum required correction. Anchor it to the exact line in the diff, not to a prose description of where it is.
 10. Recheck the head SHA before submitting the review. If changed materially, inspect new changes.
 11. Submit exactly one formal final verdict: `APPROVE` or `REQUEST_CHANGES`. Do not use `COMMENT` as the final verdict.
+
+## Test execution boundary
+
+Evaluate existing evidence; do not generate new test evidence during review.
+
+- Never run a test command or test suite, focused or full.
+- Never rerun, retry, or dispatch CI or another workflow to obtain new test evidence.
+- Inspect test code, changed tests, implementation validation reports, check results, logs, and artifacts.
+- When evidence is missing or insufficient, state the exact gap and account for it in the verdict. Do not compensate by running tests.
+
+Treat reading check status, check logs, and existing artifacts as inspection, not test execution.
+`issue-implement` owns executing tests and recording their results; `issue-review` owns evaluating
+that evidence and reaching a verdict.
 
 ## GitHub is the only platform
 
@@ -119,8 +132,8 @@ Each names a feeling, not a failure. State what breaks, under which input or con
 
 Approve only when the PR satisfies every issue in `closingIssuesReferences`, all required
 acceptance criteria are met, no demonstrated blocking defect remains, repository rules are
-followed, validation is sufficient, and unresolved threads do not represent blocking work. Do not
-withhold approval for optional improvements.
+followed, existing validation evidence is sufficient, and unresolved threads do not represent
+blocking work. Do not withhold approval for optional improvements.
 
 ## Request Changes criteria
 
