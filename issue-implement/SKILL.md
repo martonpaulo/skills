@@ -36,7 +36,7 @@ checkout matches that repository and stop on a mismatch.
 
 ## Workflow
 
-1. Resolve every explicitly requested issue number or URL. Require one repository, deduplicate the set while preserving the user's order, and use the first issue in each delivery group as its primary issue for branch naming.
+1. Resolve every explicitly requested issue number or URL. Require one repository and deduplicate the selected issues. Preserve the user's order for implementation decisions, but sort each delivery group's issue numbers numerically when naming its branch.
 2. Read every selected issue body, all comments, linked issues/PRs, applicable repository instructions, current code, tests, documentation, and relevant Git history.
 3. Confirm each issue contains implementation-safe `Specify`, `Clarify`, `Plan`, and proportional `Tasks`. Do not silently invent a missing product decision.
 4. When preparation is insufficient, identify the exact missing phase or decision per issue and resolve it through [Missing preparation](#missing-preparation) before writing code for that issue.
@@ -49,7 +49,7 @@ checkout matches that repository and stop on a mismatch.
 11. Update completed Tasks only after evidence exists. Refetch every affected issue before editing its body or comments.
 12. Inspect each final diff to ensure no unrelated changes, temporary artifacts, secrets, generated logs, or accidental formatting churn are included.
 13. Commit according to repository policy using focused Conventional Commits. End each subject with the issue number that commit primarily implements as `(#<number>)`; name any other issues it materially serves in the commit body, per [`github-conventions`](../github-conventions/SKILL.md). Push normally when authorized.
-14. When using a PR workflow, open or update one PR per delivery group. Target the default branch, begin the body with one `Closes #<number>` line for every issue the PR fully resolves, then explain the problem, implementation, impact, tests, docs, and risk. Open as ready when every issue in the group is complete and validation passes, or draft if a real blocker remains.
+14. When using a PR workflow, open or update one PR per delivery group. Verify that the branch's singular or plural issue segment matches the complete sorted `Closes` set. Target the default branch, begin the body with one `Closes #<number>` line for every issue the PR fully resolves, then explain the problem, implementation, impact, tests, docs, and risk. Open as ready when every issue in the group is complete and validation passes, or draft if a real blocker remains.
 15. If publication is unavailable, finish local work and provide every branch, commit, issue set, validation result, remaining blocker, and ready-to-use PR handoff.
 
 ## Missing preparation
@@ -137,13 +137,26 @@ If `AGENTS.md` requires implementation directly on `main` or another named integ
 - do not open a PR unless explicitly asked by the user
 
 **Working through branches:**
-If the repository requires or permits issue branches, follow its naming policy. When it states none, the scheme in [`github-conventions`](../github-conventions/SKILL.md) applies and uses the delivery group's primary issue:
+If the repository requires or permits issue branches, follow its naming policy. When it states none, the scheme in [`github-conventions`](../github-conventions/SKILL.md) applies to the complete delivery group:
 
-`<type>/<agent>/issue-<NNN>/<short-description>`, for example `feature/claude/issue-024/add-button`.
+```text
+<type>/<agent>/issue-<number>/<short-description>
+<type>/<agent>/issues-<number>-<number>[-<number>...]/<short-description>
+```
+
+Examples:
+
+```text
+feature/codex/issue-70/pane-menu-actions
+feature/codex/issues-70-73-154/pane-menu-actions
+```
 
 - `type`: `feature`, `hotfix`, `fix`, `chore`, `docs`, `refactor`, `test`.
 - `agent`: exactly one of `claude`, `codex`, `gemini`, for the agent actually doing the work.
-- `issue-<NNN>`: the issue number, zero-padded to three digits.
+- `issue-<number>`: exactly one issue.
+- `issues-<number>-<number>...`: two or more issues. Include the whole delivery group once each,
+  sorted numerically from smallest to largest.
+- Use no leading zeros in either form.
 - `<short-description>`: two to four kebab-case words.
 
 The name the worktree, the harness, or a previous session gave the branch is not a naming policy and is never an excuse for a different shape. Rename with `git branch -m` before pushing, or create the correctly named branch and push that one.

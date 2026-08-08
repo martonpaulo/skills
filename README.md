@@ -206,13 +206,14 @@ Every mutation is read back before it is reported. An issue, comment, review, or
 the API says it does, never because a command exited zero.
 
 Everything an agent publishes there is signed with the agent, model and reasoning level that wrote
-it, every branch is named for the agent doing the work rather than for its worktree, every commit
-made for an issue ends its subject with `(#54)`, every pull request starts with its complete block
-of `Closes` lines, every branch merges with all of its commits instead of being squashed into one,
-and every draft, diff or patch written to disk along the way is deleted before the run reports
-completion. [`github-conventions`](github-conventions/) owns those rules. The signature is never a
-repository's to waive; the branch, commit and merge shapes yield only to a repository that
-documents its own.
+it. Every branch is named for the agent and its complete issue set: `issue-70` for one, or a
+numerically sorted form such as `issues-70-73-154` for several, always without leading zeros.
+Every commit made for an issue ends its subject with `(#54)`, every pull request starts with its
+complete block of `Closes` lines, every branch merges with all of its commits instead of being
+squashed into one, and every draft, diff or patch written to disk along the way is deleted before
+the run reports completion. [`github-conventions`](github-conventions/) owns those rules. The
+signature is never a repository's to waive; the branch, commit and merge shapes yield only to a
+repository that documents its own.
 
 
 <br />
@@ -677,10 +678,11 @@ A confirmed bug is handed to `diagnose-bug` only after the user selects it for i
 * `deep-docs` takes over when an authoritative source is required or the library is not indexed
 
 `github-conventions` is unconditional for every skill that publishes on GitHub. It settles how a
-published text is signed, how a branch is named, how a commit subject carries its issue number,
-how a PR body starts with the issues it closes, how closure is verified after merge, that commits
-are not squashed, what happens when the API refuses a formal review event, and where temporary
-files may live, so those answers cannot drift apart across five skills.
+published text is signed, how a branch names one issue or a complete sorted issue set, how a commit
+subject carries its issue number, how a PR body starts with the issues it closes, how closure is
+verified after merge, that commits are not squashed, what happens when the API refuses a formal
+review event, and where temporary files may live, so those answers cannot drift apart across five
+skills.
 
 `issue-capture` uses `domain-model` or `research` only when ambiguity or missing evidence prevents the issue from being captured correctly.
 

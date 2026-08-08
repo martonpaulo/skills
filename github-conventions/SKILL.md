@@ -53,26 +53,43 @@ edit, and stays a single line. Two stacked signatures mean the previous one was 
 
 ## 2. Name the branch for the agent, not the worktree
 
+For exactly one issue:
+
 ```
-<type>/<agent>/issue-<NNN>/<short-description>
+<type>/<agent>/issue-<number>/<short-description>
+```
+
+For two or more issues resolved by the same branch:
+
+```
+<type>/<agent>/issues-<number>-<number>[-<number>...]/<short-description>
 ```
 
 ```
-feature/claude/issue-024/add-button
-fix/codex/issue-107/expired-session-check
+feature/codex/issue-70/pane-menu-actions
+feature/codex/issues-70-73-154/pane-menu-actions
 ```
 
 - `type`: `feature`, `hotfix`, `fix`, `chore`, `docs`, `refactor`, `test`.
 - `agent`: exactly one of `claude`, `codex`, `gemini`. Nothing else is a valid value. Map the
   running agent through the table above: Claude to `claude`, Gemini and Antigravity to `gemini`,
   ChatGPT and Codex to `codex`.
-- `issue-<NNN>`: the issue number, zero-padded to three digits.
+- `issue-<number>`: use only when the branch resolves exactly one issue.
+- `issues-<number>-<number>...`: use when the branch resolves two or more issues. Include every
+  issue the branch is intended to close, remove duplicates, and sort the numbers numerically from
+  smallest to largest.
+- Issue numbers use their ordinary decimal form with no leading zeros: `issue-7`, not `issue-007`;
+  `issues-7-53-154`, not `issues-007-053-154`.
 - `<short-description>`: two to four kebab-case words describing the change.
 
 The worktree's directory name, a tool-generated branch name, and a session identifier are none of
 them a reason to deviate. If a branch already exists under a generated name, rename it
 (`git branch -m`) before pushing, or create the correctly named branch and push that one. "It is
-what the worktree is called" is not an exemption.
+what the worktree is called" is not an exemption. Settle the issue set before the first push; if
+the delivery group changes while the branch is still local, regenerate the singular or plural
+segment from the complete sorted set before publishing it. Before opening or updating a PR,
+verify that the branch segment names exactly the issues in its closing block. Correct a mismatch
+before publication rather than leaving an inaccurate branch name attached to the PR.
 
 ## 3. End the commit subject with its issue number
 
