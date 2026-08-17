@@ -199,6 +199,9 @@ Two consequences are load-bearing:
 * **Pull requests close their full issue set.** Every pull request body starts with one
   `Closes #N` line per issue it resolves. Before merge, the API must report every intended issue
   in `closingIssuesReferences`; after merge, every one is read back as closed.
+* **Pull request titles identify their full issue set.** `github-conventions` owns the fallback
+  title rule, and `issue-implement` applies and verifies it whenever it creates or updates a pull
+  request.
 
 * **The verdict is always published.** GitHub refuses a formal `APPROVE` on a pull request the
   same account authored. That refuses the review *event*, not the review: `issue-review` posts the
@@ -212,8 +215,9 @@ the API says it does, never because a command exited zero.
 Everything an agent publishes there is signed with the agent, model and reasoning level that wrote
 it. Every branch is named for the agent and its complete issue set: `issue-70` for one, or a
 numerically sorted form such as `issues-70-73-154` for several, always without leading zeros.
-Every commit made for an issue ends its subject with `(#54)`, every pull request starts with its
-complete block of `Closes` lines, every branch merges with all of its commits instead of being
+Every commit made for an issue ends its subject with `(#54)`, every pull request title identifies
+its complete issue set and its body starts with the matching block of `Closes` lines, and every
+branch merges with all of its commits instead of being
 squashed into one, and every draft, diff or patch written to disk along the way is deleted before
 the run reports completion. [`github-conventions`](github-conventions/) owns those rules. The
 signature is never a repository's to waive; the branch, commit and merge shapes yield only to a
@@ -324,7 +328,7 @@ They may be invoked directly, but their primary purpose is to support other skil
 | [`apple-docs`](apple-docs/)     | Model or user | `none`      | Research version-specific Apple platform behavior using Apple documentation, Swift Evolution, Xcode context, local Xcode documentation, HIG, WWDC, release notes, signing, and distribution sources. | [Ahrentlov/apple-docs-skill](https://github.com/Ahrentlov/apple-docs-skill)                                                                                                                    |
 | [`context7`](context7/)         | Model or user | `none`      | Quickly query library documentation through the Context7 index by resolving a library ID and querying one focused topic.                                                                             | [upstash/context7 → context7-cli](https://github.com/upstash/context7/tree/master/skills/context7-cli)                                                                                         |
 | [`deep-docs`](deep-docs/)       | Model or user | `none`      | Research version-specific documentation for non-Apple frameworks, SDKs, APIs, CLIs, and platforms using source-linked evidence.                                                                      | Written for this collection. Architecture adapted from [apple-docs-skill](https://github.com/Ahrentlov/apple-docs-skill) and [appledeepdoc-mcp](https://github.com/Ahrentlov/appledeepdoc-mcp) |
-| [`github-conventions`](github-conventions/) | Model or user | `none`      | Hold the rules every publishing skill follows: signatures, branches, commit issue numbers, leading PR closing lines, verified issue closure after merge, merge method, review fallback, and temporary files. | Written for this collection |
+| [`github-conventions`](github-conventions/) | Model or user | `none`      | Hold the rules every publishing skill follows: signatures, branches, commit issue numbers, PR titles, leading closing lines, verified issue closure after merge, merge method, review fallback, and temporary files. | Written for this collection |
 | [`domain-model`](domain-model/) | Model or user | `docs`      | Resolve contradictory domain terminology, states, rules, and relationships.                                                                                                                          | [mattpocock/skills → domain-modeling](https://github.com/mattpocock/skills/tree/main/skills/engineering/domain-modeling)                                                                       |
 | [`grilling`](grilling/)         | Model or user | `none`      | Provide the shared interview discipline used by other skills: one decision at a time, always with a recommendation.                                                                                  | [mattpocock/skills → grilling](https://github.com/mattpocock/skills/tree/main/skills/productivity/grilling)                                                                                    |
 | [`prototype`](prototype/)       | Model or user | `temporary` | Run a disposable experiment when executing code provides stronger evidence than discussing possibilities.                                                                                            | [mattpocock/skills → prototype](https://github.com/mattpocock/skills/tree/main/skills/engineering/prototype)                                                                                   |
@@ -684,8 +688,9 @@ A confirmed bug is handed to `diagnose-bug` only after the user selects it for i
 
 `github-conventions` is unconditional for every skill that publishes on GitHub. It settles how a
 published text is signed, how a branch names one issue or a complete sorted issue set, how a commit
-subject carries its issue number, how a PR body starts with the issues it closes, how closure is
-verified after merge, that commits are not squashed, what happens when the API refuses a formal
+subject carries its issue number, how a PR title and body carry the same complete issue set, how
+closure is verified after merge, that commits are not squashed, what happens when the
+API refuses a formal
 review event, and where temporary files may live, so those answers cannot drift apart across five
 skills.
 
