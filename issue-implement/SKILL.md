@@ -49,7 +49,7 @@ checkout matches that repository and stop on a mismatch.
 11. Update completed Tasks only after evidence exists. Refetch every affected issue before editing its body or comments.
 12. Inspect each final diff to ensure no unrelated changes, temporary artifacts, secrets, generated logs, or accidental formatting churn are included.
 13. Commit according to repository policy using focused Conventional Commits. End each subject with the issue number that commit primarily implements as `(#<number>)`; name any other issues it materially serves in the commit body, per [`github-conventions`](../github-conventions/SKILL.md). Push normally when authorized.
-14. When using a PR workflow, open or update one PR per delivery group. Verify that the branch's singular or plural issue segment matches the complete sorted `Closes` set. Target the default branch, begin the body with one `Closes #<number>` line for every issue the PR fully resolves, then explain the problem, implementation, impact, tests, docs, and risk. Open as ready when every issue in the group is complete and validation passes, or draft if a real blocker remains.
+14. When using a PR workflow, open or update one PR per delivery group. Build its title from the complete delivery group according to [`github-conventions`](../github-conventions/SKILL.md), and pass that title to `gh pr create` or update the existing PR title. Verify that the title, branch's singular or plural issue segment, and complete sorted `Closes` set all name the same issues. Target the default branch, begin the body with one `Closes #<number>` line for every issue the PR fully resolves, then explain the problem, implementation, impact, tests, docs, and risk. Open as ready when every issue in the group is complete and validation passes, or draft if a real blocker remains.
 15. If publication is unavailable, finish local work and provide every branch, commit, issue set, validation result, remaining blocker, and ready-to-use PR handoff.
 
 ## Missing preparation
@@ -104,7 +104,7 @@ Read back every remote mutation before reporting it. A PR is open, an issue is u
 ```bash
 gh issue view <number-or-url> --json number,title,body,comments,labels,blockedBy,url
 gh pr create --base <base> --head <branch> --title "<title>" --body-file -
-gh pr view <number> --json number,url,isDraft,closingIssuesReferences
+gh pr view <number> --json number,title,url,isDraft,closingIssuesReferences
 ```
 
 The PR body begins with one closing keyword per fully resolved issue, before any heading or prose:
@@ -114,10 +114,12 @@ Closes #3
 Closes #53
 ```
 
-Mentioning an issue in the title does not link it. After creating or updating the PR, verify that
-`closingIssuesReferences` contains every issue in the delivery group and no unintended issue. An
-empty or incomplete array means the PR is not ready: merging it will not close the missing issues.
-Do not add a closing line for a grouped issue whose implementation or validation is unfinished.
+Build the title from the complete delivery group using the singular or plural format required by
+`github-conventions`. Mentioning an issue in the title does not link it. After creating or updating
+the PR, read back both `title` and `closingIssuesReferences`; correct either one when its issue set
+does not match the delivery group. An empty or incomplete closing array means the PR is not ready:
+merging it will not close the missing issues. Do not add a closing line for a grouped issue whose
+implementation or validation is unfinished.
 
 The PR body states the problem, the implementation, the impact, the tests run with their results, the documentation touched, and the residual risk. A PR body that only repeats the issue title is not a description.
 

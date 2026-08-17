@@ -1,6 +1,6 @@
 ---
 name: github-conventions
-description: "Carries the conventions every skill must follow when it writes on GitHub: the agent signature, branch and commit naming, the leading Closes lines in every pull request body, verified issue closure after merge, merging without squashing, review-event fallback, and temporary-file cleanup. Invoked by issue-capture, issue-plan, issue-implement, issue-review and project-groom before they publish, branch, commit, merge, or write a scratch file, or directly when the owner asks what the signature, branch, commit, pull request, or merge format is. Not for deciding product scope, reviewing code, or any GitHub read operation."
+description: "Carries the conventions every skill must follow when it writes on GitHub: the agent signature, branch, commit and pull request title naming, leading Closes lines, verified issue closure after merge, merge method, review-event fallback, and temporary-file cleanup. Invoked by issue-capture, issue-plan, issue-implement, issue-review and project-groom before they publish, branch, commit, merge, or write a scratch file, or directly when the owner asks what the signature, branch, commit, pull request, or merge format is. Not for deciding product scope, reviewing code, or any GitHub read operation."
 metadata:
   scope: project
   role: foundation
@@ -110,9 +110,33 @@ fix: stop the session expiring during upload (#107)
 - Commit messages are never signed, per the rule above. The suffix is not a signature; it is how a
   commit stays traceable to its issue once the branch is gone.
 
-The suffix does not replace the pull request closing block below.
+The suffix does not replace the pull request title or closing block below.
 
-## 4. Start every pull request body with its closing block
+## 4. Put the complete issue set in the pull request title
+
+When a pull request fully resolves one issue, use:
+
+```text
+Issue #198 - Preserve typed values through reconciliation
+```
+
+When it fully resolves multiple issues, use:
+
+```text
+Issues #70, #73, #154 - Add pane menu actions
+```
+
+Use ordinary decimal issue numbers without leading zeros. Deduplicate multiple issues and sort
+them numerically. The title's issue set must exactly match both the branch's singular or plural
+issue segment and the pull request body's leading `Closes` block. The description after the dash
+stays concise and describes the complete change.
+
+This is the fallback when a repository does not document its own pull request title convention;
+an explicit repository convention wins. A pull request that closes no issue must not invent an
+issue number. The title makes pull request lists easier to scan, but it does not link or close an
+issue: only the closing block does that.
+
+## 5. Start every pull request body with its closing block
 
 The first line of every pull request body is `Closes #<number>`. Use one separate line for every
 issue the pull request fully resolves, with no bullet, heading, or prose before it:
@@ -138,7 +162,7 @@ intended issue and no unintended issue. Fix the body before review when the set 
 explanatory sections follow the closing block, and the agent signature remains the final line of
 the body.
 
-## 5. Merge without squashing and verify closure
+## 6. Merge without squashing and verify closure
 
 A branch merges into the default branch with all of its commits intact:
 
@@ -162,7 +186,7 @@ If any intended issue is still open after the merge, close it as `completed` and
 resulting state. Never close an issue before the merge succeeds, and never report the merge
 workflow complete while an intended issue remains open without an explicit closure error.
 
-## 6. Publish the verdict, even when the API refuses it
+## 7. Publish the verdict, even when the API refuses it
 
 GitHub rejects a formal `APPROVE` on a pull request the same account authored, and can reject a
 formal review event for other reasons. That is a rejection of the review *event*, never a reason
@@ -184,7 +208,7 @@ Then report accurately: the findings were published as a comment, the formal rev
 refused and why, and which separate reviewer action is still required. Never claim a formal
 approval GitHub rejected, and never let the refusal end with nothing published at all.
 
-## 7. Leave no temporary file behind
+## 8. Leave no temporary file behind
 
 Most of this needs no file at all. A body goes in through stdin, and a diff is read from the
 command that produced it:
