@@ -723,6 +723,10 @@ The repository includes commands that link every top-level skill into the corres
 
 The commands may be run from any working directory and are safe to run repeatedly.
 
+Every linked skill exposes a `references/` directory for Antigravity compatibility. Skills without
+reference documentation contain only a zero-byte `.keep` marker, which prevents the client from
+logging a failed optional-directory probe and is not a resource for agents to load.
+
 Use `--dry-run` to preview changes:
 
 ```sh

@@ -32,7 +32,10 @@ Use this user-invoked skill to create a new Agent Skill or improve an existing o
 3. Choose invocation policy:
    - **Model-invoked:** omit `disable-model-invocation`; write a narrow description containing positive trigger conditions and explicit non-triggers when accidental activation is plausible.
    - **User-invoked:** set `disable-model-invocation: true`; write a concise human-facing description.
-4. Put the common workflow in `SKILL.md`. Move branch-specific reference material to clearly named supporting files only when that reduces the context needed for ordinary runs.
+4. Put the common workflow in `SKILL.md`. Move branch-specific reference material to clearly named
+   supporting files only when that reduces the context needed for ordinary runs. If the skill is
+   self-contained, create a zero-byte `references/.keep` as the repository's Antigravity
+   compatibility shim; remove the marker when real reference files are added.
 5. When the skill is adapted from someone else's work, record its provenance. See [Provenance](#provenance).
 6. Remove no-op instructions, promotional prose, stale assumptions, and generic rules already owned by repository guidance. Keep each meaning in one place.
 7. Use cross-skill references only for real dependencies, and verify that every referenced skill is installed. Avoid tool-specific instructions unless the skill genuinely requires that tool.

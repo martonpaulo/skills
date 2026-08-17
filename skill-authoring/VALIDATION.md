@@ -33,6 +33,7 @@ Skip this section only for a skill written entirely from scratch.
 
 ## References and safety
 
+- `references/` contains real reference files or only a zero-byte `.keep` compatibility marker.
 - Every relative link resolves.
 - Every named skill or external tool is available or explicitly optional.
 - Old names and stale workflows are absent.

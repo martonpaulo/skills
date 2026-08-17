@@ -91,6 +91,13 @@ exactly. Everything else is optional and belongs inside the skill's own director
 documents loaded on demand, executable scripts, agent-specific metadata, and the licensing and
 attribution files required when upstream work is adapted.
 
+This repository keeps one compatibility exception to that specification: every skill directory
+contains `references/` because Antigravity probes that optional path during discovery. A skill with
+real reference documentation keeps those files normally. A self-contained skill instead contains
+only a zero-byte `references/.keep`; the marker is a client compatibility shim, not documentation
+for an agent to load. Do not precreate other optional directories without evidence that a client
+requires them.
+
 ### The `project-` and `issue-` prefixes
 
 Two prefixes describe **what a skill acts on**, not how important it is.
@@ -213,6 +220,8 @@ bump the `-personal.N` suffix, and record the change in `THIRD_PARTY_NOTICES.md`
 ## Validation before committing
 
 - Every skill directory has a `SKILL.md` whose frontmatter `name` matches the directory.
+- `tests/references-layout.test.sh` passes: every skill has real references or only a zero-byte
+  `references/.keep` compatibility marker.
 - Every description states both triggers and non-triggers.
 - Every skill declares `scope`, `role` and `mutation`, using only the documented values.
 - The declared `mutation` is not narrower than what the skill's workflow actually permits.
