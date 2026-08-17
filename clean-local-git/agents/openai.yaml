@@ -1,0 +1,6 @@
+interface:
+  display_name: "Clean Local Git"
+  short_description: "Safely consolidate local Git state"
+  default_prompt: "Use $clean-local-git to audit and safely consolidate this repository onto its remote-backed default branch."
+policy:
+  allow_implicit_invocation: false
