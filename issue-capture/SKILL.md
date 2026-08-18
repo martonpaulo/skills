@@ -16,9 +16,10 @@ Keep this skill model-invocable because `project-groom` and `issue-plan` delegat
 ## Workflow
 
 1. Read repository instructions, issue templates, label conventions, documentation, code, tests, and relevant history.
-2. Search open issues and relevant closed issues before creating anything.
-3. Decide whether to update an existing canonical issue, comment with missing evidence, create a new issue, or produce a ready-to-post draft when GitHub writes are unavailable.
-4. For bugs, investigate enough to capture:
+2. Resolve the target GitHub repository from the local repository's `origin` remote. Never use `upstream` as the issue target and never rely on an implicit repository selection.
+3. Search open issues and relevant closed issues before creating anything.
+4. Decide whether to update an existing canonical issue, comment with missing evidence, create a new issue, or produce a ready-to-post draft when GitHub writes are unavailable.
+5. For bugs, investigate enough to capture:
    - observed behavior
    - expected behavior
    - reproduction steps
@@ -29,12 +30,12 @@ Keep this skill model-invocable because `project-groom` and `issue-plan` delegat
    - validation already attempted
    - known workaround
    - blockers or dependencies
-5. Apply `grilling` for material unresolved decisions.
-6. Check the request against the product definition when one exists, at the path repository guidance configures or `docs/product.md`. A request that contradicts a stated non-goal is raised with the owner before an issue is written, quoting the non-goal and its reason. Do not silently widen the product, and do not refuse either; the owner may be deliberately changing the boundary, in which case the definition is what gets updated first.
-7. Route to `domain-model` when domain terminology, states, rules, entities, or relationships are materially ambiguous.
-8. Route to `research` when current external evidence affects the requested behavior.
-9. Create or update exactly one canonical issue. Label it following the repository's own convention, or [LABELS.md](LABELS.md) when it has none. Apply only clearly applicable values, and never invent one to fill a field.
-10. Refetch the issue before mutation when concurrent editing is possible.
+6. Apply `grilling` for material unresolved decisions.
+7. Check the request against the product definition when one exists, at the path repository guidance configures or `docs/product.md`. A request that contradicts a stated non-goal is raised with the owner before an issue is written, quoting the non-goal and its reason. Do not silently widen the product, and do not refuse either; the owner may be deliberately changing the boundary, in which case the definition is what gets updated first.
+8. Route to `domain-model` when domain terminology, states, rules, entities, or relationships are materially ambiguous.
+9. Route to `research` when current external evidence affects the requested behavior.
+10. Create or update exactly one canonical issue. Label it following the repository's own convention, or [LABELS.md](LABELS.md) when it has none. Apply only clearly applicable values, and never invent one to fill a field.
+11. Refetch the issue before mutation when concurrent editing is possible.
 
 ## Specify Phase
 
@@ -90,6 +91,15 @@ Do not ask the user for information that the repository, GitHub history, or link
 
 This skill targets GitHub Issues and nothing else. Do not add support for, degrade towards, or produce output shaped for GitLab, Bitbucket, Jira, Linear, or a local Markdown tracker. If the repository is not on GitHub, say so and produce a ready-to-post draft instead of inventing a substitute workflow.
 
+Always create GitHub issues in the repository configured as the local repository's `origin` remote. Never create issues in `upstream`. Before searching, reading, creating, editing, or verifying an issue, determine the repository from `origin` and pass it explicitly to every `gh issue` command:
+
+```bash
+origin_url="$(git remote get-url origin)"
+target_repo="$(gh repo view "$origin_url" --json nameWithOwner --jq .nameWithOwner)"
+```
+
+If `origin` is absent, is not a GitHub repository, or cannot be resolved, do not fall back to `upstream` or implicit current-directory behavior. Produce a ready-to-post draft instead. Native GitHub integrations and direct API calls must target the same resolved `OWNER/REPO` explicitly.
+
 The official GitHub API is the interface. Reach it through the available native GitHub integration or `gh api`, which are transports for the same endpoints. Use a higher-level `gh issue` command only when it covers the operation exactly; drop to the API whenever it does not, in particular for anything involving issue relationships, precise body edits, or reading state back.
 
 Read state back from the API before claiming a mutation happened. An issue exists when the API says it does.
@@ -97,16 +107,16 @@ Read state back from the API before claiming a mutation happened. An issue exist
 Search before creating, always including closed issues, because the most common duplicate is one that was already answered:
 
 ```bash
-gh issue list --state all --search "<terms>" --limit 50 --json number,title,state,stateReason,labels,url
-gh issue view <number> --json number,title,body,state,stateReason,labels,comments,blockedBy,blocking,closedByPullRequestsReferences,url
+gh issue list --repo "$target_repo" --state all --search "<terms>" --limit 50 --json number,title,state,stateReason,labels,url
+gh issue view <number> --repo "$target_repo" --json number,title,body,state,stateReason,labels,comments,blockedBy,blocking,closedByPullRequestsReferences,url
 ```
 
 Create or update, then verify:
 
 ```bash
-gh issue create --title "<title>" --body-file - --label "type:bug" --label "priority:P2"
-gh issue edit <number> --body-file -   # replaces the whole body; refetch and merge first
-gh issue view <number> --json number,labels,url
+gh issue create --repo "$target_repo" --title "<title>" --body-file - --label "type:bug" --label "priority:P2"
+gh issue edit <number> --repo "$target_repo" --body-file -   # replaces the whole body; refetch and merge first
+gh issue view <number> --repo "$target_repo" --json number,labels,url
 ```
 
 `--body-file -` reads the body from stdin and replaces it entirely. There is no partial-body edit, so refetch immediately before writing when concurrent editing is possible.
