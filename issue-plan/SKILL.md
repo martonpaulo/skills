@@ -1,8 +1,7 @@
 ---
 name: issue-plan
-description: Complete the Plan and Tasks SDD phases for exactly one GitHub Issue. Invoke as `/issue-plan <issue-number-or-url>`; direct GitHub issue URLs are accepted. Also triggers when delegated by project-groom. Not for planning several issues, implementing code, or handling non-GitHub trackers.
+description: Complete the Plan and Tasks SDD phases for exactly one GitHub Issue. Triggers when the user asks to plan an issue, or when delegated by project-groom or issue-implement. Invoke manually as `/issue-plan <issue-number-or-url>`; direct GitHub issue URLs are accepted. Not for planning several issues, implementing code, or handling non-GitHub trackers.
 argument-hint: "<issue-number-or-url>"
-disable-model-invocation: true
 metadata:
   scope: project
   role: authoring
